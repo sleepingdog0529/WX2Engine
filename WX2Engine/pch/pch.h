@@ -1,0 +1,35 @@
+/*********************************************************************
+ * @file	pch.h
+ * @author	Tomomi Murakami
+ * @date	2021/09/18 19:30
+ * @brief	プリコンパイル済みヘッダ
+*********************************************************************/
+#pragma once
+
+#include <WX2Common.h>
+
+#pragma warning(push, 0) 
+#include <memory>
+#include <filesystem>
+#include <chrono>
+#include <thread>
+#include <mutex>
+#include <deque>
+#include <optional>
+#include <fstream>
+#include <ranges>
+#include <unordered_map>
+#include <functional>
+#include <sstream>
+#include <memory>
+
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
+#define STRICT
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+#include <windowsx.h>
+#pragma warning(pop)

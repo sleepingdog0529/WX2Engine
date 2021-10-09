@@ -50,15 +50,15 @@
     <IntDir>$(SolutionDir)bin-int\$(Platform)-$(Configuration)\$(TargetName)\</IntDir>
     <IncludePath>$(SolutionDir)include;C:\boost_1_77_0\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\$(Platform)-$(Configuration);C:\boost_1_77_0\lib\$(Platform)-$(Configuration);$(LibraryPath)</LibraryPath>
-    <TargetName>wx2engined</TargetName>
+    <TargetName>$(TargetName)D</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)-$(Configuration)\$(TargetName)\</OutDir>
     <IntDir>$(SolutionDir)bin-int\$(Platform)-$(Configuration)\$(TargetName)\</IntDir>
-    <IncludePath>C:\boost_1_77_0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\boost_1_77_0\lib\$(Platform)-$(Configuration);$(LibraryPath)</LibraryPath>
-    <TargetName>wx2engine</TargetName>
+    <IncludePath>$(SolutionDir)include;C:\boost_1_77_0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Platform)-$(Configuration);C:\boost_1_77_0\lib\$(Platform)-$(Configuration);$(LibraryPath)</LibraryPath>
+    <TargetName>$(TargetName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -68,9 +68,9 @@
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>$(ProjectDir)src\pch\pch.h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>$(ProjectDir)src\pch\pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(ProjectDir)src</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>$(ProjectDir)pch\pch.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -83,9 +83,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-      <AdditionalDependencies>spdlogd.lib; vld.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>spdlogd.lib; vld.lib; wx2commond.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -98,9 +97,9 @@
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>$(ProjectDir)src\pch\pch.h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>$(ProjectDir)src\pch\pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>$(ProjectDir)pch\pch.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -115,35 +114,28 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Platform)-$(Configuration);</AdditionalLibraryDirectories>
-      <AdditionalDependencies>spdlog.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>spdlog.lib; wx2common.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\window.cpp" />
-    <ClCompile Include="src\core\scene.cpp" />
-    <ClCompile Include="src\core\assert.cpp" />
-    <ClCompile Include="src\core\log.cpp" />
-    <ClCompile Include="src\core\application.cpp" />
-    <ClCompile Include="src\core\window_container.cpp" />
-    <ClCompile Include="src\pch\pch.cpp">
+    <ClCompile Include="core\window.cpp" />
+    <ClCompile Include="core\scene.cpp" />
+    <ClCompile Include="core\application.cpp" />
+    <ClCompile Include="core\window_container.cpp" />
+    <ClCompile Include="pch\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\core\window.h" />
-    <ClInclude Include="src\core\scene.h" />
-    <ClInclude Include="src\core\window_container.h" />
-    <ClInclude Include="src\core\window_property.h" />
-    <ClInclude Include="src\debug\leak_detector.h" />
-    <ClInclude Include="src\core\macro.h" />
-    <ClInclude Include="src\core\entry_point.h" />
-    <ClInclude Include="src\core\log.h" />
-    <ClInclude Include="src\core\application.h" />
-    <ClInclude Include="src\core\assert.h" />
-    <ClInclude Include="src\pch\pch.h" />
-    <ClInclude Include="src\util\string_helper.h" />
+    <ClInclude Include="core\window.h" />
+    <ClInclude Include="core\scene.h" />
+    <ClInclude Include="core\window_container.h" />
+    <ClInclude Include="core\window_property.h" />
+    <ClInclude Include="core\entry_point.h" />
+    <ClInclude Include="core\application.h" />
+    <ClInclude Include="pch\pch.h" />
     <ClInclude Include="WX2Engine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

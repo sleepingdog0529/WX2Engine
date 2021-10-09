@@ -15,16 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\pch\pch.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
+    <ClCompile Include="startup.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="pch\pch.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\pch\pch.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\startup.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
+    <ClInclude Include="pch\pch.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
