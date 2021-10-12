@@ -10,9 +10,9 @@
 
 namespace wx2 
 {
-	class window_container;
+	class WindowContainer;
 
-	class window
+	class Window
 	{
 	public:
 		/// <summary>
@@ -20,24 +20,20 @@ namespace wx2
 		/// </summary>
 		/// <param name="container">格納先コンテナ</param>
 		/// <param name="window_prop">ウィンドウ設定</param>
-		window(window_container* container, const window_property& window_prop);
-		virtual ~window();
+		Window(WindowContainer* container, const WindowProperty& windowProp);
+		virtual ~Window();
 
-		WX2_DISALLOW_COPY_AND_MOVE(window);
+		WX2_DISALLOW_COPY_AND_MOVE(Window);
 
-		/// <returns>ウィンドウハンドル</returns>
-		HWND get_handle() const { return hwnd_; }
-		/// <returns>ウィンドウ横幅</returns>
-		int get_width() const { return window_prop_.width; }
-		/// <returns>ウィンドウ縦幅</returns>
-		int get_height() const { return window_prop_.height; }
-		/// <returns>フルスクリーンか</returns>
-		bool is_fullscreen() const { return window_prop_.fullscreen; }
+		HWND GetHandle() const { return hwnd_; }
+		int GetWidth() const { return windowProp_.width; }
+		int GetHeight() const { return windowProp_.height; }
+		bool IsFullscreen() const { return windowProp_.fullscreen; }
 
 	private:
-		window_container* container_;	// ウィンドウコンテナ
+		WindowContainer* container_;	// ウィンドウコンテナ
 		HWND hwnd_;						// ウィンドハンドル
-		std::string class_name_;		// クラス名
-		window_property window_prop_;	// ウィンドウ情報
+		std::string className_;		// クラス名
+		WindowProperty windowProp_;	// ウィンドウ情報
 	};
 }

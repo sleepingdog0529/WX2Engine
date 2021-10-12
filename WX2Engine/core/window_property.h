@@ -11,7 +11,7 @@ namespace wx2
 	/// <summary>
 	/// ウィンドウ情報
 	/// </summary>
-	struct window_property
+	struct WindowProperty
 	{
 		std::string title;
 		int x, y;

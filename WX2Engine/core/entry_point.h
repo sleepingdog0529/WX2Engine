@@ -7,15 +7,15 @@
 #pragma once
 #include "application.h"
 
-extern std::unique_ptr<wx2::application> wx2::create_app();
+extern std::unique_ptr<wx2::Application> wx2::CreateApp();
 
 /// <summary>
 /// エントリポイント
 /// </summary>
 int main(int argc, char** argv)
 {
-	auto app = wx2::create_app();
+	auto app = wx2::CreateApp();
 
-	app->run();
-	return 0;
+	app->Run();
+	return EXIT_SUCCESS;
 }

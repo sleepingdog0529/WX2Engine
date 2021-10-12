@@ -7,6 +7,13 @@
 #pragma once
 
 /// <summary>
+/// 1 を n 回左ビットシフトした値を返す
+/// </summary>
+/// <param name="n">左ビットシフト回数</param>
+/// <returns>1 を指定回数左ビットシフトした値</returns>
+#define WX2_BIT(n) (1 << (n))
+
+/// <summary>
 /// コピーコンストラクタの呼び出しを禁止する
 /// </summary>
 #define WX2_DISALLOW_COPY(name)				\

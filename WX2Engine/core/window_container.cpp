@@ -2,14 +2,9 @@
 
 namespace wx2 
 {
-	window_container::window_container() :
-		hinst_(GetModuleHandle(nullptr))
+	std::shared_ptr<Window> WindowContainer::Create(const std::string& name, const WindowProperty& windowProp)
 	{
-	}
-
-	std::shared_ptr<window> window_container::create(const std::string& name, const window_property& window_prop)
-	{
-		auto [itr, success] = render_windows_.emplace(name, std::make_shared<window>(this, window_prop));
+		auto [itr, success] = windows_.emplace(name, std::make_shared<Window>(this, windowProp));
 
 		if (!success)
 		{
@@ -20,7 +15,7 @@ namespace wx2
 		return itr->second;
 	}
 
-	void window_container::process_msgs(std::function<bool()> process)
+	void WindowContainer::ProcessMessages(std::function<bool()> process)
 	{
 		MSG msg = {};
 
@@ -38,7 +33,7 @@ namespace wx2
 		}
 	}
 
-	LRESULT window_container::wnd_proc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+	LRESULT WindowContainer::WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	{
 		return DefWindowProc(hwnd, msg, wp, lp);
 	}

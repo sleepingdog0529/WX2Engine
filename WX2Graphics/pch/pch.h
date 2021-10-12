@@ -10,4 +10,5 @@
 
 #pragma warning(push, 0) 
 
+#include <DirectXMath.h>
 #pragma warning(pop)

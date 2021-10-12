@@ -10,21 +10,24 @@
 
 namespace wx2
 {
-	logger::logger()
+	Logger::Logger()
 	{
 		namespace fs = std::filesystem;
 		namespace vs = std::views;
 		namespace ch = std::chrono;
 
 		// ログを格納するディレクトリ
-		const fs::path dir(FileDirectory);
-		WX2_ASSERT_MSG(fs::is_directory(dir), "指定されたディレクトリ\"{}\"は存在しません。");
+		const fs::path dir(FILE_DIR_);
+		if (!fs::is_directory(dir))
+		{
+			WX2_LOG_ERROR("指定されたディレクトリ\"{}\"は存在しません。", dir.string());
+		}
 
 		// ディレクトリ内のファイルを決まった数に保つ
-		std::vector log_files(fs::directory_iterator(dir), {});
-		if (log_files.size() >= MaxFiles)
+		std::vector logFiles(fs::directory_iterator(dir), {});
+		if (logFiles.size() >= MAX_FILE_)
 		{
-			for (const auto& f : vs::counted(log_files.begin(), log_files.size() - (MaxFiles - 1)))
+			for (const auto& f : vs::counted(logFiles.begin(), logFiles.size() - (MAX_FILE_ - 1)))
 			{
 				fs::remove(f);
 			}
@@ -32,19 +35,19 @@ namespace wx2
 
 		// 東京の現在時刻を取得
 		auto now = ch::system_clock::now();
-		ch::sys_seconds now_sec = ch::floor<ch::seconds>(now);
-		ch::zoned_time zoned_time{ "Asia/Tokyo", now_sec };
+		ch::sys_seconds nowSec = ch::floor<ch::seconds>(now);
+		ch::zoned_time zonedTime{ "Asia/Tokyo", nowSec };
 
 		// ログファイルの生成先パス
-		const fs::path path = dir / std::format(FileName, zoned_time);
+		const fs::path path = dir / std::format(FILE_NAME_, zonedTime);
 
 		// ログの出力先を指定
-		std::vector<spdlog::sink_ptr> logger_sink;
-		logger_sink.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
-		logger_sink.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(path.string(), true));
+		std::vector<spdlog::sink_ptr> loggerSink;
+		loggerSink.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
+		loggerSink.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(path.string(), true));
 
 		// ロガーを作成
-		logger_ = std::make_shared<spdlog::logger>("logger", logger_sink.begin(), logger_sink.end());
+		logger_ = std::make_shared<spdlog::logger>("logger", loggerSink.begin(), loggerSink.end());
 		logger_->set_level(spdlog::level::trace);
 		logger_->flush_on(spdlog::level::trace);
 
@@ -52,7 +55,7 @@ namespace wx2
 		set_default_logger(logger_);
 	}
 
-	logger::~logger()
+	Logger::~Logger()
 	{
 		// ロガーを終了させる
 		spdlog::shutdown();

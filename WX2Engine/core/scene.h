@@ -8,7 +8,7 @@
 
 namespace wx2
 {
-	class scene
+	class Scene
 	{
 
 	};

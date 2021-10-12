@@ -16,29 +16,29 @@ namespace wx2
 	/// <para>アプリケーション基礎クラス</para>
 	/// <para>クライアントはこれを継承してアプリケーションの動作を定義する</para>
 	/// </summary>
-	class application
+	class Application
 	{
 	public:
-		application();
-		virtual ~application();
+		Application();
+		virtual ~Application();
 
-		WX2_DISALLOW_COPY_AND_MOVE(application);
+		WX2_DISALLOW_COPY_AND_MOVE(Application);
 
 	private:
 		/// <summary>
 		/// アプリケーションを実行する
 		/// </summary>
-		void run();
+		void Run();
 
 		// main関数でのみ実行を許可
 		friend int ::main(int argc, char** argv);
 
-		logger log_;
-		window_container window_container_;
+		Logger log_;
+		WindowContainer windowContainer_;
 
-		static bool instantiated_;
+		static inline bool instantiated_ = false;
 	};
 
 	// クライアントが定義する
-	std::unique_ptr<application> create_app();
+	std::unique_ptr<Application> CreateApp();
 }

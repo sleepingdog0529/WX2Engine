@@ -5,8 +5,10 @@
  * @brief	アサーション
 *********************************************************************/
 #pragma once
+#pragma warning(push, 0) 
 #define BOOST_ENABLE_ASSERT_HANDLER
 #include <boost/assert.hpp>
+#pragma warning(pop)
 
 #if defined(NDEBUG)
 

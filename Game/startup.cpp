@@ -1,4 +1,4 @@
-class Game : public wx2::application
+class Game : public wx2::Application
 {
 public:
 	Game()
@@ -10,7 +10,7 @@ public:
 	}
 };
 
-std::unique_ptr<wx2::application> wx2::create_app()
+std::unique_ptr<wx2::Application> wx2::CreateApp()
 {
 	return std::make_unique<Game>();
 }

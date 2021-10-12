@@ -2,25 +2,31 @@
 
 namespace wx2
 {
-	LRESULT CALLBACK handle_msg_redirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
-	LRESULT CALLBACK handle_msg_setup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
+	LRESULT CALLBACK HandleMsgRedirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
+	LRESULT CALLBACK HandleMsgSetup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
 
-	window::window(window_container* container, const window_property& window_prop) :
+	Window::Window(WindowContainer* container, const WindowProperty& windowProp) :
 		container_(container),
-		window_prop_(window_prop)
+		windowProp_(windowProp)
 	{
+		WX2_ASSERT(windowProp_.width > 0);
+		WX2_ASSERT(windowProp_.height > 0);
+
 		// ランダムにユニークIDを生成
 		const boost::uuids::uuid uuid = boost::uuids::random_generator()();
 		std::stringstream uuid_ss;
 		uuid_ss << uuid;
-		class_name_ = std::format("wx2eg-{}", uuid_ss.str());
+		className_ = std::format("wx2eg-{}", uuid_ss.str());
+
+		// インスタンスハンドル取得
+		const HINSTANCE hinst = GetModuleHandle(nullptr);
 
 		// ウィンドウクラスを登録
 		WNDCLASSEX wcex = {};
 		wcex.cbSize = sizeof(wcex);
-		wcex.lpfnWndProc = handle_msg_setup;
-		wcex.hInstance = container_->get_instance_handle();
-		wcex.lpszClassName = class_name_.c_str();
+		wcex.lpfnWndProc = HandleMsgSetup;
+		wcex.hInstance = hinst;
+		wcex.lpszClassName = className_.c_str();
 		if (!RegisterClassEx(&wcex))
 		{
 			WX2_LOG_ERROR("ウィンドウクラスの登録に失敗しました。code\"{}\"", GetLastError());
@@ -29,16 +35,16 @@ namespace wx2
 
 		// ウィンドウを作成
 		hwnd_ = CreateWindow(
-			class_name_.c_str(),
-			window_prop_.title.c_str(),
+			className_.c_str(),
+			windowProp_.title.c_str(),
 			WS_OVERLAPPED | WS_CAPTION,
-			window_prop_.x,
-			window_prop_.y,
-			window_prop_.width,
-			window_prop_.height,
+			windowProp_.x,
+			windowProp_.y,
+			windowProp_.width,
+			windowProp_.height,
 			nullptr,
 			nullptr,
-			container_->get_instance_handle(),
+			hinst,
 			container_
 		);
 		if (!hwnd_)
@@ -52,17 +58,17 @@ namespace wx2
 		UpdateWindow(hwnd_);
 	}
 
-	window::~window()
+	Window::~Window()
 	{
 		// ウィンドウを登録解除し、破棄する
 		if (hwnd_)
 		{
-			UnregisterClass(class_name_.c_str(), container_->get_instance_handle());
+			UnregisterClass(className_.c_str(), GetModuleHandle(nullptr));
 			DestroyWindow(hwnd_);
 		}
 	}
 
-	LRESULT CALLBACK handle_msg_redirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+	LRESULT CALLBACK HandleMsgRedirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	{
 		switch (msg)
 		{
@@ -72,16 +78,16 @@ namespace wx2
 		default:
 		{
 			// パラメータからウィンドウコンテナにキャストする
-			window_container* const wnd_container = 
-				reinterpret_cast<window_container*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+			WindowContainer* const wndContainer = 
+				reinterpret_cast<WindowContainer*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
 			// 動的なウィンドウプロシージャに処理を委譲する
-			return wnd_container->wnd_proc(hwnd, msg, wp, lp);
+			return wndContainer->WndProc(hwnd, msg, wp, lp);
 		}
 		}
 	}
 
-	LRESULT CALLBACK handle_msg_setup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+	LRESULT CALLBACK HandleMsgSetup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	{
 		switch (msg)
 		{
@@ -89,21 +95,21 @@ namespace wx2
 		{
 			// パラメータからウィンドウコンテナにキャストする
 			const CREATESTRUCTW* const create = reinterpret_cast<CREATESTRUCTW*>(lp);
-			window_container* wnd_container = 
-				reinterpret_cast<window_container*>(create->lpCreateParams);
+			WindowContainer* wndContainer = 
+				reinterpret_cast<WindowContainer*>(create->lpCreateParams);
 
-			if (!wnd_container)
+			if (!wndContainer)
 			{
 				WX2_LOG_CRITICAL("windows_containerはnullptrです。");
 				exit(EXIT_FAILURE);
 			}
 
 			// ウィンドウプロシージャを差し替え
-			SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(wnd_container));
-			SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(handle_msg_redirect));
+			SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(wndContainer));
+			SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(HandleMsgRedirect));
 
 			// 動的なウィンドウプロシージャに処理を委譲する
-			return wnd_container->wnd_proc(hwnd, msg, wp, lp);
+			return wndContainer->WndProc(hwnd, msg, wp, lp);
 		}
 		default:
 			return DefWindowProc(hwnd, msg, wp, lp);

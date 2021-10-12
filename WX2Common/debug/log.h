@@ -21,18 +21,18 @@ namespace wx2
 	/// <summary>
 	/// ロギングクラス
 	/// </summary>
-	class logger
+	class Logger
 	{
 	private:
-		static constexpr size_t MaxFiles = 3;	// ログファイルの最大数
-		static constexpr const char* FileDirectory = ".\\log";	// ログファイルを置くディレクトリ
-		static constexpr const char* FileName = "{:%Y-%m-%d-%H-%M-%S}.log";	// ログファイル名のフォーマット
+		static constexpr std::size_t MAX_FILE_ = 3;	// ログファイルの最大数
+		static constexpr const char* FILE_DIR_ = ".\\log";	// ログファイルを置くディレクトリ
+		static constexpr const char* FILE_NAME_ = "{:%Y-%m-%d-%H-%M-%S}.log";	// ログファイル名のフォーマット
 
 	public:
-		logger();
-		virtual ~logger();
+		Logger();
+		virtual ~Logger();
 
-		WX2_DISALLOW_COPY_AND_MOVE(logger);
+		WX2_DISALLOW_COPY_AND_MOVE(Logger);
 
 	private:
 		std::shared_ptr<spdlog::logger> logger_;

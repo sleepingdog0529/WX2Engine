@@ -7,6 +7,7 @@
 #pragma once
 
 #include <WX2Common.h>
+#include <WX2Input.h>
 
 #pragma warning(push, 0) 
 #include <memory>
@@ -22,6 +23,7 @@
 #include <functional>
 #include <sstream>
 #include <memory>
+#include <iostream>
 
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>

@@ -3,19 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31613.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Engine", "WX2Engine\WX2Engine.vcxproj", "{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}"
-	ProjectSection(ProjectDependencies) = postProject
-		{15E3903F-D8AD-4B65-88A8-C27A79974449} = {15E3903F-D8AD-4B65-88A8-C27A79974449}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{C376DDD0-7798-429F-83D7-D91453BF2473}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2} = {DF121E6F-5A96-49CA-AC93-40DB331A2CA2}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Engine", "WX2Engine\WX2Engine.vcxproj", "{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{65182225-DF4D-4F88-A70D-2C8E3FC0837D} = {65182225-DF4D-4F88-A70D-2C8E3FC0837D}
+		{F46EC134-67E3-40AC-A8D2-48F264AFE398} = {F46EC134-67E3-40AC-A8D2-48F264AFE398}
+		{15E3903F-D8AD-4B65-88A8-C27A79974449} = {15E3903F-D8AD-4B65-88A8-C27A79974449}
+	EndProjectSection
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Common", "WX2Common\WX2Common.vcxproj", "{15E3903F-D8AD-4B65-88A8-C27A79974449}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Graphics", "WX2Graphics\Graphics.vcxproj", "{F46EC134-67E3-40AC-A8D2-48F264AFE398}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Graphics", "WX2Graphics\WX2Graphics.vcxproj", "{F46EC134-67E3-40AC-A8D2-48F264AFE398}"
+	ProjectSection(ProjectDependencies) = postProject
+		{15E3903F-D8AD-4B65-88A8-C27A79974449} = {15E3903F-D8AD-4B65-88A8-C27A79974449}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Input", "WX2Input\WX2Input.vcxproj", "{65182225-DF4D-4F88-A70D-2C8E3FC0837D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{15E3903F-D8AD-4B65-88A8-C27A79974449} = {15E3903F-D8AD-4B65-88A8-C27A79974449}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,18 +35,18 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}.Debug|x64.ActiveCfg = Debug|x64
-		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}.Debug|x64.Build.0 = Debug|x64
-		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}.Debug|x86.ActiveCfg = Debug|x64
-		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}.Release|x64.ActiveCfg = Release|x64
-		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}.Release|x64.Build.0 = Release|x64
-		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}.Release|x86.ActiveCfg = Release|x64
 		{C376DDD0-7798-429F-83D7-D91453BF2473}.Debug|x64.ActiveCfg = Debug|x64
 		{C376DDD0-7798-429F-83D7-D91453BF2473}.Debug|x64.Build.0 = Debug|x64
 		{C376DDD0-7798-429F-83D7-D91453BF2473}.Debug|x86.ActiveCfg = Debug|x64
 		{C376DDD0-7798-429F-83D7-D91453BF2473}.Release|x64.ActiveCfg = Release|x64
 		{C376DDD0-7798-429F-83D7-D91453BF2473}.Release|x64.Build.0 = Release|x64
 		{C376DDD0-7798-429F-83D7-D91453BF2473}.Release|x86.ActiveCfg = Release|x64
+		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}.Debug|x64.ActiveCfg = Debug|x64
+		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}.Debug|x64.Build.0 = Debug|x64
+		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}.Debug|x86.ActiveCfg = Debug|x64
+		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}.Release|x64.ActiveCfg = Release|x64
+		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}.Release|x64.Build.0 = Release|x64
+		{DF121E6F-5A96-49CA-AC93-40DB331A2CA2}.Release|x86.ActiveCfg = Release|x64
 		{15E3903F-D8AD-4B65-88A8-C27A79974449}.Debug|x64.ActiveCfg = Debug|x64
 		{15E3903F-D8AD-4B65-88A8-C27A79974449}.Debug|x64.Build.0 = Debug|x64
 		{15E3903F-D8AD-4B65-88A8-C27A79974449}.Debug|x86.ActiveCfg = Debug|x64
@@ -49,6 +59,12 @@ Global
 		{F46EC134-67E3-40AC-A8D2-48F264AFE398}.Release|x64.ActiveCfg = Release|x64
 		{F46EC134-67E3-40AC-A8D2-48F264AFE398}.Release|x64.Build.0 = Release|x64
 		{F46EC134-67E3-40AC-A8D2-48F264AFE398}.Release|x86.ActiveCfg = Release|x64
+		{65182225-DF4D-4F88-A70D-2C8E3FC0837D}.Debug|x64.ActiveCfg = Debug|x64
+		{65182225-DF4D-4F88-A70D-2C8E3FC0837D}.Debug|x64.Build.0 = Debug|x64
+		{65182225-DF4D-4F88-A70D-2C8E3FC0837D}.Debug|x86.ActiveCfg = Debug|x64
+		{65182225-DF4D-4F88-A70D-2C8E3FC0837D}.Release|x64.ActiveCfg = Release|x64
+		{65182225-DF4D-4F88-A70D-2C8E3FC0837D}.Release|x64.Build.0 = Release|x64
+		{65182225-DF4D-4F88-A70D-2C8E3FC0837D}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
