@@ -29,7 +29,7 @@ namespace wx2
 		wcex.lpszClassName = className_.c_str();
 		if (!RegisterClassEx(&wcex))
 		{
-			WX2_LOG_ERROR("ウィンドウクラスの登録に失敗しました。code\"{}\"", GetLastError());
+			WX2_LOG_ERROR("ウィンドウクラスの登録に失敗しました。エラーコード:\"{}\"", GetLastError());
 			exit(EXIT_FAILURE);
 		}
 
@@ -49,7 +49,7 @@ namespace wx2
 		);
 		if (!hwnd_)
 		{
-			WX2_LOG_ERROR("ウィンドウの作成に失敗しました。code\"{}\"", GetLastError());
+			WX2_LOG_ERROR("ウィンドウの作成に失敗しました。エラーコード:\"{}\"", GetLastError());
 			exit(EXIT_FAILURE);
 		}
 

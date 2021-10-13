@@ -13,7 +13,8 @@ namespace wx2
 	/// </summary>
 	/// <param name="strv">•¶š—ñƒrƒ…[</param>
 	/// <returns>•¶š—ñ</returns>
-	inline std::string ToString(std::string_view strv) {
+	inline std::string ToString(std::string_view strv) 
+	{
 		return { strv.data(), strv.size() };
 	}
 }

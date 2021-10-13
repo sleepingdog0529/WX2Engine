@@ -18,14 +18,14 @@ namespace wx2
 	class Input
 	{
 	public:
-		/// <summary>
-		/// 入力デバイスの初期化
-		/// </summary>
-		static void Initialize();
+		explicit Input(HWND hwnd);
+		void AcquireDevices();
 
-		static IDirectInput8* GetDirectInput() { return directInput_.Get(); }
+		IDirectInput8* GetDirectInput() { return directInput_.Get(); }
 
 	private:
-		static inline Microsoft::WRL::ComPtr<IDirectInput8> directInput_;
+		HWND hwnd_;
+		Microsoft::WRL::ComPtr<IDirectInput8> directInput_;
+		std::vector<DIDEVICEINSTANCE> devices_;
 	};
 }

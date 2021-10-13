@@ -5,15 +5,19 @@
  * @brief	キーボード入力
 *********************************************************************/
 #pragma once
+#pragma warning(push, 0) 
 #include <bitset>
+#include <dinput.h>
+#include <wrl/client.h>
+#pragma warning(pop)
 
 namespace wx2
 {
 	class Keyboard
 	{
 	public:
-		enum Key : uint8_t
-		{
+		enum KeyCode : uint8_t
+		{ 
 			Escape			= 0x01,
 			D1				= 0x02,
 			D2				= 0x03,
@@ -130,7 +134,22 @@ namespace wx2
 			NUM_KEYS
 		};
 
+		static void Initialize(HWND hwnd);
+		static void Finalize();
+		static void Update();
+
+		static void StateReset();
+
+		static bool IsDown(KeyCode key) { return keys_[0][key]; }
+		static bool IsUp(KeyCode key) { return !keys_[0][key]; }
+		static bool IsPressed(KeyCode key) { return keys_[0][key] && !keys_[1][key]; }
+		static bool IsReleased(KeyCode key) { return !keys_[0][key] && keys_[1][key]; }
+
 	private:
-		std::bitset<NUM_KEYS> keys_;
+		static inline HWND hwnd_;
+		static inline Microsoft::WRL::ComPtr<IDirectInputDevice8> device_;
+		static inline std::array<uint8_t, 256> buffer_;
+
+		static inline std::bitset<NUM_KEYS> keys_[2];
 	};
 }

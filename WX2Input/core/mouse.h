@@ -6,7 +6,6 @@
 *********************************************************************/
 #pragma once
 #pragma warning(push, 0) 
-#include <array>
 #include <bitset>
 #include <dinput.h>
 #include <wrl/client.h>
@@ -21,7 +20,7 @@ namespace wx2
 	class Mouse
 	{
 	public:
-		enum Button : uint8_t
+		enum ButtonCode : uint8_t
 		{
 			Left = 0,
 			Right,
@@ -37,23 +36,23 @@ namespace wx2
 
 		static void StateReset();
 
-		static bool IsDown(Button button) { return buttons_[0][button]; }
-		static bool IsUp(Button button) { return !buttons_[0][button]; }
-		static bool IsPressed(Button button) { return buttons_[0][button] && !buttons_[1][button]; }
-		static bool IsReleased(Button button) { return !buttons_[0][button] && buttons_[1][button]; }
-		static Eigen::Vector2f GetVelocity() { return cursor_; }
+		static bool IsDown(ButtonCode button) { return buttons_[0][button]; }
+		static bool IsUp(ButtonCode button) { return !buttons_[0][button]; }
+		static bool IsPressed(ButtonCode button) { return buttons_[0][button] && !buttons_[1][button]; }
+		static bool IsReleased(ButtonCode button) { return !buttons_[0][button] && buttons_[1][button]; }
+		static Eigen::Vector2f GetVelocity() { return velocity_; }
 		static float GetScroll() { return scroll_; }
 
 	private:
 		static constexpr float CURSOR_SENSITIVITY_ = 0.0018f;
 		static constexpr float SCOLL_SENSITIVITY_ = 1.0f;
 
-		static inline HWND hwnd_ = nullptr;
-		static inline Microsoft::WRL::ComPtr<IDirectInputDevice8A> device_;
+		static inline HWND hwnd_;
+		static inline Microsoft::WRL::ComPtr<IDirectInputDevice8> device_;
 		static inline DIMOUSESTATE2 state_;
 
-		static inline std::array<std::bitset<NUM_BUTTONS>, 2> buttons_;
-		static inline Eigen::Vector2f cursor_{ 0.0f, 0.0f };
-		static inline float scroll_ = 0.0f;
+		static inline std::bitset<NUM_BUTTONS> buttons_[2];
+		static inline Eigen::Vector2f velocity_;
+		static inline float scroll_;
 	};
 }

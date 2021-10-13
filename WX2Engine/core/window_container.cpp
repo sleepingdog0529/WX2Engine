@@ -8,7 +8,7 @@ namespace wx2
 
 		if (!success)
 		{
-			WX2_LOG_CRITICAL("ウィンドウ名が重複しています。ウィンドウ名\"{}\"", name);
+			WX2_LOG_CRITICAL("ウィンドウ名が重複しています。ウィンドウ名:\"{}\"", name);
 			exit(EXIT_FAILURE);
 		}
 

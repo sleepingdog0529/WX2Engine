@@ -7,7 +7,7 @@ namespace wx2
 		// ロケールの設定
 		std::setlocale(LC_CTYPE, ".UTF-8");
 
-		WX2_LOG_INFO("WX2Engine 初期化開始...");
+		WX2_LOG_TRACE("アプリケーション初期化開始");
 
 		// 画面サイズ取得
 		const int screenWidth = GetSystemMetrics(SM_CXSCREEN);
@@ -25,22 +25,22 @@ namespace wx2
 		// メインウィンドウ生成
 		auto mainWnd = windowContainer_.Create("MainWindow", wndProp);
 
-		Input::Initialize();
-		Mouse::Initialize(mainWnd->GetHandle());
+		Input input(mainWnd->GetHandle());
+		input.AcquireDevices();
 	}
 
 	Application::~Application()
 	{
-		Mouse::Finalize();
+		WX2_LOG_TRACE("アプリケーション終了処理開始");
 	}
 
 	void Application::Run()
 	{
+		WX2_LOG_TRACE("アプリケーション実行開始");
+
 		windowContainer_.ProcessMessages([]()
 		{
-			Mouse::Update();
-
-			return !Mouse::IsReleased(Mouse::X2);
+			return false;
 		});
 	}
 }

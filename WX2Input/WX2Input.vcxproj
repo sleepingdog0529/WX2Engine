@@ -11,18 +11,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core\mouse.cpp" />
     <ClCompile Include="core\input.cpp" />
-    <ClCompile Include="core\keyboard.cpp" />
     <ClCompile Include="pch\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\mouse.h" />
     <ClInclude Include="core\input.h" />
-    <ClInclude Include="core\keyboard.h" />
     <ClInclude Include="pch\pch.h" />
     <ClInclude Include="WX2Input.h" />
   </ItemGroup>
@@ -101,7 +97,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2CommonD.lib;xinput.lib;dinput8.lib;dxguid.lib</AdditionalDependencies>
+      <AdditionalDependencies>WX2CommonD.lib;xinput.lib;dinput8.lib;dxguid.lib;xinput.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -133,7 +129,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2Common.lib;xinput.lib;dinput8.lib;dxguid.lib;</AdditionalDependencies>
+      <AdditionalDependencies>WX2Common.lib;xinput.lib;dinput8.lib;dxguid.lib;xinput.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
