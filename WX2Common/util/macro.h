@@ -13,6 +13,8 @@
 /// <returns>1 を指定回数左ビットシフトした値</returns>
 #define WX2_BIT(n) (1 << (n))
 
+#define WX2_DECLARE_ENUM_COUNT
+
 /// <summary>
 /// コピーコンストラクタの呼び出しを禁止する
 /// </summary>

@@ -40,7 +40,7 @@ namespace wx2
 		/// <summary>
 		/// ウィンドウプロシージャ
 		/// </summary>
-		LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
+		LRESULT WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Window>> windows_;	// ウィンドウリスト

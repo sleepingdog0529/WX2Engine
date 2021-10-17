@@ -3,10 +3,12 @@
   <ItemGroup>
     <ClCompile Include="pch\pch.cpp" />
     <ClCompile Include="core\input.cpp" />
+    <ClCompile Include="core\gamepad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch\pch.h" />
     <ClInclude Include="WX2Input.h" />
     <ClInclude Include="core\input.h" />
+    <ClInclude Include="core\gamepad.h" />
   </ItemGroup>
 </Project>

@@ -25,8 +25,7 @@ namespace wx2
 		// メインウィンドウ生成
 		auto mainWnd = windowContainer_.Create("MainWindow", wndProp);
 
-		Input input(mainWnd->GetHandle());
-		input.AcquireDevices();
+		input_.Initialize(mainWnd->GetHandle());
 	}
 
 	Application::~Application()
@@ -38,9 +37,11 @@ namespace wx2
 	{
 		WX2_LOG_TRACE("アプリケーション実行開始");
 
-		windowContainer_.ProcessMessages([]()
+		windowContainer_.ProcessMessages([this]()
 		{
-			return false;
+			input_.Update();
+
+			return true;
 		});
 	}
 }

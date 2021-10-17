@@ -2,8 +2,8 @@
 
 namespace wx2
 {
-	LRESULT CALLBACK HandleMsgRedirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
-	LRESULT CALLBACK HandleMsgSetup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
+	LRESULT CALLBACK HandleMessageRedirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
+	LRESULT CALLBACK HandleMessageSetup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
 
 	Window::Window(WindowContainer* container, const WindowProperty& windowProp) :
 		container_(container),
@@ -24,7 +24,7 @@ namespace wx2
 		// ウィンドウクラスを登録
 		WNDCLASSEX wcex = {};
 		wcex.cbSize = sizeof(wcex);
-		wcex.lpfnWndProc = HandleMsgSetup;
+		wcex.lpfnWndProc = HandleMessageSetup;
 		wcex.hInstance = hinst;
 		wcex.lpszClassName = className_.c_str();
 		if (!RegisterClassEx(&wcex))
@@ -68,7 +68,7 @@ namespace wx2
 		}
 	}
 
-	LRESULT CALLBACK HandleMsgRedirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+	LRESULT CALLBACK HandleMessageRedirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	{
 		switch (msg)
 		{
@@ -82,12 +82,12 @@ namespace wx2
 				reinterpret_cast<WindowContainer*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
 			// 動的なウィンドウプロシージャに処理を委譲する
-			return wndContainer->WndProc(hwnd, msg, wp, lp);
+			return wndContainer->WindowProcedure(hwnd, msg, wp, lp);
 		}
 		}
 	}
 
-	LRESULT CALLBACK HandleMsgSetup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+	LRESULT CALLBACK HandleMessageSetup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	{
 		switch (msg)
 		{
@@ -106,10 +106,10 @@ namespace wx2
 
 			// ウィンドウプロシージャを差し替え
 			SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(wndContainer));
-			SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(HandleMsgRedirect));
+			SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(HandleMessageRedirect));
 
 			// 動的なウィンドウプロシージャに処理を委譲する
-			return wndContainer->WndProc(hwnd, msg, wp, lp);
+			return wndContainer->WindowProcedure(hwnd, msg, wp, lp);
 		}
 		default:
 			return DefWindowProc(hwnd, msg, wp, lp);

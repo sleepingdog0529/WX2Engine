@@ -6,6 +6,7 @@
 *********************************************************************/
 #pragma once
 #include <wx2common.h>
+#include <WX2Input.h>
 #include "window_container.h"
 
 int main(int argc, char** argv);
@@ -18,6 +19,10 @@ namespace wx2
 	/// </summary>
 	class Application
 	{
+	private:
+		// mainŠÖ”‚Å‚Ì‚İÀs‚ğ‹–‰Â
+		friend int ::main(int argc, char** argv);
+
 	public:
 		Application();
 		virtual ~Application();
@@ -30,11 +35,9 @@ namespace wx2
 		/// </summary>
 		void Run();
 
-		// mainŠÖ”‚Å‚Ì‚İÀs‚ğ‹–‰Â
-		friend int ::main(int argc, char** argv);
-
 		Logger log_;
 		WindowContainer windowContainer_;
+		Input input_;
 
 		static inline bool instantiated_ = false;
 	};

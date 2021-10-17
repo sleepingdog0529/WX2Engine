@@ -5,9 +5,9 @@
  * @brief	デバイス入力共通クラス
 *********************************************************************/
 #pragma once
-#pragma warning(push, 0) 
+#pragma warning(push, 0)
+#include "gamepad.h"
 #include <dinput.h>
-#include <wrl/client.h>
 #pragma warning(pop)
 
 namespace wx2
@@ -17,15 +17,17 @@ namespace wx2
 	/// </summary>
 	class Input
 	{
-	public:
-		explicit Input(HWND hwnd);
-		void AcquireDevices();
+	private:
+		using DInputPtr = Microsoft::WRL::ComPtr<IDirectInput8>;
 
-		IDirectInput8* GetDirectInput() { return directInput_.Get(); }
+	public:
+		Input();
+		virtual ~Input() = default;
+
+		void Initialize(HWND hwnd);
+		void Update();
 
 	private:
-		HWND hwnd_;
-		Microsoft::WRL::ComPtr<IDirectInput8> directInput_;
-		std::vector<DIDEVICEINSTANCE> devices_;
+		DInputPtr directInput_;
 	};
 }

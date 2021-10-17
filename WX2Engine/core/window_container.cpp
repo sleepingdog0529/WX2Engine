@@ -33,7 +33,7 @@ namespace wx2
 		}
 	}
 
-	LRESULT WindowContainer::WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+	LRESULT WindowContainer::WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	{
 		return DefWindowProc(hwnd, msg, wp, lp);
 	}
