@@ -14,8 +14,14 @@ namespace wx2
 	/// <param name="val">”»’è‚·‚é’l</param>
 	/// <returns>•„†’l</returns>
 	template <typename T>
-	T Sign(T val)
+	constexpr T Sign(T val)
 	{
 		return (val > T(0)) - (val < T(0));
+	}
+
+	template <typename T>
+	constexpr T Remap(T val, T inMin, T inMax, T outMin, T outMax)
+	{
+		return (val - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 	}
 }

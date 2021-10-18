@@ -28,5 +28,6 @@ namespace wx2
 
 	void Input::Update()
 	{
+		gamepad_.Update();
 	}
 }

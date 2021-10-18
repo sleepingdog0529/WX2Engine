@@ -29,5 +29,6 @@ namespace wx2
 
 	private:
 		DInputPtr directInput_;
+		Gamepad gamepad_;
 	};
 }
