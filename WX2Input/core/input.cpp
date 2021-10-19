@@ -24,10 +24,14 @@ namespace wx2
 			WX2_LOG_ERROR("DirectInput8ÇÃçÏê¨Ç…é∏îsÇµÇ‹ÇµÇΩÅB");
 			exit(EXIT_FAILURE);
 		}
+
+		mouse_.Initialize(directInput_, hwnd);
+		mouse_.Regist();
 	}
 
 	void Input::Update()
 	{
 		gamepad_.Update();
+		mouse_.Update();
 	}
 }

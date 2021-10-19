@@ -4,11 +4,13 @@
     <ClCompile Include="pch\pch.cpp" />
     <ClCompile Include="core\input.cpp" />
     <ClCompile Include="core\gamepad.cpp" />
+    <ClCompile Include="core\mouse.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch\pch.h" />
     <ClInclude Include="WX2Input.h" />
     <ClInclude Include="core\input.h" />
     <ClInclude Include="core\gamepad.h" />
+    <ClInclude Include="core\mouse.h" />
   </ItemGroup>
 </Project>

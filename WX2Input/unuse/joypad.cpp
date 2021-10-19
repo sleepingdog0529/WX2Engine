@@ -23,6 +23,7 @@ namespace wx2
 	void Joypad::Initialize(DInputPtr directInput, HWND hwnd)
 	{
 		WX2_ASSERT_MSG(directInput, "IDirectInputDevice8がnullptrです。");
+		WX2_ASSERT_MSG(IsWindowEnabled(hwnd) != 0, "ウィンドウハンドルが無効です。");
 		directInput_ = directInput;
 		hwnd_ = hwnd;
 	}
@@ -67,6 +68,7 @@ namespace wx2
 			if (FAILED(hr))
 			{
 				WX2_LOG_WARN("ジョイスティック状態取得に失敗しました。");
+				continue;
 			}
 		}
 	}

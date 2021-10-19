@@ -6,6 +6,7 @@
 *********************************************************************/
 #pragma once
 #pragma warning(push, 0)
+#include "mouse.h"
 #include "gamepad.h"
 #include <dinput.h>
 #pragma warning(pop)
@@ -27,8 +28,14 @@ namespace wx2
 		void Initialize(HWND hwnd);
 		void Update();
 
+		bool IsDown(Mouse::Buttons button) const { return mouse_.IsDown(button); }
+		bool IsPressed(Mouse::Buttons button) const { return mouse_.IsReleased(button); }
+		bool IsReleased(Mouse::Buttons button) const { return mouse_.IsReleased(button); }
+		float GetAxisValue(Mouse::Axises axises) const { return mouse_.GetAxisVelocity(axises); }
+
 	private:
 		DInputPtr directInput_;
+		Mouse mouse_;
 		Gamepad gamepad_;
 	};
 }

@@ -4,36 +4,40 @@
 
 namespace wx2
 {
-	Gamepad::Gamepad()
+	Gamepad::Gamepad() :
+		states_{}
 	{
-		std::memset(&states_, 0, sizeof(states_));
 	}
 
 	void Gamepad::Update()
 	{
-		for (auto& [current, prev, connection] : states_)
+		// コントローラーの最大接続数分ループ
+		for (auto& [curt, prev, isConected] : states_)
 		{
-			prev = std::move(current);
-			memset(&current, 0, sizeof(current));
+			prev = std::move(curt);
+			memset(&curt, 0, sizeof(curt));
 
-			connection = XInputGetState(0, &buffer_) == ERROR_SUCCESS;
-			if (connection)
+			// コントローラー状態取得、接続中であるか調べる
+			isConected = XInputGetState(0, &buffer_) == ERROR_SUCCESS;
+			if (isConected)
 			{
-				current.buttons[DPadUp]	   = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP;
-				current.buttons[DPadDown]  = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN;
-				current.buttons[DPadLeft]  = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT;
-				current.buttons[DPadRight] = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT;
-				current.buttons[Start]     = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_START;
-				current.buttons[Back]      = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_BACK;
-				current.buttons[LThumb]    = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB;
-				current.buttons[RThumb]    = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB;
-				current.buttons[LShoulder] = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER;
-				current.buttons[RShoulder] = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER;
-				current.buttons[A]         = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_A;
-				current.buttons[B]         = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_B;
-				current.buttons[X]         = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_X;
-				current.buttons[Y]         = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_Y;
+				// ボタン状態を格納
+				curt.buttons[DPadUp]	= buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP;
+				curt.buttons[DPadDown]  = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN;
+				curt.buttons[DPadLeft]  = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT;
+				curt.buttons[DPadRight] = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT;
+				curt.buttons[Start]     = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_START;
+				curt.buttons[Back]      = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_BACK;
+				curt.buttons[LThumb]    = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB;
+				curt.buttons[RThumb]    = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB;
+				curt.buttons[LShoulder] = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER;
+				curt.buttons[RShoulder] = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER;
+				curt.buttons[A]         = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_A;
+				curt.buttons[B]         = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_B;
+				curt.buttons[X]         = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_X;
+				curt.buttons[Y]         = buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_Y;
 
+				// 軸値をfloat型の0~1に変換
 				const float lt = buffer_.Gamepad.bLeftTrigger  / (float)UCHAR_MAX;
 				const float rt = buffer_.Gamepad.bRightTrigger / (float)UCHAR_MAX;
 				const float lx = buffer_.Gamepad.sThumbLX / (float)SHRT_MAX;
@@ -41,12 +45,13 @@ namespace wx2
 				const float rx = buffer_.Gamepad.sThumbRX / (float)SHRT_MAX;
 				const float ry = buffer_.Gamepad.sThumbRY / (float)SHRT_MAX;
 
-				current.axises[LTrigger] = std::clamp(Remap(lt, TRIGGER_DEADZONE_, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f);
-				current.axises[RTrigger] = std::clamp(Remap(rt, TRIGGER_DEADZONE_, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f);
-				current.axises[LThumbX]  = std::clamp(Remap(std::fabsf(lx), LEFT_THUMB_DEADZONE_, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(lx);
-				current.axises[LThumbY]  = std::clamp(Remap(std::fabsf(ly), LEFT_THUMB_DEADZONE_, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(ly);
-				current.axises[RThumbX]  = std::clamp(Remap(std::fabsf(rx), RIGHT_THUMB_DEADZONE_, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(rx);
-				current.axises[RThumbY]  = std::clamp(Remap(std::fabsf(ry), RIGHT_THUMB_DEADZONE_, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(ry);
+				// デッドゾーンを適応して軸値を格納
+				curt.axises[LTrigger] = std::clamp(Remap(lt, TRIGGER_DEADZONE_, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f);
+				curt.axises[RTrigger] = std::clamp(Remap(rt, TRIGGER_DEADZONE_, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f);
+				curt.axises[LThumbX]  = std::clamp(Remap(std::fabsf(lx), LEFT_THUMB_DEADZONE_, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(lx);
+				curt.axises[LThumbY]  = std::clamp(Remap(std::fabsf(ly), LEFT_THUMB_DEADZONE_, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(ly);
+				curt.axises[RThumbX]  = std::clamp(Remap(std::fabsf(rx), RIGHT_THUMB_DEADZONE_, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(rx);
+				curt.axises[RThumbY]  = std::clamp(Remap(std::fabsf(ry), RIGHT_THUMB_DEADZONE_, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(ry);
 			}
 		}
 	}
@@ -58,12 +63,12 @@ namespace wx2
 
 	bool Gamepad::IsPressed(Buttons button, size_t user) const
 	{
-		return states_[user].current.buttons[button] & !states_[user].prev.buttons[button];
+		return states_[user].current.buttons[button] & !states_[user].previous.buttons[button];
 	}
 
 	bool Gamepad::IsReleased(Buttons button, size_t user) const
 	{
-		return !states_[user].current.buttons[button] & states_[user].prev.buttons[button];
+		return !states_[user].current.buttons[button] & states_[user].previous.buttons[button];
 	}
 
 	float Gamepad::GetAxisValue(Axises axises, size_t user) const
@@ -71,8 +76,8 @@ namespace wx2
 		return states_[user].current.axises[axises];
 	}
 
-	float Gamepad::GetAxisAcceleration(Axises axises, size_t user) const
+	float Gamepad::GetAxisVelocity(Axises axises, size_t user) const
 	{
-		return states_[user].current.axises[axises] - states_[user].prev.axises[axises];
+		return states_[user].current.axises[axises] - states_[user].previous.axises[axises];
 	}
 }

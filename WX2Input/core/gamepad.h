@@ -67,8 +67,8 @@ namespace wx2
 			{
 				std::bitset<NUM_BUTTONS_> buttons;
 				std::array<float, NUM_AXISES_> axises;
-			} current, prev;
-			bool isConnection;
+			} current, previous;
+			bool isConnected;
 		};
 
 	public:
@@ -83,7 +83,7 @@ namespace wx2
 		bool IsPressed(Buttons button, size_t user = 0) const;
 		bool IsReleased(Buttons button, size_t user = 0) const;
 		float GetAxisValue(Axises axises, size_t user = 0) const;
-		float GetAxisAcceleration(Axises axises, size_t user = 0) const;
+		float GetAxisVelocity(Axises axises, size_t user = 0) const;
 
 	private:
 		std::array<GamepadState, XUSER_MAX_COUNT> states_;

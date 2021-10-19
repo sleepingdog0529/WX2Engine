@@ -37,7 +37,7 @@ namespace wx2
 
 		Logger log_;
 		WindowContainer windowContainer_;
-		Gamepad gamepad_;
+		Input input_;
 
 		static inline bool instantiated_ = false;
 	};

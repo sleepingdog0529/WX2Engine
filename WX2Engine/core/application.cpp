@@ -24,6 +24,8 @@ namespace wx2
 
 		// メインウィンドウ生成
 		auto mainWnd = windowContainer_.Create("MainWindow", wndProp);
+
+		input_.Initialize(mainWnd->GetHandle());
 	}
 
 	Application::~Application()
@@ -37,9 +39,9 @@ namespace wx2
 
 		windowContainer_.ProcessMessages([this]()
 		{
-			gamepad_.Update();
+			input_.Update();
 
-			return !gamepad_.IsPressed(Gamepad::Back);
+			return !input_.IsPressed(Mouse::Left);
 		});
 	}
 }

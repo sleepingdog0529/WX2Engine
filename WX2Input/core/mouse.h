@@ -20,39 +20,66 @@ namespace wx2
 	class Mouse
 	{
 	public:
-		enum ButtonCode : uint8_t
+		enum Buttons
 		{
 			Left = 0,
 			Right,
 			Middle,
 			X1,
-			X2,
-			NUM_BUTTONS
+			X2
 		};
 
-		static void Initialize(HWND hwnd);
-		static void Finalize();
-		static void Update();
-
-		static void StateReset();
-
-		static bool IsDown(ButtonCode button) { return buttons_[0][button]; }
-		static bool IsUp(ButtonCode button) { return !buttons_[0][button]; }
-		static bool IsPressed(ButtonCode button) { return buttons_[0][button] && !buttons_[1][button]; }
-		static bool IsReleased(ButtonCode button) { return !buttons_[0][button] && buttons_[1][button]; }
-		static Eigen::Vector2f GetVelocity() { return velocity_; }
-		static float GetScroll() { return scroll_; }
+		enum Axises
+		{
+			CursorX,
+			CursorY,
+			WheellScroll
+		};
 
 	private:
-		static constexpr float CURSOR_SENSITIVITY_ = 0.0018f;
-		static constexpr float SCOLL_SENSITIVITY_ = 1.0f;
+		using DInputPtr = Microsoft::WRL::ComPtr<IDirectInput8>;
+		using DevicePtr = Microsoft::WRL::ComPtr<IDirectInputDevice8>;
 
-		static inline HWND hwnd_;
-		static inline Microsoft::WRL::ComPtr<IDirectInputDevice8> device_;
-		static inline DIMOUSESTATE2 state_;
+		static constexpr size_t NUM_BUTTONS_ = 5;	// É{É^Éìêî
+		static constexpr size_t NUM_AXISES_ = 3;	// é≤êî
 
-		static inline std::bitset<NUM_BUTTONS> buttons_[2];
-		static inline Eigen::Vector2f velocity_;
-		static inline float scroll_;
+		struct MouseState
+		{
+			struct 
+			{
+				std::bitset<NUM_BUTTONS_> buttons;
+			} current, previous;
+			std::array<float, NUM_AXISES_> axises;
+		};
+
+		struct MouseInfo
+		{
+			DevicePtr device;
+			DIDEVICEINSTANCE instance;
+			DIDEVCAPS capability;
+		};
+
+	public:
+		Mouse();
+		virtual ~Mouse();
+
+		void Initialize(DInputPtr directInput, HWND hwnd);
+		void Regist();
+		void Update();
+
+		bool IsDown(Buttons button) const;
+		bool IsPressed(Buttons button) const;
+		bool IsReleased(Buttons button) const;
+		float GetAxisVelocity(Axises axises) const;
+
+	private:
+		static BOOL CALLBACK SetupMouseCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);
+
+		DInputPtr directInput_;
+		HWND hwnd_;
+
+		std::vector<MouseInfo> mouses_;
+		MouseState state_;
+		DIMOUSESTATE2 stateBuffer_;
 	};
 }
