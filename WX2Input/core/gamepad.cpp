@@ -12,14 +12,13 @@ namespace wx2
 	void Gamepad::Update()
 	{
 		// コントローラーの最大接続数分ループ
-		for (auto& [curt, prev, isConected] : states_)
+		for (auto& [curt, prev] : states_)
 		{
 			prev = std::move(curt);
 			memset(&curt, 0, sizeof(curt));
 
-			// コントローラー状態取得、接続中であるか調べる
-			isConected = XInputGetState(0, &buffer_) == ERROR_SUCCESS;
-			if (isConected)
+			// コントローラー状態取得
+			if (SUCCEEDED(XInputGetState(0, &buffer_)))
 			{
 				// ボタン状態を格納
 				curt.buttons[DPadUp]	= buffer_.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP;

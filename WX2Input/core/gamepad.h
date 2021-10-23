@@ -68,7 +68,6 @@ namespace wx2
 				std::bitset<NUM_BUTTONS_> buttons;
 				std::array<float, NUM_AXISES_> axises;
 			} current, previous;
-			bool isConnected;
 		};
 
 	public:

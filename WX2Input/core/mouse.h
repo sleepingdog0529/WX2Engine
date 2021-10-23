@@ -40,8 +40,8 @@ namespace wx2
 		using DInputPtr = Microsoft::WRL::ComPtr<IDirectInput8>;
 		using DevicePtr = Microsoft::WRL::ComPtr<IDirectInputDevice8>;
 
-		static constexpr size_t NUM_BUTTONS_ = 5;	// ボタン数
-		static constexpr size_t NUM_AXISES_ = 3;	// 軸数
+		static constexpr std::size_t NUM_BUTTONS_ = 5;	// ボタン数
+		static constexpr std::size_t NUM_AXISES_ = 3;	// 軸数
 
 		struct MouseState
 		{
@@ -52,7 +52,7 @@ namespace wx2
 			std::array<float, NUM_AXISES_> axises;
 		};
 
-		struct MouseInfo
+		struct MouseDevice
 		{
 			DevicePtr device;
 			DIDEVICEINSTANCE instance;
@@ -78,8 +78,7 @@ namespace wx2
 		DInputPtr directInput_;
 		HWND hwnd_;
 
-		std::vector<MouseInfo> mouses_;
+		std::vector<MouseDevice> mouses_;
 		MouseState state_;
-		DIMOUSESTATE2 stateBuffer_;
 	};
 }

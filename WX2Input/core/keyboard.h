@@ -16,7 +16,7 @@ namespace wx2
 	class Keyboard
 	{
 	public:
-		enum KeyCode : uint8_t
+		enum Keys
 		{ 
 			Escape			= 0x01,
 			D1				= 0x02,
@@ -130,26 +130,49 @@ namespace wx2
 			Delete			= 0xD3,
 			LWin			= 0xDB,
 			RWin			= 0xDC,
-			Apps			= 0xDD,	// Menu
-			NUM_KEYS
+			Apps			= 0xDD	// Menu
 		};
 
-		static void Initialize(HWND hwnd);
-		static void Finalize();
-		static void Update();
+	private:
+		using DInputPtr = Microsoft::WRL::ComPtr<IDirectInput8>;
+		using DevicePtr = Microsoft::WRL::ComPtr<IDirectInputDevice8>;
 
-		static void StateReset();
+		static constexpr std::size_t NUM_KEYS_ = 256;	// ÉLÅ[êî
 
-		static bool IsDown(KeyCode key) { return keys_[0][key]; }
-		static bool IsUp(KeyCode key) { return !keys_[0][key]; }
-		static bool IsPressed(KeyCode key) { return keys_[0][key] && !keys_[1][key]; }
-		static bool IsReleased(KeyCode key) { return !keys_[0][key] && keys_[1][key]; }
+		struct KeyboardState
+		{
+			struct
+			{
+				std::bitset<NUM_KEYS_> keys;
+			} current, previous;
+		};
+
+		struct KeyboardDevice
+		{
+			DevicePtr device;
+			DIDEVICEINSTANCE instance;
+			DIDEVCAPS capability;
+		};
+
+	public:
+		Keyboard();
+		virtual ~Keyboard();
+
+		void Initialize(DInputPtr directInput, HWND hwnd);
+		void Regist();
+		void Update();
+
+		bool IsDown(Keys key) const;
+		bool IsPressed(Keys key) const;
+		bool IsReleased(Keys key) const;
 
 	private:
-		static inline HWND hwnd_;
-		static inline Microsoft::WRL::ComPtr<IDirectInputDevice8> device_;
-		static inline std::array<uint8_t, 256> buffer_;
+		static BOOL CALLBACK SetupKeyboardCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);
 
-		static inline std::bitset<NUM_KEYS> keys_[2];
+		DInputPtr directInput_;
+		HWND hwnd_;
+
+		std::vector<KeyboardDevice> keyboards_;
+		KeyboardState state_;
 	};
 }

@@ -14,6 +14,7 @@ namespace wx2
 		const int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
 		// ウィンドウ情報を構築
+		constexpr const char* path = ".\\main_window.json";
 		WindowProperty wndProp;
 		wndProp.title = "WX2EG";
 		wndProp.width = 1280;
@@ -23,9 +24,9 @@ namespace wx2
 		wndProp.fullscreen = false;
 
 		// メインウィンドウ生成
-		auto mainWnd = windowContainer_.Create("MainWindow", wndProp);
+		mainWindow_ = windowContainer_.Create("Main", wndProp);
 
-		input_.Initialize(mainWnd->GetHandle());
+		input_.Initialize(mainWindow_->GetHandle());
 	}
 
 	Application::~Application()
@@ -41,7 +42,7 @@ namespace wx2
 		{
 			input_.Update();
 
-			return !input_.IsPressed(Mouse::Left);
+			return !input_.IsPressed(Keyboard::Escape);
 		});
 	}
 }

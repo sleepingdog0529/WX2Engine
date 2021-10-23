@@ -25,13 +25,17 @@ namespace wx2
 			exit(EXIT_FAILURE);
 		}
 
+		keyboard_.Initialize(directInput_, hwnd);
 		mouse_.Initialize(directInput_, hwnd);
+
+		keyboard_.Regist();
 		mouse_.Regist();
 	}
 
 	void Input::Update()
 	{
-		gamepad_.Update();
+		keyboard_.Update();
 		mouse_.Update();
+		gamepad_.Update();
 	}
 }

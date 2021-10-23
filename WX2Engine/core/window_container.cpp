@@ -2,17 +2,28 @@
 
 namespace wx2 
 {
-	std::shared_ptr<Window> WindowContainer::Create(const std::string& name, const WindowProperty& windowProp)
+	WindowContainer::WindowContainer()
 	{
-		auto [itr, success] = windows_.emplace(name, std::make_shared<Window>(this, windowProp));
+		Deserialize();
+	}
 
+	WindowContainer::~WindowContainer()
+	{
+		Serialize();
+	}
+
+	WindowContainer::WindowPtr WindowContainer::Create(const std::string& name, const WindowProperty& defaultProp)
+	{
+		auto [propItr, unuse] = windowProps_.try_emplace(name, std::make_shared<WindowProperty>(defaultProp));
+
+		auto [wndItr, success] = windows_.emplace(name, std::make_shared<Window>(this, propItr->second));
 		if (!success)
 		{
 			WX2_LOG_CRITICAL("ウィンドウ名が重複しています。ウィンドウ名:\"{}\"", name);
 			exit(EXIT_FAILURE);
 		}
 
-		return itr->second;
+		return wndItr->second;
 	}
 
 	void WindowContainer::ProcessMessages(std::function<bool()> process)
@@ -36,5 +47,28 @@ namespace wx2
 	LRESULT WindowContainer::WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	{
 		return DefWindowProc(hwnd, msg, wp, lp);
+	}
+
+	void WindowContainer::Serialize()
+	{
+		std::stringstream os;
+		{
+			cereal::JSONOutputArchive output(os);
+			output(cereal::make_nvp("windowContainer", windowProps_));
+		}
+		std::ofstream ofs(WINDOW_PROPERTY_PATH_, std::ios::out);
+		ofs << os.str() << std::endl;
+	}
+
+	void WindowContainer::Deserialize()
+	{
+		if (std::filesystem::exists(WINDOW_PROPERTY_PATH_))
+		{
+			std::stringstream is;
+			std::ifstream ifs(WINDOW_PROPERTY_PATH_, std::ios::in);
+			is << ifs.rdbuf() << std::endl;
+			cereal::JSONInputArchive input(is);
+			input(cereal::make_nvp("windowContainer", windowProps_));
+		}
 	}
 }

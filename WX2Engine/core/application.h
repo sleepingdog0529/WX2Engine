@@ -20,8 +20,12 @@ namespace wx2
 	class Application
 	{
 	private:
-		// main関数でのみ実行を許可
-		friend int ::main(int argc, char** argv);
+		// エントリポイントでのみ実行を許可
+#ifdef NDEBUG
+		friend INT WINAPI ::WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
+#else
+		friend int ::main(int, char**);
+#endif
 
 	public:
 		Application();
@@ -38,6 +42,7 @@ namespace wx2
 		Logger log_;
 		WindowContainer windowContainer_;
 		Input input_;
+		std::shared_ptr<Window> mainWindow_;
 
 		static inline bool instantiated_ = false;
 	};
