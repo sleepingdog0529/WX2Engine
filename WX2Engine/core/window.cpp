@@ -19,9 +19,8 @@ namespace wx2
 		const HINSTANCE hinst = GetModuleHandle(nullptr);
 
 		// ウィンドウクラスを登録
-		WNDCLASSEX wcex = {};
+		WNDCLASSEX wcex = { sizeof(wcex) };
 		wcex.style = CS_HREDRAW | CS_VREDRAW;
-		wcex.cbSize = sizeof(wcex);
 		wcex.lpfnWndProc = HandleMessageSetup;
 		wcex.hInstance = hinst;
 		wcex.hbrBackground = GetStockBrush(WHITE_BRUSH);
@@ -33,10 +32,11 @@ namespace wx2
 		}
 
 		// ウィンドウを作成
-		hwnd_ = CreateWindow(
+		hwnd_ = CreateWindowEx(
+			windowProp_->ex_style,
 			className_.c_str(),
 			windowProp_->title.c_str(),
-			WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+			windowProp_->style,
 			windowProp_->x,
 			windowProp_->y,
 			windowProp_->width,
@@ -54,6 +54,11 @@ namespace wx2
 
 		// ウィンドウを可視化、更新
 		UpdateWindow(hwnd_);
+
+		if (windowProp_->maximized)
+		{
+			ShowWindow(hwnd_, SW_MAXIMIZE);
+		}
 	}
 
 	Window::~Window()
@@ -74,29 +79,38 @@ namespace wx2
 
 		switch (msg)
 		{
-			case WM_MOVE:
+			case WM_MOVE: // ウィンドウの移動
 			{
 				window->windowProp_->x = static_cast<int>(LOWORD(lp));
 				window->windowProp_->y = static_cast<int>(HIWORD(lp));
 				return 0;
 			}
-			case WM_SIZE:
+			case WM_SIZE: // ウィンドウのサイズ変更
 			{
 				window->windowProp_->width = static_cast<int>(LOWORD(lp));
 				window->windowProp_->height = static_cast<int>(HIWORD(lp));
 
-				if (wp == SIZE_MAXIMIZED)
+				if (wp == SIZE_RESTORED)
 				{
-					window->windowProp_->fullscreen = true;
-				}
-				else if (wp == SIZE_RESTORED)
-				{
+					window->windowProp_->maximized = false;
 					window->windowProp_->fullscreen = false;
+				}
+				else if (wp == SIZE_MAXIMIZED)
+				{
+					window->windowProp_->maximized = true;
 				}
 
 				return 0;
 			}
-			case WM_CLOSE:
+			case WM_KEYDOWN:
+			{
+				if (wp == VK_F11)
+				{
+					window->SetFullscreen(!window->windowProp_->fullscreen);
+				}
+				return 0;
+			}
+			case WM_CLOSE: // ウィンドウを閉じた
 			{
 				DestroyWindow(hwnd);
 				return 0;
@@ -130,5 +144,50 @@ namespace wx2
 		}
 
 		return DefWindowProc(hwnd, msg, wp, lp);
+	}
+
+	void Window::SetFullscreen(bool fullscreen)
+	{
+		if (windowProp_->fullscreen == fullscreen)
+		{
+			return;
+		}
+		windowProp_->fullscreen = fullscreen;
+
+		if (windowProp_->fullscreen)
+		{
+			SetWindowLong(hwnd_, GWL_STYLE,
+				windowProp_->style & ~(WS_CAPTION | WS_THICKFRAME));
+			SetWindowLong(hwnd_, GWL_EXSTYLE, 
+				windowProp_->ex_style & ~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
+
+			MONITORINFO mi = { sizeof(mi) };
+			GetMonitorInfo(MonitorFromWindow(hwnd_, MONITOR_DEFAULTTONEAREST), &mi);
+			SetWindowPos(
+				hwnd_, 
+				nullptr, 
+				mi.rcMonitor.left, 
+				mi.rcMonitor.top,
+				mi.rcMonitor.right - mi.rcMonitor.left,
+				mi.rcMonitor.bottom - mi.rcMonitor.top,
+				SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+		}
+		else
+		{
+			// ウィンドウを再設定
+			SetWindowLong(hwnd_, GWL_STYLE, windowProp_->style);
+			SetWindowLong(hwnd_, GWL_EXSTYLE, windowProp_->ex_style);
+
+			SetWindowPos(
+				hwnd_, 
+				nullptr, 
+				windowProp_->x,
+				windowProp_->y,
+				windowProp_->width,
+				windowProp_->height,
+				SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+			if (windowProp_->maximized)
+				::SendMessage(hwnd_, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
+		}
 	}
 }

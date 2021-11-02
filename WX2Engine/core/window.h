@@ -37,6 +37,8 @@ namespace wx2
 		int GetHeight() const { return windowProp_->height; }
 		bool IsFullscreen() const { return windowProp_->fullscreen; }
 
+		void SetFullscreen(bool fullscreen);
+
 	private:
 		WindowContainer* container_;	// ウィンドウコンテナ
 		HWND hwnd_;						// ウィンドハンドル

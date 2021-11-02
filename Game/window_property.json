@@ -7,10 +7,13 @@
                     "id": 2147483649,
                     "data": {
                         "title": "WX2EG",
-                        "x": 332,
-                        "y": 130,
-                        "width": 805,
-                        "height": 369,
+                        "x": 0,
+                        "y": 0,
+                        "width": 1280,
+                        "height": 720,
+                        "style": 336265216,
+                        "ex_style": 0,
+                        "maximized": false,
                         "fullscreen": false
                     }
                 }

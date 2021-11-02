@@ -20,6 +20,9 @@ namespace wx2
 		std::string title;
 		int x, y;
 		int width, height;
+		unsigned long style;
+		unsigned long ex_style;
+		bool maximized;
 		bool fullscreen;
 
 	private:
@@ -34,6 +37,9 @@ namespace wx2
 				CEREAL_NVP(y),
 				CEREAL_NVP(width),
 				CEREAL_NVP(height),
+				CEREAL_NVP(style),
+				CEREAL_NVP(ex_style),
+				CEREAL_NVP(maximized),
 				CEREAL_NVP(fullscreen));
 		}
 	};
