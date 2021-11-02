@@ -38,6 +38,7 @@ namespace wx2
 	{
 		WX2_LOG_TRACE("アプリケーション実行開始");
 
+		// メインループ
 		windowContainer_.ProcessMessages([this]()
 		{
 			input_.Update();

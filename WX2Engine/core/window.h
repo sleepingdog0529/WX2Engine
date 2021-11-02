@@ -3,7 +3,7 @@
  * @author	Tomomi Murakami
  * @date	2021/09/20 19:36
  * @brief	ウィンドウ作成
-*********************************************************************/
+ ********************************************************************/
 #pragma once
 #include "window_container.h"
 #include "window_property.h"
@@ -18,11 +18,11 @@ namespace wx2
 		using WindowPropertyPtr = std::shared_ptr<WindowProperty>;
 
 	public:
-		/// <summary>
-		/// ウィンドウ生成
-		/// </summary>
-		/// <param name="container">格納先コンテナ</param>
-		/// <param name="window_prop">ウィンドウ設定</param>
+		/**
+		 * @brief	  ウィンドウ生成
+		 * @param[in] container 格納先コンテナ
+		 * @param[in] window_prop ウィンドウ設定
+		 */
 		Window(WindowContainer* container, WindowPropertyPtr windowProp);
 		virtual ~Window();
 

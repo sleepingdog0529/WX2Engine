@@ -20,7 +20,8 @@ namespace wx2
 		const fs::path dir(FILE_DIR_);
 		if (!fs::is_directory(dir))
 		{
-			WX2_LOG_ERROR("指定されたディレクトリは存在しません。ディレクトリ:\"{}\"", dir.string());
+			WX2_LOG_INFO("指定されたディレクトリは存在しません。新たに作成します。");
+			fs::create_directory(dir);
 		}
 
 		// ディレクトリ内のファイルを決まった数に保つ

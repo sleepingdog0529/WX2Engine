@@ -3,15 +3,15 @@
  * @author	Tomomi Murakami
  * @date	2021/09/19 1:28
  * @brief	エントリポイント
-*********************************************************************/
+ ********************************************************************/
 #pragma once
 #include "application.h"
 
 extern std::unique_ptr<wx2::Application> wx2::CreateApp();
 
-/// <summary>
-/// エントリポイント
-/// </summary>
+/**
+ * @brief エントリポイント
+ */
 #ifdef NDEBUG
 INT WINAPI WinMain(
 	_In_ HINSTANCE hInstance, 

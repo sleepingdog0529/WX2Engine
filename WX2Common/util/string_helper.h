@@ -8,11 +8,11 @@
 
 namespace wx2
 {
-	/// <summary>
-	/// string_viewをstringに変換
-	/// </summary>
-	/// <param name="strv">文字列ビュー</param>
-	/// <returns>文字列</returns>
+	/**
+	 * @brief	  string_viewをstringに変換する
+	 * @param[in] strv 文字列ビュー
+	 * @return    文字列
+	 */
 	inline std::string ToString(std::string_view strv) 
 	{
 		return { strv.data(), strv.size() };

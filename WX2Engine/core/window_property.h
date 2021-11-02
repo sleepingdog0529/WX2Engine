@@ -3,7 +3,7 @@
  * @author	Tomomi Murakami
  * @date	2021/09/20 19:19
  * @brief	ウィンドウ情報
-*********************************************************************/
+ ********************************************************************/
 #pragma once
 #include <cereal/cereal.hpp>
 #include <cereal/archives/json.hpp>
@@ -11,9 +11,9 @@
 
 namespace wx2 
 {
-	/// <summary>
-	/// ウィンドウ情報
-	/// </summary>
+	/**
+	 * @brief ウィンドウ情報
+	 */
 	struct WindowProperty
 	{
 	public:

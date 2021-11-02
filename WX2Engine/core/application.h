@@ -3,7 +3,7 @@
  * @author	Tomomi Murakami
  * @date	2021/09/19 1:27
  * @brief	アプリケーション基礎
-*********************************************************************/
+ ********************************************************************/
 #pragma once
 #include <wx2common.h>
 #include <WX2Input.h>
@@ -13,10 +13,9 @@ int main(int argc, char** argv);
 
 namespace wx2
 {
-	/// <summary>
-	/// <para>アプリケーション基礎クラス</para>
-	/// <para>クライアントはこれを継承してアプリケーションの動作を定義する</para>
-	/// </summary>
+	/**
+	 * @brief アプリケーション基礎クラス クライアントはこれを継承してアプリケーションの動作を定義する
+	 */
 	class Application
 	{
 	private:
@@ -28,15 +27,22 @@ namespace wx2
 #endif
 
 	public:
+		/**
+		 * @brief  アプリケーション初期化
+		 */
 		Application();
+
+		/**
+		 * @brief  アプリケーション終了
+		 */
 		virtual ~Application();
 
 		WX2_DISALLOW_COPY_AND_MOVE(Application);
 
 	private:
-		/// <summary>
-		/// アプリケーションを実行する
-		/// </summary>
+		/**
+		 * @brief アプリケーションを実行する
+		 */
 		void Run();
 
 		Logger log_;
@@ -44,9 +50,10 @@ namespace wx2
 		Input input_;
 		std::shared_ptr<Window> mainWindow_;
 
+		//! 既にインスタンス化されているか
 		static inline bool instantiated_ = false;
 	};
 
-	// クライアントが定義する
+	//! クライアントが定義する
 	std::unique_ptr<Application> CreateApp();
 }

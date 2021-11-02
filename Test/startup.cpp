@@ -1,5 +1,3 @@
-#include <cereal/>
-
 class Game : public wx2::Application
 {
 public:
