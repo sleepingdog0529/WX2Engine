@@ -23,7 +23,7 @@
 	name& operator=(name&&) = delete
 
  /**
-  * @brief	  コピー＆ムーブコンストラクタの呼び出しを禁止する
+  * @brief	   コピー＆ムーブコンストラクタの呼び出しを禁止する
   * @param[in] name クラス名
   */
 #define WX2_DISALLOW_COPY_AND_MOVE(name)	\

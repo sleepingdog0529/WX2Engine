@@ -21,9 +21,14 @@ namespace wx2
 		 * @param[in] window_prop ウィンドウ設定
 		 */
 		Window(WindowContainer* container, const WindowProperty& windowProp);
+		/**
+		 * @brief 
+		 */
 		virtual ~Window();
 
+		//! ウィンドウのウィンドウプロシージャ
 		static LRESULT CALLBACK HandleMessageRedirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
+		//! ウィンドウのウィンドウプロシージャ
 		static LRESULT CALLBACK HandleMessageSetup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
 
 		WX2_DISALLOW_COPY_AND_MOVE(Window);

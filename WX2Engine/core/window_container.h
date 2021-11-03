@@ -20,10 +20,18 @@ namespace wx2
 	private:
 		using WindowPtr = std::shared_ptr<Window>;
 
+		//! ウィンドウ設定の保存先パス
 		static constexpr const char* WINDOW_PROPERTY_PATH_ = ".\\window_property.json";
 
 	public:
+		/**
+		 * @brief ウィンドウ設定のデシリアライズを行う
+		 */
 		WindowContainer();
+
+		/**
+		 * @brief ウィンドウ設定のシリアライズを行う
+		 */
 		virtual ~WindowContainer();
 
 		WX2_DISALLOW_COPY_AND_MOVE(WindowContainer);
@@ -43,12 +51,7 @@ namespace wx2
 		void ProcessMessages(std::function<bool()> process);
 
 		/**
-		 * @brief	  アプリケーションの全てのウィンドウ共通のウィンドウプロシージャ
-		 * @param[in] ウィンドウハンドル
-		 * @param[in] メッセージ識別子
-		 * @param[in] 一つ目のパラメータ
-		 * @param[in] 二つ目のパラメータ
-		 * @return	  メッセージの処理結果
+		 * @brief アプリケーションの全てのウィンドウ共通のウィンドウプロシージャ
 		 */
 		LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
 

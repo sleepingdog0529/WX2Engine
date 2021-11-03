@@ -19,6 +19,8 @@ namespace wx2
 	class Application
 	{
 	private:
+		using WindowPtr = std::shared_ptr<Window>;
+
 		// エントリポイントでのみ実行を許可
 #ifdef NDEBUG
 		friend INT WINAPI ::WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
@@ -48,7 +50,7 @@ namespace wx2
 		Logger log_;
 		WindowContainer windowContainer_;
 		Input input_;
-		std::shared_ptr<Window> mainWindow_;
+		WindowPtr mainWindow_;
 
 		//! 既にインスタンス化されているか
 		static inline bool instantiated_ = false;

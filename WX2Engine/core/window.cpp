@@ -81,6 +81,8 @@ namespace wx2
 				RECT* rect = reinterpret_cast<RECT*>(lp);
 				window->windowProp_.x = static_cast<int>(rect->left);
 				window->windowProp_.y = static_cast<int>(rect->top);
+				window->windowProp_.maximized = false;
+				window->windowProp_.fullscreen = false;
 				return TRUE;
 			}
 			case WM_SIZING: // ウィンドウがカーソルによってサイズ変更されている
@@ -90,6 +92,8 @@ namespace wx2
 				window->windowProp_.y = static_cast<int>(rect->top);
 				window->windowProp_.width = static_cast<int>(rect->right - rect->left);
 				window->windowProp_.height = static_cast<int>(rect->bottom - rect->top);
+				window->windowProp_.maximized = false;
+				window->windowProp_.fullscreen = false;
 				return TRUE;
 			}
 			case WM_SYSCOMMAND: // ウィンドウの最大化＆元に戻したとき
@@ -104,7 +108,7 @@ namespace wx2
 				}
 				break;
 			}
-			case WM_KEYDOWN:
+			case WM_KEYDOWN: // F11でフルスクリーン切り替え
 			{
 				if (wp == VK_F11)
 				{
@@ -112,7 +116,7 @@ namespace wx2
 				}
 				return 0;
 			}
-			case WM_CLOSE: // ウィンドウを閉じた
+			case WM_CLOSE: // ウィンドウを閉じる
 			{
 				DestroyWindow(hwnd);
 				return 0;
@@ -205,14 +209,6 @@ namespace wx2
 	void Window::SetMaximize(bool maximaize)
 	{
 		windowProp_.maximized = maximaize;
-
-		if (windowProp_.maximized)
-		{
-			SendMessage(hwnd_, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
-		}
-		else
-		{
-			SendMessage(hwnd_, WM_SYSCOMMAND, SC_RESTORE, 0);
-		}
+		SendMessage(hwnd_, WM_SYSCOMMAND, windowProp_.maximized ? SC_MAXIMIZE : SC_RESTORE, 0);
 	}
 }
