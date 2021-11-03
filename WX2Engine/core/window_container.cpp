@@ -9,12 +9,19 @@ namespace wx2
 
 	WindowContainer::~WindowContainer()
 	{
+		windowProps_.clear();
+		std::for_each(windows_.begin(), windows_.end(),
+			[this](const std::pair<std::string, WindowPtr>& p)
+		{
+			windowProps_.emplace(p.first, p.second->GetWindowProperty());
+		});
+
 		Serialize();
 	}
 
 	WindowContainer::WindowPtr WindowContainer::Create(const std::string& name, const WindowProperty& defaultProp)
 	{
-		auto [propItr, unuse] = windowProps_.try_emplace(name, std::make_shared<WindowProperty>(defaultProp));
+		auto [propItr, unuse] = windowProps_.try_emplace(name, defaultProp);
 
 		auto [wndItr, success] = windows_.emplace(name, std::make_shared<Window>(this, propItr->second));
 		if (!success)

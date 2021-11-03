@@ -14,16 +14,13 @@ namespace wx2
 
 	class Window
 	{
-	private:
-		using WindowPropertyPtr = std::shared_ptr<WindowProperty>;
-
 	public:
 		/**
 		 * @brief	  ウィンドウ生成
 		 * @param[in] container 格納先コンテナ
 		 * @param[in] window_prop ウィンドウ設定
 		 */
-		Window(WindowContainer* container, WindowPropertyPtr windowProp);
+		Window(WindowContainer* container, const WindowProperty& windowProp);
 		virtual ~Window();
 
 		static LRESULT CALLBACK HandleMessageRedirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
@@ -32,17 +29,15 @@ namespace wx2
 		WX2_DISALLOW_COPY_AND_MOVE(Window);
 
 		HWND GetHandle() const { return hwnd_; }
-		WindowPropertyPtr GetWindowProperty() const { return windowProp_; }
-		int GetWidth() const { return windowProp_->width; }
-		int GetHeight() const { return windowProp_->height; }
-		bool IsFullscreen() const { return windowProp_->fullscreen; }
+		const WindowProperty& GetWindowProperty() const { return windowProp_; }
 
 		void SetFullscreen(bool fullscreen);
+		void SetMaximize(bool maximaize);
 
 	private:
 		WindowContainer* container_;	// ウィンドウコンテナ
 		HWND hwnd_;						// ウィンドハンドル
 		std::string className_;		// クラス名
-		WindowPropertyPtr windowProp_;	// ウィンドウ情報
+		WindowProperty windowProp_;	// ウィンドウ情報
 	};
 }

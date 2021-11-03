@@ -18,7 +18,6 @@ namespace wx2
 	class WindowContainer
 	{
 	private:
-		using WindowPropertyPtr = std::shared_ptr<WindowProperty>;
 		using WindowPtr = std::shared_ptr<Window>;
 
 		static constexpr const char* WINDOW_PROPERTY_PATH_ = ".\\window_property.json";
@@ -64,7 +63,7 @@ namespace wx2
 		 */
 		void Deserialize();
 
-		std::unordered_map<std::string, WindowPtr> windows_; //! ウィンドウポインタのの連想配列
-		std::unordered_map<std::string, WindowPropertyPtr> windowProps_; //! ウィンドウ設定の連想配列
+		std::unordered_map<std::string, WindowPtr> windows_; //! ウィンドウポインタの連想配列
+		std::unordered_map<std::string, WindowProperty> windowProps_; //! ウィンドウ設定の連想配列
 	};
 }

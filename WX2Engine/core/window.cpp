@@ -2,12 +2,12 @@
 
 namespace wx2
 {
-	Window::Window(WindowContainer* container, WindowPropertyPtr windowProp) :
+	Window::Window(WindowContainer* container, const WindowProperty& windowProp) :
 		container_(container),
 		windowProp_(windowProp)
 	{
-		WX2_ASSERT(windowProp_->width > 0);
-		WX2_ASSERT(windowProp_->height > 0);
+		WX2_ASSERT(windowProp_.width > 0);
+		WX2_ASSERT(windowProp_.height > 0);
 
 		// ランダムにユニークIDを生成
 		const boost::uuids::uuid uuid = boost::uuids::random_generator()();
@@ -33,14 +33,14 @@ namespace wx2
 
 		// ウィンドウを作成
 		hwnd_ = CreateWindowEx(
-			windowProp_->ex_style,
+			windowProp_.ex_style,
 			className_.c_str(),
-			windowProp_->title.c_str(),
-			windowProp_->style,
-			windowProp_->x,
-			windowProp_->y,
-			windowProp_->width,
-			windowProp_->height,
+			windowProp_.title.c_str(),
+			windowProp_.style,
+			windowProp_.x,
+			windowProp_.y,
+			windowProp_.width,
+			windowProp_.height,
 			nullptr,
 			nullptr,
 			hinst,
@@ -55,10 +55,7 @@ namespace wx2
 		// ウィンドウを可視化、更新
 		UpdateWindow(hwnd_);
 
-		if (windowProp_->maximized)
-		{
-			ShowWindow(hwnd_, SW_MAXIMIZE);
-		}
+		SetFullscreen(windowProp_.fullscreen);
 	}
 
 	Window::~Window()
@@ -79,34 +76,39 @@ namespace wx2
 
 		switch (msg)
 		{
-			case WM_MOVE: // ウィンドウの移動
+			case WM_MOVING: // ウィンドウがカーソルによって移動されている
 			{
-				window->windowProp_->x = static_cast<int>(LOWORD(lp));
-				window->windowProp_->y = static_cast<int>(HIWORD(lp));
-				return 0;
+				RECT* rect = reinterpret_cast<RECT*>(lp);
+				window->windowProp_.x = static_cast<int>(rect->left);
+				window->windowProp_.y = static_cast<int>(rect->top);
+				return TRUE;
 			}
-			case WM_SIZE: // ウィンドウのサイズ変更
+			case WM_SIZING: // ウィンドウがカーソルによってサイズ変更されている
 			{
-				window->windowProp_->width = static_cast<int>(LOWORD(lp));
-				window->windowProp_->height = static_cast<int>(HIWORD(lp));
-
-				if (wp == SIZE_RESTORED)
+				RECT* rect = reinterpret_cast<RECT*>(lp);
+				window->windowProp_.x = static_cast<int>(rect->left);
+				window->windowProp_.y = static_cast<int>(rect->top);
+				window->windowProp_.width = static_cast<int>(rect->right - rect->left);
+				window->windowProp_.height = static_cast<int>(rect->bottom - rect->top);
+				return TRUE;
+			}
+			case WM_SYSCOMMAND: // ウィンドウの最大化＆元に戻したとき
+			{
+				if (wp == SC_MAXIMIZE)
 				{
-					window->windowProp_->maximized = false;
-					window->windowProp_->fullscreen = false;
+					window->windowProp_.maximized = true;
 				}
-				else if (wp == SIZE_MAXIMIZED)
+				else if(wp == SC_RESTORE)
 				{
-					window->windowProp_->maximized = true;
+					window->windowProp_.maximized = false;
 				}
-
-				return 0;
+				break;
 			}
 			case WM_KEYDOWN:
 			{
 				if (wp == VK_F11)
 				{
-					window->SetFullscreen(!window->windowProp_->fullscreen);
+					window->SetFullscreen(!window->windowProp_.fullscreen);
 				}
 				return 0;
 			}
@@ -148,24 +150,28 @@ namespace wx2
 
 	void Window::SetFullscreen(bool fullscreen)
 	{
-		if (windowProp_->fullscreen == fullscreen)
-		{
-			return;
-		}
-		windowProp_->fullscreen = fullscreen;
+		windowProp_.fullscreen = fullscreen;
 
-		if (windowProp_->fullscreen)
+		if (windowProp_.fullscreen)
 		{
-			SetWindowLong(hwnd_, GWL_STYLE,
-				windowProp_->style & ~(WS_CAPTION | WS_THICKFRAME));
-			SetWindowLong(hwnd_, GWL_EXSTYLE, 
-				windowProp_->ex_style & ~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
+			// ウィンドウスタイルからフルスクリーンに
+			// 不要なフラグを取り除いて適応
+			SetWindowLong(
+				hwnd_, 
+				GWL_STYLE,
+				windowProp_.style & ~(WS_CAPTION | WS_THICKFRAME));
+			SetWindowLong(
+				hwnd_, 
+				GWL_EXSTYLE, 
+				windowProp_.ex_style & ~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
 
-			MONITORINFO mi = { sizeof(mi) };
+			// ウィンドウサイズをモニターサイズと同じにする
+			MONITORINFO mi;
+			mi.cbSize = sizeof(mi);
 			GetMonitorInfo(MonitorFromWindow(hwnd_, MONITOR_DEFAULTTONEAREST), &mi);
 			SetWindowPos(
 				hwnd_, 
-				nullptr, 
+				NULL, 
 				mi.rcMonitor.left, 
 				mi.rcMonitor.top,
 				mi.rcMonitor.right - mi.rcMonitor.left,
@@ -174,20 +180,39 @@ namespace wx2
 		}
 		else
 		{
-			// ウィンドウを再設定
-			SetWindowLong(hwnd_, GWL_STYLE, windowProp_->style);
-			SetWindowLong(hwnd_, GWL_EXSTYLE, windowProp_->ex_style);
+			// ウィンドウスタイルを再設定
+			SetWindowLong(hwnd_, GWL_STYLE, windowProp_.style);
+			SetWindowLong(hwnd_, GWL_EXSTYLE, windowProp_.ex_style);
 
+			// ウィンドウサイズを復元
 			SetWindowPos(
-				hwnd_, 
-				nullptr, 
-				windowProp_->x,
-				windowProp_->y,
-				windowProp_->width,
-				windowProp_->height,
+				hwnd_,
+				NULL,
+				windowProp_.x,
+				windowProp_.y,
+				windowProp_.width,
+				windowProp_.height,
 				SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
-			if (windowProp_->maximized)
-				::SendMessage(hwnd_, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
+
+			// フルスクリーン前に最大化されていたら再度最大化
+			if (windowProp_.maximized)
+			{
+				SetMaximize(true);
+			}
+		}
+	}
+
+	void Window::SetMaximize(bool maximaize)
+	{
+		windowProp_.maximized = maximaize;
+
+		if (windowProp_.maximized)
+		{
+			SendMessage(hwnd_, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
+		}
+		else
+		{
+			SendMessage(hwnd_, WM_SYSCOMMAND, SC_RESTORE, 0);
 		}
 	}
 }
