@@ -22,7 +22,7 @@ namespace wx2
 		 */
 		Window(WindowContainer* container, const WindowProperty& windowProp);
 		/**
-		 * @brief 
+		 * @brief ウィンドウを閉じる
 		 */
 		virtual ~Window();
 
@@ -33,16 +33,33 @@ namespace wx2
 
 		WX2_DISALLOW_COPY_AND_MOVE(Window);
 
+		/**
+		 * @return ウィンドウハンドル
+		 */
 		HWND GetHandle() const { return hwnd_; }
+
+		/**
+		 * @brief  
+		 * @return ウィンドウ情報を取得
+		 */
 		const WindowProperty& GetWindowProperty() const { return windowProp_; }
 
+		/**
+		 * @brief     ウィンドウのフルスクリーン状態を設定する
+		 * @param[in] フルスクリーンにするか
+		 */
 		void SetFullscreen(bool fullscreen);
+
+		/**
+		 * @brief     ウィンドウの最大化状態を設定する
+		 * @param[in] 最大化するか
+		 */
 		void SetMaximize(bool maximaize);
 
 	private:
-		WindowContainer* container_;	// ウィンドウコンテナ
-		HWND hwnd_;						// ウィンドハンドル
-		std::string className_;		// クラス名
-		WindowProperty windowProp_;	// ウィンドウ情報
+		WindowContainer* container_;	//! ウィンドウコンテナ
+		HWND hwnd_;						//! ウィンドウハンドル
+		std::string className_;			//! ウィンドウクラス名
+		WindowProperty windowProp_;		//! ウィンドウ情報
 	};
 }

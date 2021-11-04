@@ -1,4 +1,5 @@
 #include "window_container.h"
+#include "constant.h"
 
 namespace wx2 
 {
@@ -58,21 +59,25 @@ namespace wx2
 
 	void WindowContainer::Serialize()
 	{
+		auto filePath = std::filesystem::path(CONFIG_DIR) / WINDOW_PROPERTY_FILE_NAME_;
+		
 		std::stringstream os;
 		{
 			cereal::JSONOutputArchive output(os);
 			output(cereal::make_nvp("windowContainer", windowProps_));
 		}
-		std::ofstream ofs(WINDOW_PROPERTY_PATH_, std::ios::out);
+		std::ofstream ofs(filePath, std::ios::out);
 		ofs << os.str() << std::endl;
 	}
 
 	void WindowContainer::Deserialize()
 	{
-		if (std::filesystem::exists(WINDOW_PROPERTY_PATH_))
+		auto filePath = std::filesystem::path(CONFIG_DIR) / WINDOW_PROPERTY_FILE_NAME_;
+
+		if (std::filesystem::exists(filePath))
 		{
 			std::stringstream is;
-			std::ifstream ifs(WINDOW_PROPERTY_PATH_, std::ios::in);
+			std::ifstream ifs(filePath, std::ios::in);
 			is << ifs.rdbuf() << std::endl;
 			cereal::JSONInputArchive input(is);
 			input(cereal::make_nvp("windowContainer", windowProps_));

@@ -10,6 +10,16 @@
 #include <WX2Input.h>
 
 #pragma warning(push, 0) 
+#define STRICT
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+#include <windowsx.h>
+
+#include <d3d11.h>
+#include <wrl/client.h>
+#include <DirectXMath.h>
+
 #include <memory>
 #include <filesystem>
 #include <chrono>
@@ -34,10 +44,4 @@
 #include <cereal/types/string.hpp>
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/memory.hpp>
-
-#define STRICT
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
-#include <windowsx.h>
 #pragma warning(pop)

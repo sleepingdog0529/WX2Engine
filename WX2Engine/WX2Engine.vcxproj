@@ -131,6 +131,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\constant.h" />
     <ClInclude Include="core\window.h" />
     <ClInclude Include="core\scene.h" />
     <ClInclude Include="core\window_container.h" />

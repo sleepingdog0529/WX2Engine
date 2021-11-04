@@ -21,7 +21,7 @@ namespace wx2
 		using WindowPtr = std::shared_ptr<Window>;
 
 		//! ウィンドウ設定の保存先パス
-		static constexpr const char* WINDOW_PROPERTY_PATH_ = ".\\window_property.json";
+		static constexpr const char* WINDOW_PROPERTY_FILE_NAME_ = "window.json";
 
 	public:
 		/**
