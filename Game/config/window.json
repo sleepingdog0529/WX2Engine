@@ -4,14 +4,14 @@
             "key": "Main",
             "value": {
                 "title": "WX2EG",
-                "x": 210,
-                "y": 63,
+                "x": 416,
+                "y": 265,
                 "width": 452,
                 "height": 254,
                 "style": 282001408,
                 "ex_style": 256,
-                "maximized": true,
-                "fullscreen": true
+                "maximized": false,
+                "fullscreen": false
             }
         }
     ]
