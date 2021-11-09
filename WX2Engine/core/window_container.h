@@ -48,12 +48,13 @@ namespace wx2
 		 * @brief     メッセージを処理しつつ合間に更新処理を呼び出す
 		 * @param[in] process アプリケーションの更新関数
 		 */
-		void ProcessMessages(std::function<bool()> process);
+		template <class F>
+		void ProcessMessages(F process) const;
 
 		/**
 		 * @brief アプリケーションの全てのウィンドウ共通のウィンドウプロシージャ
 		 */
-		LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
+		LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) const;
 
 	private:
 		/**
@@ -66,7 +67,37 @@ namespace wx2
 		 */
 		void Deserialize();
 
-		std::unordered_map<std::string, WindowPtr> windows_; //! ウィンドウポインタの連想配列
-		std::unordered_map<std::string, WindowProperty> windowProps_; //! ウィンドウ設定の連想配列
+		//! ウィンドウポインタの連想配列
+		std::unordered_map<
+			std::string, 
+			WindowPtr, 
+			StringHash,
+			std::equal_to<>> windows_;
+
+		//! ウィンドウ設定の連想配列
+		std::unordered_map<
+			std::string, 
+			WindowProperty, 
+			StringHash,
+			std::equal_to<>> windowProps_;
 	};
+
+	template<class F>
+	inline void WindowContainer::ProcessMessages(F process) const
+	{
+		MSG msg = {};
+
+		while (msg.message != WM_QUIT)
+		{
+			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+			else
+			{
+				if (!process()) break;
+			}
+		}
+	}
 }

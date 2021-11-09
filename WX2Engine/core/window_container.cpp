@@ -11,10 +11,10 @@ namespace wx2
 	WindowContainer::~WindowContainer()
 	{
 		windowProps_.clear();
-		std::for_each(windows_.begin(), windows_.end(),
+		std::ranges::for_each(windows_,
 			[this](const std::pair<std::string, WindowPtr>& p)
 		{
-			windowProps_.emplace(p.first, p.second->GetWindowProperty());
+			windowProps_.try_emplace(p.first, p.second->GetWindowProperty());
 		});
 
 		Serialize();
@@ -24,7 +24,7 @@ namespace wx2
 	{
 		auto [propItr, unuse] = windowProps_.try_emplace(name, defaultProp);
 
-		auto [wndItr, success] = windows_.emplace(name, std::make_shared<Window>(this, propItr->second));
+		auto [wndItr, success] = windows_.try_emplace(name, std::make_shared<Window>(this, propItr->second));
 		if (!success)
 		{
 			WX2_LOG_CRITICAL("ウィンドウ名が重複しています。ウィンドウ名: {}", name);
@@ -34,25 +34,7 @@ namespace wx2
 		return wndItr->second;
 	}
 
-	void WindowContainer::ProcessMessages(std::function<bool()> process)
-	{
-		MSG msg = {};
-
-		while (msg.message != WM_QUIT)
-		{
-			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-			else
-			{
-				if (!process()) break;
-			}
-		}
-	}
-
-	LRESULT WindowContainer::WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+	LRESULT WindowContainer::WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) const
 	{
 		return DefWindowProc(hwnd, msg, wp, lp);
 	}
@@ -61,13 +43,9 @@ namespace wx2
 	{
 		auto filePath = std::filesystem::path(CONFIG_DIR) / WINDOW_PROPERTY_FILE_NAME_;
 		
-		std::stringstream os;
-		{
-			cereal::JSONOutputArchive output(os);
-			output(cereal::make_nvp("windowContainer", windowProps_));
-		}
 		std::ofstream ofs(filePath, std::ios::out);
-		ofs << os.str() << std::endl;
+		cereal::JSONOutputArchive output(ofs);
+		output(cereal::make_nvp("windowContainer", windowProps_));
 	}
 
 	void WindowContainer::Deserialize()
@@ -76,10 +54,8 @@ namespace wx2
 
 		if (std::filesystem::exists(filePath))
 		{
-			std::stringstream is;
 			std::ifstream ifs(filePath, std::ios::in);
-			is << ifs.rdbuf() << std::endl;
-			cereal::JSONInputArchive input(is);
+			cereal::JSONInputArchive input(ifs);
 			input(cereal::make_nvp("windowContainer", windowProps_));
 		}
 	}

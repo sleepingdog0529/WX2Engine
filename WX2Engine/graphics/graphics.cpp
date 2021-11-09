@@ -8,7 +8,7 @@ namespace wx2
 
 		// ‹@”\ƒŒƒxƒ‹
 		D3D_FEATURE_LEVEL supported_feature_level = D3D_FEATURE_LEVEL_1_0_CORE;
-		D3D_FEATURE_LEVEL feature_levels[] = {
+		std::array<D3D_FEATURE_LEVEL, 2> feature_levels = {
 			D3D_FEATURE_LEVEL_11_1,
 			D3D_FEATURE_LEVEL_11_0
 		};
@@ -24,8 +24,8 @@ namespace wx2
 			D3D_DRIVER_TYPE_HARDWARE,
 			nullptr,
 			frags,
-			feature_levels,
-			ARRAYSIZE(feature_levels),
+			feature_levels.data(),
+			feature_levels.size(),
 			D3D11_SDK_VERSION,
 			device_.GetAddressOf(),
 			&supported_feature_level,

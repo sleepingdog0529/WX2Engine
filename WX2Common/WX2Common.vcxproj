@@ -23,6 +23,7 @@
     <ClInclude Include="debug\leak_detector.h" />
     <ClInclude Include="debug\log.h" />
     <ClInclude Include="pch\pch.h" />
+    <ClInclude Include="util\hash.h" />
     <ClInclude Include="util\math_helper.h" />
     <ClInclude Include="WX2Common.h" />
     <ClInclude Include="util\macro.h" />

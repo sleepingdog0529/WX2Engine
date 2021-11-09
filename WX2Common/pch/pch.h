@@ -9,4 +9,5 @@
 #pragma warning(push, 0) 
 #include <string>
 #include <string_view>
+#include <functional>
 #pragma warning(pop)

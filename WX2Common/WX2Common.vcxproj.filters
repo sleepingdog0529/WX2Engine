@@ -14,5 +14,6 @@
     <ClInclude Include="WX2Common.h" />
     <ClInclude Include="debug\leak_detector.h" />
     <ClInclude Include="util\math_helper.h" />
+    <ClInclude Include="util\hash.h" />
   </ItemGroup>
 </Project>
