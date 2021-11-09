@@ -1,19 +1,18 @@
 /*********************************************************************
- * @file	graphics.h
- * @author	SleepingDog0529
- * @date	2021/07/10 0:13
-*********************************************************************/
+ * @file   graphics.h
+ * @author Tomomi Murakami
+ * @date   2021/11/04 13:49
+ * @brief  グラフィック管理クラス
+ ********************************************************************/
 #pragma once
-#include "shader.h"
-#include "constant_buffer.h"
-#include "constant_buffer_types.h"
-#include "core/render_window.h"
+#include <d3d11.h>
+#include <wrl/client.h>
+#include <DirectXMath.h>
+#include <dxgi1_6.h>
+#include "../core/window_property.h"
 
-namespace wx2 {
-
-	template <typename ConstantType>
-	class ConstantBuffer;
-
+namespace wx2
+{
 	class Graphics
 	{
 	public:
@@ -22,67 +21,48 @@ namespace wx2 {
 			BS_NORM,
 			BS_ADD,
 			BS_SUB,
-			BS_MUL,
-			_BS_LAST
+			BS_MUL
 		};
 
-		Graphics(RenderWindow* render_window);
-		~Graphics();
+	private:
+		template <class T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-		void RenderFrame();
+		static constexpr int NUM_BLEND_STATE_ = 4;
 
-		void SetEyePosition(const XMVECTOR& eye_position) { XMStoreFloat3(&cb_ps_scene_->data.EyePosition, eye_position); }
-		void SetViewMatrix(const XMMATRIX& view_matrix) { view_matrix_ = view_matrix; };
-		void SetProjectionMatrix(const XMMATRIX& projection_matrix) { projection_matrix_ = projection_matrix; };
-		void SetBlendState(BlendState blend_state);
-
-		ID3D11Device* GetDevice() const { return device_.Get(); }
-		ID3D11DeviceContext* GetDeviceContext() const { return device_context_.Get(); }
-
-		const ConstantBuffer<CBVSMesh>& GetCBVSMesh() const { return *cb_vs_mesh_; }
-		const ConstantBuffer<CBVSScene>& GetCBVSScene() const { return *cb_vs_scene_; }
-		const ConstantBuffer<CBPSScene>& GetCBPSScene() const { return *cb_ps_scene_; }
-		const ConstantBuffer<CBPSMaterial>& GetCBPSMaterial() const { return *cb_ps_material_; }
+	public:
+		/**
+		 * @brief     グラフィックスの初期化処理
+		 * @param[in] 描画先ウィンドウハンドル
+		 * @param[in] ウィンドウ情報
+		 * @param[in] 垂直同期の使用
+		 */
+		void Initialize(HWND hwnd, const WindowProperty& windowProp, bool vsync);
 
 	private:
-		void InitializeDirectX();
-		void InitializeScene();
-		void ReportLiveObjects();
+		/**
+		 * @brief  GPUメモリの最も大きいアダプタを取得
+		 * @return アダプタ
+		 */
+		ComPtr<IDXGIAdapter> GetAdapterByGpuMemory(IDXGIFactory* factory);
 
-		std::unique_ptr<VertexShader> vertex_shader_;
-		std::unique_ptr<PixelShader> pixel_shader_;
-
-		std::unique_ptr<ConstantBuffer<CBVSMesh>> cb_vs_mesh_;
-		std::unique_ptr<ConstantBuffer<CBVSScene>> cb_vs_scene_;
-		std::unique_ptr<ConstantBuffer<CBPSScene>> cb_ps_scene_;
-		std::unique_ptr<ConstantBuffer<CBPSMaterial>> cb_ps_material_;
-
+		ComPtr<IDXGISwapChain> swapChain_;
 		ComPtr<ID3D11Device> device_;
-		ComPtr<ID3D11DeviceContext> device_context_;
+		ComPtr<ID3D11DeviceContext> deviceContext_;
+		D3D_FEATURE_LEVEL featureLevel_;
 
-		ComPtr<IDXGISwapChain> swap_chain_;
-		ComPtr<ID3D11RenderTargetView> render_target_view_;
+		ComPtr<ID3D11Texture2D> backBuffer_;
+		ComPtr<ID3D11RenderTargetView> renderTargetView_;
 
-		ComPtr<ID3D11DepthStencilView>  depth_stencil_view_;
-		ComPtr<ID3D11Texture2D>		    depth_stencil_;
-		ComPtr<ID3D11DepthStencilState> depth_stencil_state_;
-		ComPtr<ID3D11DepthStencilState> depth_stencil_state_draw_mask_;
-		ComPtr<ID3D11DepthStencilState> depth_stencil_state_apply_mask_;
-		ComPtr<ID3D11RasterizerState>	rasterizer_state_;
+		ComPtr<ID3D11Texture2D> depthStencilBuffer_;
+		ComPtr<ID3D11DepthStencilView> depthStencilView_;
 
-		D3D11_VIEWPORT view_port_;
+		ComPtr<ID3D11DepthStencilState> depthStencilState_;
+		ComPtr<ID3D11RasterizerState>	rasterizerState_;
 
-		ComPtr<ID3D11BlendState> blend_state_[_BS_LAST];
-		ComPtr<ID3D11SamplerState> sampler_state_;
+		D3D11_VIEWPORT viewport_;
 
-#ifdef WX2_DEBUG_ENABLED
-		ComPtr<ID3D11Debug> debug_controller_;
-#endif
-
-		XMMATRIX view_matrix_;
-		XMMATRIX projection_matrix_;
-
-		RenderWindow* render_window_;
+		ComPtr<ID3D11BlendState> blendState_[NUM_BLEND_STATE_];
+		ComPtr<ID3D11SamplerState> samplerState_;
 	};
-
 }

@@ -124,7 +124,7 @@ namespace wx2
 			nullptr);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("キーボードデバイスの作成に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("キーボードデバイスの作成に失敗しました。製品名: {} 種別: {:X}",
 				keyboardDev.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(keyboardDev.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -135,7 +135,7 @@ namespace wx2
 		hr = keyboardDev.device->GetCapabilities(&keyboardDev.capability);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("キーボードデバイスの機能情報取得に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("キーボードデバイスの機能情報取得に失敗しました。製品名: {} 種別: {:X}",
 				keyboardDev.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(keyboardDev.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -145,7 +145,7 @@ namespace wx2
 		hr = keyboardDev.device->SetDataFormat(&c_dfDIKeyboard);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("キーボードデバイスのフォーマットの設定に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("キーボードデバイスのフォーマットの設定に失敗しました。製品名: {} 種別: {:X}",
 				keyboardDev.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(keyboardDev.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -155,7 +155,7 @@ namespace wx2
 		hr = keyboardDev.device->SetCooperativeLevel(keyboard->hwnd_, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("キーボードデバイスの協調モード設定に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("キーボードデバイスの協調モード設定に失敗しました。製品名: {} 種別: {:X}",
 				keyboardDev.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(keyboardDev.instance.dwDevType));
 			return DIENUM_CONTINUE;

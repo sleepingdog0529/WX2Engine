@@ -27,7 +27,7 @@ namespace wx2
 		auto [wndItr, success] = windows_.emplace(name, std::make_shared<Window>(this, propItr->second));
 		if (!success)
 		{
-			WX2_LOG_CRITICAL("ウィンドウ名が重複しています。ウィンドウ名:\"{}\"", name);
+			WX2_LOG_CRITICAL("ウィンドウ名が重複しています。ウィンドウ名: {}", name);
 			exit(EXIT_FAILURE);
 		}
 

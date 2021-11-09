@@ -85,7 +85,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\; $(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Input\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>spdlogd.lib; vld.lib; WX2CommonD.lib; WX2InputD.lib;</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;DXGI.lib;D3DCompiler.lib;spdlogd.lib;vld.lib;WX2CommonD.lib;WX2InputD.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -117,7 +117,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Input\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>spdlog.lib; WX2Common.lib; WX2Input.lib;</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;DXGI.lib;D3DCompiler.lib;spdlog.lib;WX2Common.lib;WX2Input.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -125,6 +125,7 @@
     <ClCompile Include="core\scene.cpp" />
     <ClCompile Include="core\application.cpp" />
     <ClCompile Include="core\window_container.cpp" />
+    <ClCompile Include="graphics\graphics.cpp" />
     <ClCompile Include="pch\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -138,6 +139,7 @@
     <ClInclude Include="core\window_property.h" />
     <ClInclude Include="core\entry_point.h" />
     <ClInclude Include="core\application.h" />
+    <ClInclude Include="graphics\graphics.h" />
     <ClInclude Include="pch\pch.h" />
     <ClInclude Include="WX2Engine.h" />
   </ItemGroup>

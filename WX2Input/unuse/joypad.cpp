@@ -101,7 +101,7 @@ namespace wx2
 			nullptr);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("ジョイパッドデバイスの作成に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("ジョイパッドデバイスの作成に失敗しました。製品名: {} 種別: {:X}",
 				joypadInfo.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(joypadInfo.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -111,7 +111,7 @@ namespace wx2
 		hr = joypadInfo.device->GetCapabilities(&joypadInfo.capability);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("ジョイパッドデバイスの機能情報取得に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("ジョイパッドデバイスの機能情報取得に失敗しました。製品名: {} 種別: {:X}",
 				joypadInfo.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(joypadInfo.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -120,7 +120,7 @@ namespace wx2
 		hr = joypadInfo.device->SetDataFormat(&c_dfDIJoystick2);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("ジョイスティックデバイスのフォーマットの設定に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("ジョイスティックデバイスのフォーマットの設定に失敗しました。製品名: {} 種別: {:X}",
 				joypadInfo.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(joypadInfo.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -129,7 +129,7 @@ namespace wx2
 		hr = joypadInfo.device->SetCooperativeLevel(joypad->hwnd_, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("ジョイパッドデバイスの協調モード設定に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("ジョイパッドデバイスの協調モード設定に失敗しました。製品名: {} 種別: {:X}",
 				joypadInfo.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(joypadInfo.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -145,7 +145,7 @@ namespace wx2
 		hr = joypadInfo.device->SetProperty(DIPROP_BUFFERSIZE, &diprop.diph);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("ジョイパッドデバイスのバッファサイズ設定に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("ジョイパッドデバイスのバッファサイズ設定に失敗しました。製品名: {} 種別: {:X}",
 				joypadInfo.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(joypadInfo.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -154,7 +154,7 @@ namespace wx2
 		hr = joypadInfo.device->EnumObjects(SetupAxisCallback, joypadInfo.device.Get(), DIDFT_AXIS);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("ジョイパッドデバイスの軸設定に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("ジョイパッドデバイスの軸設定に失敗しました。製品名: {} 種別: {:X}",
 				joypadInfo.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(joypadInfo.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -163,7 +163,7 @@ namespace wx2
 		hr = joypadInfo.device->Acquire();
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("ジョイパッドデバイスの制御開始に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("ジョイパッドデバイスの制御開始に失敗しました。製品名: {} 種別: {:X}",
 				joypadInfo.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(joypadInfo.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -172,7 +172,7 @@ namespace wx2
 		hr = joypadInfo.device->Poll();
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("ジョイパッドデバイスのポーリング開始に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("ジョイパッドデバイスのポーリング開始に失敗しました。製品名: {} 種別: {:X}",
 				joypadInfo.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(joypadInfo.instance.dwDevType));
 			return DIENUM_CONTINUE;

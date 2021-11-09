@@ -135,7 +135,7 @@ namespace wx2
 			nullptr);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("マウスデバイスの作成に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("マウスデバイスの作成に失敗しました。製品名: {} 種別: {:X}",
 				mouseDev.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(mouseDev.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -146,7 +146,7 @@ namespace wx2
 		hr = mouseDev.device->GetCapabilities(&mouseDev.capability);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("マウスデバイスの機能情報取得に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("マウスデバイスの機能情報取得に失敗しました。製品名: {} 種別: {:X}",
 				mouseDev.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(mouseDev.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -156,7 +156,7 @@ namespace wx2
 		hr = mouseDev.device->SetDataFormat(&c_dfDIMouse2);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("マウスデバイスのフォーマットの設定に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("マウスデバイスのフォーマットの設定に失敗しました。製品名: {} 種別: {:X}",
 				mouseDev.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(mouseDev.instance.dwDevType));
 			return DIENUM_CONTINUE;
@@ -166,7 +166,7 @@ namespace wx2
 		hr = mouseDev.device->SetCooperativeLevel(mouse->hwnd_, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 		if (FAILED(hr))
 		{
-			WX2_LOG_ERROR("マウスデバイスの協調モード設定に失敗しました。製品名\"{}\" 種別\"{:X}\"",
+			WX2_LOG_ERROR("マウスデバイスの協調モード設定に失敗しました。製品名: {} 種別: {:X}",
 				mouseDev.instance.tszProductName,
 				GET_DIDEVICE_SUBTYPE(mouseDev.instance.dwDevType));
 			return DIENUM_CONTINUE;

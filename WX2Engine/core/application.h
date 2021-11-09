@@ -8,6 +8,7 @@
 #include <wx2common.h>
 #include <WX2Input.h>
 #include "window_container.h"
+#include "../graphics/graphics.h"
 
 int main(int argc, char** argv);
 
@@ -51,6 +52,7 @@ namespace wx2
 		WindowContainer windowContainer_;
 		Input input_;
 		WindowPtr mainWindow_;
+		Graphics graphics_;
 
 		//! 既にインスタンス化されているか
 		static inline bool instantiated_ = false;

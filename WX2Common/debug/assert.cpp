@@ -11,10 +11,10 @@ namespace boost
 	{
 		auto out = std::format(
 			"==============< Assertion failed ! >==============\n"
-			"Expression : {}\n"
-			"Function : {}\n"
-			"File : {}\n"
-			"Line : {}\n"
+			"Expression: {}\n"
+			"Function: {}\n"
+			"File: {}\n"
+			"Line: {}\n"
 			"==================================================\n",
 			expr, function, file, line);
 
@@ -27,11 +27,11 @@ namespace boost
 	{
 		auto out = std::format(
 			"==============< Assertion failed ! >==============\n"
-			"Expression : {}\n"
-			"Message : {}\n"
-			"Function : {}\n"
-			"File : {}\n"
-			"Line : {}\n"
+			"Expression: {}\n"
+			"Message: {}\n"
+			"Function: {}\n"
+			"File: {}\n"
+			"Line: {}\n"
 			"==================================================\n",
 			expr, msg, function, file, line);
 

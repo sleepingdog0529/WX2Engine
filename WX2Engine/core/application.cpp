@@ -30,6 +30,8 @@ namespace wx2
 		mainWindow_ = windowContainer_.Create("Main", wndProp);
 
 		input_.Initialize(mainWindow_->GetHandle());
+
+		graphics_.Initialize(mainWindow_->GetHandle(), mainWindow_->GetWindowProperty(), true);
 	}
 
 	Application::~Application()
