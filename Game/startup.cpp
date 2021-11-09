@@ -11,13 +11,8 @@
 class Game : public wx2::Application
 {
 public:
-	Game()
-	{
-	}
-
-	~Game()
-	{
-	}
+	Game() = default;
+	~Game() final = default;
 };
 
 /**

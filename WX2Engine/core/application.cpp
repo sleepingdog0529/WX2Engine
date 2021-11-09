@@ -14,7 +14,6 @@ namespace wx2
 		const int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
 		// ウィンドウ情報を構築
-		constexpr const char* path = ".\\main_window.json";
 		WindowProperty wndProp;
 		wndProp.title = "WX2EG";
 		wndProp.width = 1280;

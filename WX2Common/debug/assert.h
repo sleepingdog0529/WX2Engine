@@ -22,7 +22,7 @@
  * @param[in] expr 判定式
  * @return
  */
-#define WX2_ASSERT(expr) BOOST_ASSERT(expr);
+#define WX2_ASSERT(expr) BOOST_ASSERT(expr)
 
 /**
  * @brief	  デバッグビルド時にメッセージ付きでログを出力してブレークポイントを発生させる
@@ -31,6 +31,6 @@
  * @param[in] __VA_ARGS__ 書式引数
  * @return
  */
-#define WX2_ASSERT_MSG(expr, msg, ...) BOOST_ASSERT_MSG(expr, std::format(msg, ##__VA_ARGS__).c_str());
+#define WX2_ASSERT_MSG(expr, msg, ...) BOOST_ASSERT_MSG(expr, std::format(msg, ##__VA_ARGS__).c_str())
 
 #endif

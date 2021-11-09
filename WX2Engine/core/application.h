@@ -5,7 +5,6 @@
  * @brief	アプリケーション基礎
  ********************************************************************/
 #pragma once
-#include <wx2common.h>
 #include <WX2Input.h>
 #include "window_container.h"
 #include "../graphics/graphics.h"

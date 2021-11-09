@@ -25,8 +25,8 @@ namespace wx2
 		}
 
 		// ディレクトリ内のファイルを決まった数に保つ
-		std::vector logFiles(fs::directory_iterator(dir), {});
-		if (logFiles.size() >= MAX_FILE_)
+		if (std::vector logFiles(fs::directory_iterator(dir), {}); 
+			logFiles.size() >= MAX_FILE_)
 		{
 			for (const auto& f : vs::counted(logFiles.begin(), logFiles.size() - (MAX_FILE_ - 1)))
 			{

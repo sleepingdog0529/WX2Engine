@@ -28,16 +28,16 @@ namespace wx2
 		std::size_t len = wstr.size();
 		std::size_t converted_len;
 
-		char* conv = static_cast<char*>(malloc(sizeof(char) * len * 2 + 1));
-		errno_t error = wcstombs_s(&converted_len, conv, sizeof(char) * len * 2 + 1, wstr.c_str(), len * 2);
-		if (error != 0 || conv == nullptr)
+		std::vector<char> conv;
+		conv.resize(sizeof(char) * len * 2 + 1);
+		if (wcstombs_s(&converted_len, conv.data(), sizeof(char) * len * 2 + 1, wstr.c_str(), len * 2) != 0 ||
+			conv[0] == '\0')
 		{
 			WX2_LOG_ERROR("ƒƒCƒh•¶š—ñ‚©‚ç•¶š—ñ‚Ö‚Ì•ÏŠ·‚É¸”s‚µ‚Ü‚µ‚½B");
 			exit(EXIT_FAILURE);
 		}
 
-		std::string conv_str(conv);
-		free(conv);
+		std::string conv_str(conv.begin(), conv.end());
 		return conv_str;
 	}
 }

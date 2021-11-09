@@ -71,14 +71,13 @@ namespace wx2
 	LRESULT CALLBACK Window::HandleMessageRedirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	{
 		// パラメータからウィンドウコンテナにキャストする
-		Window* const window =
-			reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+		auto const window = std::bit_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
 		switch (msg)
 		{
 			case WM_MOVING: // ウィンドウがカーソルによって移動されている
 			{
-				RECT* rect = reinterpret_cast<RECT*>(lp);
+				auto rect = std::bit_cast<RECT*>(lp);
 				window->windowProp_.x = static_cast<int>(rect->left);
 				window->windowProp_.y = static_cast<int>(rect->top);
 				window->windowProp_.maximized = false;
@@ -87,7 +86,7 @@ namespace wx2
 			}
 			case WM_SIZING: // ウィンドウがカーソルによってサイズ変更されている
 			{
-				RECT* rect = reinterpret_cast<RECT*>(lp);
+				auto rect = std::bit_cast<RECT*>(lp);
 				window->windowProp_.x = static_cast<int>(rect->left);
 				window->windowProp_.y = static_cast<int>(rect->top);
 				window->windowProp_.width = static_cast<int>(rect->right - rect->left);
@@ -121,10 +120,12 @@ namespace wx2
 				DestroyWindow(hwnd);
 				return 0;
 			}
+			default:
+			{
+				// 動的なウィンドウプロシージャに処理を委譲する
+				return window->container_->WindowProcedure(hwnd, msg, wp, lp);
+			}
 		}
-
-		// 動的なウィンドウプロシージャに処理を委譲する
-		return window->container_->WindowProcedure(hwnd, msg, wp, lp);
 	}
 
 	LRESULT CALLBACK Window::HandleMessageSetup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
