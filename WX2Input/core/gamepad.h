@@ -6,6 +6,11 @@
 *********************************************************************/
 #pragma once
 #pragma warning(push, 0)
+#include <WX2Common.h>
+#define STRICT
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <Windows.h> // Xinputより先にインクルードしないとエラー
 #include <Xinput.h>
 #include <wrl/client.h>
 #include <bitset>
@@ -14,7 +19,7 @@
 
 namespace wx2
 {
-	class Gamepad
+	class Gamepad final
 	{
 	public:
 		enum Buttons
@@ -47,42 +52,61 @@ namespace wx2
 
 	private:
 		// 左スティックのデッドゾーン(0 ~ 1)
-		static constexpr float LEFT_THUMB_DEADZONE_ = 
-			XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE / (float)SHRT_MAX; 
+		static constexpr float LEFT_THUMB_DEADZONE = 
+			XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE / static_cast<float>(SHRT_MAX); 
 
 		// 左スティックのデッドゾーン(0 ~ 1)
-		static constexpr float RIGHT_THUMB_DEADZONE_ =
-			XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE / (float)SHRT_MAX; 
+		static constexpr float RIGHT_THUMB_DEADZONE =
+			XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE / static_cast<float>(SHRT_MAX); 
 
 		// 両トリガーのデッドゾーン(0 ~ 1)
-		static constexpr float TRIGGER_DEADZONE_ =
-			XINPUT_GAMEPAD_TRIGGER_THRESHOLD / (float)UCHAR_MAX;
+		static constexpr float TRIGGER_DEADZONE =
+			XINPUT_GAMEPAD_TRIGGER_THRESHOLD / static_cast<float>(UCHAR_MAX);
 
-		static constexpr size_t NUM_BUTTONS_ = 14;
-		static constexpr size_t NUM_AXISES_ = 6;
+		static constexpr size_t NUM_BUTTONS = 14;
+		static constexpr size_t NUM_AXISES = 6;
 
 		struct GamepadState
 		{
 			struct
 			{
-				std::bitset<NUM_BUTTONS_> buttons;
-				std::array<float, NUM_AXISES_> axises;
+				std::bitset<NUM_BUTTONS> buttons;
+				std::array<float, NUM_AXISES> axises;
 			} current, previous;
 		};
 
 	public:
 		Gamepad();
-		virtual ~Gamepad() = default;
+		~Gamepad() = default;
 
 		WX2_DISALLOW_COPY_AND_MOVE(Gamepad);
 
 		void Update();
 
-		bool IsDown(Buttons button, size_t user = 0) const;
-		bool IsPressed(Buttons button, size_t user = 0) const;
-		bool IsReleased(Buttons button, size_t user = 0) const;
-		float GetAxisValue(Axises axises, size_t user = 0) const;
-		float GetAxisVelocity(Axises axises, size_t user = 0) const;
+		[[nodiscard]] bool IsDown(const Buttons button, const size_t user = 0) const
+		{
+			return states_[user].current.buttons[button];
+		}
+
+		[[nodiscard]] bool IsPressed(const Buttons button, const size_t user = 0) const
+		{
+			return states_[user].current.buttons[button] && !states_[user].previous.buttons[button];
+		}
+
+		[[nodiscard]] bool IsReleased(const Buttons button, const size_t user = 0) const
+		{
+			return !states_[user].current.buttons[button] && states_[user].previous.buttons[button];
+		}
+
+		[[nodiscard]] float GetAxisValue(const Axises axises, const size_t user = 0) const
+		{
+			return states_[user].current.axises[axises];
+		}
+
+		[[nodiscard]] float GetAxisVelocity(const Axises axises, const size_t user = 0) const
+		{
+			return states_[user].current.axises[axises] - states_[user].previous.axises[axises];
+		}
 
 	private:
 		std::array<GamepadState, XUSER_MAX_COUNT> states_;

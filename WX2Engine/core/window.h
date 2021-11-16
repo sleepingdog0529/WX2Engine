@@ -12,49 +12,55 @@ namespace wx2
 {
 	class WindowContainer;
 
-	class Window
+	class Window final
 	{
 	public:
 		/**
-		 * @brief	  ウィンドウ生成
+		 * @brief ウィンドウ生成
 		 * @param[in] container 格納先コンテナ
-		 * @param[in] window_prop ウィンドウ設定
+		 * @param[in] windowProp ウィンドウ設定
 		 */
 		Window(WindowContainer* container, const WindowProperty& windowProp);
 		/**
 		 * @brief ウィンドウを閉じる
 		 */
-		virtual ~Window();
-
-		//! ウィンドウのウィンドウプロシージャ
-		static LRESULT CALLBACK HandleMessageRedirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
-		//! ウィンドウのウィンドウプロシージャ
-		static LRESULT CALLBACK HandleMessageSetup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
+		~Window();
 
 		WX2_DISALLOW_COPY_AND_MOVE(Window);
+
+		//! ウィンドウのウィンドウプロシージャ
+		static LRESULT CALLBACK HandleMessageRedirect(const HWND hwnd, const UINT msg, const  WPARAM wp, const  LPARAM lp);
+		//! ウィンドウのウィンドウプロシージャ
+		static LRESULT CALLBACK HandleMessageSetup(const HWND hwnd, const  UINT msg, const WPARAM wp, const LPARAM lp);
 
 		/**
 		 * @return ウィンドウハンドル
 		 */
-		HWND GetHandle() const { return hwnd_; }
+		[[nodiscard]] HWND GetHandle() const
+		{
+			return hwnd_;
+		}
 
 		/**
-		 * @brief  
-		 * @return ウィンドウ情報を取得
+		 * @brief 
+		 * @return 
 		 */
-		const WindowProperty& GetWindowProperty() const { return windowProp_; }
+		[[nodiscard]] const WindowProperty& GetWindowProperty() const
+		{
+			return windowProp_;
+		}
 
 		/**
-		 * @brief     ウィンドウのフルスクリーン状態を設定する
-		 * @param[in] フルスクリーンにするか
+		 * @brief ウィンドウのフルスクリーン状態を設定する
+		 * @param fullscreen フルスクリーンにするか
 		 */
 		void SetFullscreen(bool fullscreen);
 
 		/**
-		 * @brief     ウィンドウの最大化状態を設定する
-		 * @param[in] 最大化するか
+		 * @brief ウィンドウの最大化状態を設定する
+		 * @param maximaize 最大化するか
 		 */
-		void SetMaximize(bool maximaize);
+		void SetMaximize(const bool maximaize);
 
 	private:
 		//! ウィンドウ移動時のコールバック

@@ -15,17 +15,12 @@
     <ClCompile Include="core\gamepad.cpp" />
     <ClCompile Include="core\keyboard.cpp" />
     <ClCompile Include="core\mouse.cpp" />
-    <ClCompile Include="pch\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\input.h" />
     <ClInclude Include="core\gamepad.h" />
     <ClInclude Include="core\keyboard.h" />
     <ClInclude Include="core\mouse.h" />
-    <ClInclude Include="pch\pch.h" />
     <ClInclude Include="WX2Input.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -85,9 +80,10 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>$(ProjectDir)pch\pch.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
       <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Input;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>

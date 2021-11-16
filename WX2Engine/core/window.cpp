@@ -11,15 +11,16 @@ namespace wx2
 
 		// ランダムにユニークIDを生成
 		const boost::uuids::uuid uuid = boost::uuids::random_generator()();
-		std::stringstream uuid_ss;
-		uuid_ss << uuid;
-		className_ = std::format("wx2eg-{}", uuid_ss.str());
+		std::stringstream uuidStream;
+		uuidStream << uuid;
+		className_ = std::format("wx2eg-{}", uuidStream.str());
 
 		// インスタンスハンドル取得
 		const HINSTANCE hinst = GetModuleHandle(nullptr);
 
 		// ウィンドウクラスを登録
-		WNDCLASSEX wcex = { sizeof(wcex) };
+		WNDCLASSEX wcex = {};
+		wcex.cbSize = sizeof(wcex);
 		wcex.style = CS_HREDRAW | CS_VREDRAW;
 		wcex.lpfnWndProc = HandleMessageSetup;
 		wcex.hInstance = hinst;
@@ -68,7 +69,7 @@ namespace wx2
 		}
 	}
 
-	LRESULT CALLBACK Window::HandleMessageRedirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+	LRESULT CALLBACK Window::HandleMessageRedirect(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp)
 	{
 		// パラメータからウィンドウコンテナにキャストする
 		Window* const window = std::bit_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
@@ -110,11 +111,10 @@ namespace wx2
 				container->WindowProcedure(hwnd, msg, wp, lp);
 				break;
 		}
-
 		return 0;
 	}
 
-	LRESULT CALLBACK Window::HandleMessageSetup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+	LRESULT CALLBACK Window::HandleMessageSetup(const HWND hwnd, const  UINT msg, const WPARAM wp, const LPARAM lp)
 	{
 		// パラメータからウィンドウコンテナにキャストする
 		const CREATESTRUCTW* const create = std::bit_cast<CREATESTRUCTW*>(lp);
@@ -139,7 +139,7 @@ namespace wx2
 		return DefWindowProc(hwnd, msg, wp, lp);
 	}
 
-	void Window::SetFullscreen(bool fullscreen)
+	void Window::SetFullscreen(const bool fullscreen)
 	{
 		windowProp_.fullscreen = fullscreen;
 
@@ -150,14 +150,14 @@ namespace wx2
 			SetWindowLong(
 				hwnd_, 
 				GWL_STYLE,
-				windowProp_.style & ~(WS_CAPTION | WS_THICKFRAME));
+				~(WS_CAPTION | WS_THICKFRAME) & windowProp_.style);
 			SetWindowLong(
 				hwnd_, 
-				GWL_EXSTYLE, 
-				windowProp_.ex_style & ~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
+				GWL_EXSTYLE,
+				~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE) & windowProp_.ex_style);
 
 			// ウィンドウサイズをモニターサイズと同じにする
-			MONITORINFO mi;
+			MONITORINFO mi{};
 			mi.cbSize = sizeof(mi);
 			GetMonitorInfo(MonitorFromWindow(hwnd_, MONITOR_DEFAULTTONEAREST), &mi);
 			SetWindowPos(
@@ -172,8 +172,8 @@ namespace wx2
 		else
 		{
 			// ウィンドウスタイルを再設定
-			SetWindowLong(hwnd_, GWL_STYLE, windowProp_.style);
-			SetWindowLong(hwnd_, GWL_EXSTYLE, windowProp_.ex_style);
+			SetWindowLong(hwnd_, GWL_STYLE, static_cast<LONG>(windowProp_.style));
+			SetWindowLong(hwnd_, GWL_EXSTYLE, static_cast<LONG>(windowProp_.ex_style));
 
 			// ウィンドウサイズを復元
 			SetWindowPos(
@@ -193,7 +193,7 @@ namespace wx2
 		}
 	}
 
-	void Window::SetMaximize(bool maximaize)
+	void Window::SetMaximize(const bool maximaize)
 	{
 		windowProp_.maximized = maximaize;
 		SendMessage(hwnd_, WM_SYSCOMMAND, windowProp_.maximized ? SC_MAXIMIZE : SC_RESTORE, 0);

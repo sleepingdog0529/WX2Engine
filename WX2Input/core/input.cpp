@@ -5,21 +5,14 @@
 
 namespace wx2
 {
-	Input::Input() :
-		directInput_()
+	void Input::Initialize(const HWND hwnd)
 	{
-	}
-
-	void Input::Initialize(HWND hwnd)
-	{
-		HRESULT hr;
-		hr = DirectInput8Create(
+		if (const HRESULT hr = DirectInput8Create(
 			GetModuleHandle(nullptr),
 			DIRECTINPUT_VERSION,
 			IID_IDirectInput8,
 			&directInput_,
-			nullptr);
-		if (FAILED(hr))
+			nullptr); FAILED(hr))
 		{
 			WX2_LOG_ERROR("DirectInput8ÇÃçÏê¨Ç…é∏îsÇµÇ‹ÇµÇΩÅB");
 			exit(EXIT_FAILURE);

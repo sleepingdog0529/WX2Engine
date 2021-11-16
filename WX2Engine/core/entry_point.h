@@ -27,7 +27,7 @@ INT WINAPI WinMain(
 int main(int argc, char** argv)
 {
 #endif
-	auto app = wx2::CreateApp();
+	const auto app = wx2::CreateApp();
 
 	app->Run();
 	return EXIT_SUCCESS;

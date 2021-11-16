@@ -6,6 +6,7 @@
 *********************************************************************/
 #pragma once
 #pragma warning(push, 0) 
+#include <WX2Common.h>
 #include <bitset>
 #include <dinput.h>
 #include <wrl/client.h>
@@ -17,7 +18,7 @@ namespace wx2
 	/// <summary>
 	/// マウス入力を扱うクラス
 	/// </summary>
-	class Mouse
+	class Mouse final
 	{
 	public:
 		enum Buttons
@@ -40,16 +41,16 @@ namespace wx2
 		using DInputPtr = Microsoft::WRL::ComPtr<IDirectInput8>;
 		using DevicePtr = Microsoft::WRL::ComPtr<IDirectInputDevice8>;
 
-		static constexpr std::size_t NUM_BUTTONS_ = 5;	// ボタン数
-		static constexpr std::size_t NUM_AXISES_ = 3;	// 軸数
+		static constexpr std::size_t NUM_BUTTONS = 5;	// ボタン数
+		static constexpr std::size_t NUM_AXISES = 3;	// 軸数
 
 		struct MouseState
 		{
 			struct 
 			{
-				std::bitset<NUM_BUTTONS_> buttons;
+				std::bitset<NUM_BUTTONS> buttons;
 			} current, previous;
-			std::array<float, NUM_AXISES_> axises;
+			std::array<float, NUM_AXISES> axises{};
 		};
 
 		struct MouseDevice
@@ -61,16 +62,33 @@ namespace wx2
 
 	public:
 		Mouse();
-		virtual ~Mouse();
+		~Mouse();
 
-		void Initialize(DInputPtr directInput, HWND hwnd);
+		WX2_DISALLOW_COPY_AND_MOVE(Mouse);
+
+		void Initialize(const DInputPtr& directInput, const HWND hwnd);
 		void Regist();
 		void Update();
 
-		bool IsDown(Buttons button) const;
-		bool IsPressed(Buttons button) const;
-		bool IsReleased(Buttons button) const;
-		float GetAxisVelocity(Axises axises) const;
+		[[nodiscard]] bool IsDown(const Buttons button) const
+		{
+			return state_.current.buttons[button];
+		}
+
+		[[nodiscard]] bool IsPressed(const Buttons button) const
+		{
+			return state_.current.buttons[button] && !state_.previous.buttons[button];
+		}
+
+		[[nodiscard]] bool IsReleased(const Buttons button) const
+		{
+			return !state_.current.buttons[button] && state_.previous.buttons[button];
+		}
+
+		[[nodiscard]] float GetAxisVelocity(const Axises axises) const
+		{
+			return state_.axises[axises];
+		}
 
 	private:
 		static BOOL CALLBACK SetupMouseCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);

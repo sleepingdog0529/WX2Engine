@@ -5,6 +5,7 @@
  * @brief	デバイス入力共通クラス
 *********************************************************************/
 #pragma once
+#include "WX2Common.h"
 #include "keyboard.h"
 #include "mouse.h"
 #include "gamepad.h"
@@ -17,36 +18,37 @@ namespace wx2
 	/// <summary>
 	/// デバイス入力の共通の処理を行うクラス
 	/// </summary>
-	class Input
+	class Input final
 	{
 	private:
 		using DInputPtr = Microsoft::WRL::ComPtr<IDirectInput8>;
 
 	public:
-		Input();
-		virtual ~Input() = default;
+		Input() = default;
+		~Input() = default;
 
-		void Initialize(HWND hwnd);
+		WX2_DISALLOW_COPY_AND_MOVE(Input);
+
+		void Initialize(const HWND hwnd);
 		void Update();
 
-		bool IsDown(Keyboard::Keys key) const { return keyboard_.IsDown(key); }
-		bool IsPressed(Keyboard::Keys key) const { return keyboard_.IsPressed(key); }
-		bool IsReleased(Keyboard::Keys key) const { return keyboard_.IsReleased(key); }
+		[[nodiscard]] bool IsDown(const Keyboard::Keys key) const { return keyboard_.IsDown(key); }
+		[[nodiscard]] bool IsPressed(const Keyboard::Keys key) const { return keyboard_.IsPressed(key); }
+		[[nodiscard]] bool IsReleased(const Keyboard::Keys key) const { return keyboard_.IsReleased(key); }
 
-		bool IsDown(Mouse::Buttons button) const { return mouse_.IsDown(button); }
-		bool IsPressed(Mouse::Buttons button) const { return mouse_.IsPressed(button); }
-		bool IsReleased(Mouse::Buttons button) const { return mouse_.IsReleased(button); }
-		float GetAxisVelocity(Mouse::Axises axises) const { return mouse_.GetAxisVelocity(axises); }
+		[[nodiscard]] bool IsDown(const Mouse::Buttons button) const { return mouse_.IsDown(button); }
+		[[nodiscard]] bool IsPressed(const Mouse::Buttons button) const { return mouse_.IsPressed(button); }
+		[[nodiscard]] bool IsReleased(const Mouse::Buttons button) const { return mouse_.IsReleased(button); }
+		[[nodiscard]] float GetAxisVelocity(const Mouse::Axises axises) const { return mouse_.GetAxisVelocity(axises); }
 
-		bool IsDown(Gamepad::Buttons button) const { return gamepad_.IsDown(button); }
-		bool IsPressed(Gamepad::Buttons button) const { return gamepad_.IsPressed(button); }
-		bool IsReleased(Gamepad::Buttons button) const { return gamepad_.IsReleased(button); }
-		float GetAxisValue(Gamepad::Axises axises) const { return gamepad_.GetAxisVelocity(axises); }
-		float GetAxisVelocity(Gamepad::Axises axises) const { return gamepad_.GetAxisVelocity(axises); }
+		[[nodiscard]] bool IsDown(const Gamepad::Buttons button) const { return gamepad_.IsDown(button); }
+		[[nodiscard]] bool IsPressed(const Gamepad::Buttons button) const { return gamepad_.IsPressed(button); }
+		[[nodiscard]] bool IsReleased(const Gamepad::Buttons button) const { return gamepad_.IsReleased(button); }
+		[[nodiscard]] float GetAxisValue(const Gamepad::Axises axises) const { return gamepad_.GetAxisVelocity(axises); }
+		[[nodiscard]] float GetAxisVelocity(const Gamepad::Axises axises) const { return gamepad_.GetAxisVelocity(axises); }
 
 	private:
 		DInputPtr directInput_;
-
 		Keyboard keyboard_;
 		Mouse mouse_;
 		Gamepad gamepad_;

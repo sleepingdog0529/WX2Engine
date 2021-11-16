@@ -3,24 +3,18 @@
 
 namespace wx2
 {
-	Keyboard::Keyboard() :
-		directInput_(),
-		hwnd_()
-	{
-	}
-
 	Keyboard::~Keyboard()
 	{
-		for (auto& kd : keyboards_)
+		for (auto& [device, instance, capability] : keyboards_)
 		{
-			if (kd.device)
+			if (device)
 			{
-				kd.device->Unacquire();
+				device->Unacquire();
 			}
 		}
 	}
 
-	void Keyboard::Initialize(DInputPtr directInput, HWND hwnd)
+	void Keyboard::Initialize(const DInputPtr& directInput, const HWND hwnd)
 	{
 		WX2_ASSERT_MSG(directInput, "IDirectInputDevice8がnullptrです。");
 		WX2_ASSERT_MSG(IsWindowEnabled(hwnd) != 0, "ウィンドウハンドルが無効です。");
@@ -30,14 +24,11 @@ namespace wx2
 
 	void Keyboard::Regist()
 	{
-		HRESULT hr;
-
-		hr = directInput_->EnumDevices(
+		if (const HRESULT hr = directInput_->EnumDevices(
 			DI8DEVTYPE_KEYBOARD,
 			SetupKeyboardCallback,
 			this,
-			DIEDFL_ATTACHEDONLY);
-		if (FAILED(hr))
+			DIEDFL_ATTACHEDONLY); FAILED(hr))
 		{
 			WX2_LOG_ERROR("ジョイスティックデバイスの作成に失敗しました。");
 			exit(EXIT_FAILURE);
@@ -46,28 +37,26 @@ namespace wx2
 
 	void Keyboard::Update()
 	{
-		HRESULT hr;
-
-		state_.previous = std::move(state_.current);
+		state_.previous = state_.current;
 		std::memset(&state_.current, 0, sizeof(state_.current));
 
-		BYTE stateBuffer[NUM_KEYS_] = {};
+		BYTE stateBuffer[NUM_KEYS] = {};
 
 		// 全てのキーボードの状態を取得
-		for (auto& kd : keyboards_)
+		for (const auto& [device, instance, capability] : keyboards_)
 		{
-			hr = kd.device->Poll();
+			HRESULT hr = device->Poll();
 			if (FAILED(hr))
 			{
 				// 切断されていた場合再登録を試みる
-				kd.device->Acquire();
+				device->Acquire();
 				continue;
 			}
 
 			std::memset(&stateBuffer, 0, sizeof(stateBuffer));
 
 			// キーボード状態取得
-			hr = kd.device->GetDeviceState(static_cast<DWORD>(sizeof(stateBuffer)), &stateBuffer);
+			hr = device->GetDeviceState(static_cast<DWORD>(sizeof(stateBuffer)), &stateBuffer);
 			if (FAILED(hr))
 			{
 				WX2_LOG_WARN("キーボード状態取得に失敗しました。");
@@ -75,36 +64,27 @@ namespace wx2
 			}
 
 			// キー報を格納
-			for (std::size_t i = 0; i < NUM_KEYS_; ++i)
+			for (std::size_t i = 0; i < NUM_KEYS; ++i)
 			{
-				state_.current.keys[i] = state_.current.keys[i] | (stateBuffer[i] & 0x80);
+				state_.current.keys[i] = state_.current.keys[i] || (stateBuffer[i] & 0x80);
 			}
 		}
 	}
 
-	bool Keyboard::IsDown(Keys key) const
-	{
-		return state_.current.keys[key];
-	}
 
-	bool Keyboard::IsPressed(Keys key) const
-	{
-		return state_.current.keys[key] & !state_.previous.keys[key];
-	}
 
-	bool Keyboard::IsReleased(Keys key) const
-	{
-		return !state_.current.keys[key] & state_.previous.keys[key];
-	}
-
-	BOOL Keyboard::SetupKeyboardCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef)
+	BOOL Keyboard::SetupKeyboardCallback(LPCDIDEVICEINSTANCE lpddi, const LPVOID pvRef)
 	{
 		WX2_ASSERT_MSG(
 			GET_DIDEVICE_TYPE(lpddi->dwDevType) == DI8DEVTYPE_KEYBOARD,
 			"マウス以外のデバイスは列挙できません");
 
-		auto* keyboard = reinterpret_cast<Keyboard*>(pvRef);
-		WX2_ASSERT_MSG(keyboard, "Keyboardクラスがnullptrです。");
+		auto* keyboard = static_cast<Keyboard*>(pvRef);
+		if(!keyboard)
+		{
+			WX2_LOG_CRITICAL("Keyboardクラスがnullptrです。");
+			return DIENUM_STOP;
+		}
 
 		// デバイス作成済みの場合スキップする
 		if (std::ranges::any_of(keyboard->keyboards_,
@@ -113,12 +93,11 @@ namespace wx2
 			return DIENUM_CONTINUE;
 		}
 
-		HRESULT hr;
 		KeyboardDevice keyboardDev = {};
-		keyboardDev.instance = std::move(static_cast<DIDEVICEINSTANCE>(*lpddi));
+		keyboardDev.instance = static_cast<DIDEVICEINSTANCE>(*lpddi);
 
 		// デバイス作成
-		hr = keyboard->directInput_->CreateDevice(
+		HRESULT hr = keyboard->directInput_->CreateDevice(
 			keyboardDev.instance.guidInstance,
 			keyboardDev.device.GetAddressOf(),
 			nullptr);

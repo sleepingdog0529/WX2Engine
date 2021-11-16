@@ -30,6 +30,7 @@
 #include <sstream>
 #include <memory>
 #include <iostream>
+#include <bit>
 
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>

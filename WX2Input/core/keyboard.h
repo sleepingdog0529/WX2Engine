@@ -5,7 +5,9 @@
  * @brief	キーボード入力
 *********************************************************************/
 #pragma once
-#pragma warning(push, 0) 
+#pragma warning(push, 0)
+#include <WX2Common.h>
+#include <vector>
 #include <bitset>
 #include <dinput.h>
 #include <wrl/client.h>
@@ -13,7 +15,7 @@
 
 namespace wx2
 {
-	class Keyboard
+	class Keyboard final
 	{
 	public:
 		enum Keys
@@ -137,13 +139,13 @@ namespace wx2
 		using DInputPtr = Microsoft::WRL::ComPtr<IDirectInput8>;
 		using DevicePtr = Microsoft::WRL::ComPtr<IDirectInputDevice8>;
 
-		static constexpr std::size_t NUM_KEYS_ = 256;	// キー数
+		static constexpr std::size_t NUM_KEYS = 256;	// キー数
 
 		struct KeyboardState
 		{
 			struct
 			{
-				std::bitset<NUM_KEYS_> keys;
+				std::bitset<NUM_KEYS> keys;
 			} current, previous;
 		};
 
@@ -155,22 +157,35 @@ namespace wx2
 		};
 
 	public:
-		Keyboard();
-		virtual ~Keyboard();
+		Keyboard() = default;
+		~Keyboard();
 
-		void Initialize(DInputPtr directInput, HWND hwnd);
+		WX2_DISALLOW_COPY_AND_MOVE(Keyboard);
+
+		void Initialize(const DInputPtr& directInput, HWND hwnd);
 		void Regist();
 		void Update();
 
-		bool IsDown(Keys key) const;
-		bool IsPressed(Keys key) const;
-		bool IsReleased(Keys key) const;
+		[[nodiscard]] bool IsDown(const Keys key) const
+		{
+			return state_.current.keys[key];
+		}
+
+		[[nodiscard]] bool IsPressed(const Keys key) const
+		{
+			return state_.current.keys[key] && !state_.previous.keys[key];
+		}
+
+		[[nodiscard]] bool IsReleased(const Keys key) const
+		{
+			return !state_.current.keys[key] && state_.previous.keys[key];
+		}
 
 	private:
-		static BOOL CALLBACK SetupKeyboardCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);
+		static BOOL CALLBACK SetupKeyboardCallback(LPCDIDEVICEINSTANCE lpddi, const LPVOID pvRef);
 
 		DInputPtr directInput_;
-		HWND hwnd_;
+		HWND hwnd_{};
 
 		std::vector<KeyboardDevice> keyboards_;
 		KeyboardState state_;
