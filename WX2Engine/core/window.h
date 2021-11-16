@@ -57,6 +57,18 @@ namespace wx2
 		void SetMaximize(bool maximaize);
 
 	private:
+		//! ウィンドウ移動時のコールバック
+		void OnMoving(WPARAM wp, LPARAM lp);
+
+		//! ウィンドウサイズ変更時のコールバック
+		void OnSizing(WPARAM wp, LPARAM lp);
+
+		//! ウィンドウ表示モード変更時のコールバック
+		void OnDisplayModeChanged(WPARAM wp, [[maybe_unused]] LPARAM lp);
+
+		//! キー押下時
+		void OnKeyDown(WPARAM wp, LPARAM lp);
+
 		WindowContainer* container_;	//! ウィンドウコンテナ
 		HWND hwnd_;						//! ウィンドウハンドル
 		std::string className_;			//! ウィンドウクラス名

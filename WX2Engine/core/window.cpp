@@ -25,7 +25,7 @@ namespace wx2
 		wcex.hInstance = hinst;
 		wcex.hbrBackground = GetStockBrush(WHITE_BRUSH);
 		wcex.lpszClassName = className_.c_str();
-		if (!RegisterClassEx(&wcex))
+		if (!RegisterClassEx(&wcex)) [[unlikely]]
 		{
 			WX2_LOG_ERROR("ウィンドウクラスの登録に失敗しました。エラーコード: {}", GetLastError());
 			exit(EXIT_FAILURE);
@@ -46,7 +46,7 @@ namespace wx2
 			hinst,
 			this
 		);
-		if (!hwnd_)
+		if (!hwnd_) [[unlikely]]
 		{
 			WX2_LOG_ERROR("ウィンドウの作成に失敗しました。エラーコード: {}", GetLastError());
 			exit(EXIT_FAILURE);
@@ -61,7 +61,7 @@ namespace wx2
 	Window::~Window()
 	{
 		// ウィンドウを登録解除し、破棄する
-		if (hwnd_)
+		if (hwnd_) [[likely]]
 		{
 			UnregisterClass(className_.c_str(), GetModuleHandle(nullptr));
 			DestroyWindow(hwnd_);
@@ -71,79 +71,65 @@ namespace wx2
 	LRESULT CALLBACK Window::HandleMessageRedirect(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	{
 		// パラメータからウィンドウコンテナにキャストする
-		auto const window = std::bit_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+		Window* const window = std::bit_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+		if (!window) [[unlikely]]
+		{
+			WX2_LOG_CRITICAL("ウィンドウクラスがパラメータから取得できませんでした。");
+			exit(EXIT_FAILURE);
+		}
+
+		const WindowContainer* container = window->container_;
 
 		switch (msg)
 		{
-			case WM_MOVING: // ウィンドウがカーソルによって移動されている
-			{
-				auto rect = std::bit_cast<RECT*>(lp);
-				window->windowProp_.x = static_cast<int>(rect->left);
-				window->windowProp_.y = static_cast<int>(rect->top);
-				window->windowProp_.maximized = false;
-				window->windowProp_.fullscreen = false;
+			case WM_MOVING: 
+				window->OnMoving(wp, lp); 
 				return TRUE;
-			}
-			case WM_SIZING: // ウィンドウがカーソルによってサイズ変更されている
-			{
-				auto rect = std::bit_cast<RECT*>(lp);
-				window->windowProp_.x = static_cast<int>(rect->left);
-				window->windowProp_.y = static_cast<int>(rect->top);
-				window->windowProp_.width = static_cast<int>(rect->right - rect->left);
-				window->windowProp_.height = static_cast<int>(rect->bottom - rect->top);
-				window->windowProp_.maximized = false;
-				window->windowProp_.fullscreen = false;
+
+			case WM_SIZING: 
+				window->OnSizing(wp, lp); 
 				return TRUE;
-			}
-			case WM_SYSCOMMAND: // ウィンドウの最大化＆元に戻したとき
-			{
-				if (wp == SC_MAXIMIZE)
-				{
-					window->windowProp_.maximized = true;
-				}
-				else if(wp == SC_RESTORE)
-				{
-					window->windowProp_.maximized = false;
-				}
+
+			case WM_SYSCOMMAND:
+				window->OnDisplayModeChanged(wp, lp);
 				break;
-			}
-			case WM_KEYDOWN: // F11でフルスクリーン切り替え
-			{
-				if (wp == VK_F11)
-				{
-					window->SetFullscreen(!window->windowProp_.fullscreen);
-				}
-				return 0;
-			}
-			case WM_CLOSE: // ウィンドウを閉じる
-			{
+				
+			case WM_KEYDOWN:
+				window->OnKeyDown(wp, lp);
+				break;
+
+			case WM_DESTROY:
+				PostQuitMessage(0);
+				break;
+
+			case WM_CLOSE:
 				DestroyWindow(hwnd);
-				return 0;
-			}
+				break;
+
 			default:
-			{
-				// 動的なウィンドウプロシージャに処理を委譲する
-				return window->container_->WindowProcedure(hwnd, msg, wp, lp);
-			}
+				container->WindowProcedure(hwnd, msg, wp, lp);
+				break;
 		}
+
+		return 0;
 	}
 
 	LRESULT CALLBACK Window::HandleMessageSetup(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	{
 		// パラメータからウィンドウコンテナにキャストする
-		const CREATESTRUCTW* const create = reinterpret_cast<CREATESTRUCTW*>(lp);
-		Window* window = reinterpret_cast<Window*>(create->lpCreateParams);
+		const CREATESTRUCTW* const create = std::bit_cast<CREATESTRUCTW*>(lp);
+		Window* const window = std::bit_cast<Window*>(create->lpCreateParams);
 
 		if(msg == WM_NCCREATE)
 		{
-			if (!window)
+			if (!window) [[unlikely]]
 			{
 				WX2_LOG_CRITICAL("windows_containerはnullptrです。");
 				exit(EXIT_FAILURE);
 			}
 
 			// ウィンドウプロシージャを差し替え
-			SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
+			SetWindowLongPtr(hwnd, GWLP_USERDATA, std::bit_cast<LONG_PTR>(window));
 			SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(HandleMessageRedirect));
 
 			// 動的なウィンドウプロシージャに処理を委譲する
@@ -176,7 +162,7 @@ namespace wx2
 			GetMonitorInfo(MonitorFromWindow(hwnd_, MONITOR_DEFAULTTONEAREST), &mi);
 			SetWindowPos(
 				hwnd_, 
-				NULL, 
+				nullptr, 
 				mi.rcMonitor.left, 
 				mi.rcMonitor.top,
 				mi.rcMonitor.right - mi.rcMonitor.left,
@@ -192,7 +178,7 @@ namespace wx2
 			// ウィンドウサイズを復元
 			SetWindowPos(
 				hwnd_,
-				NULL,
+				nullptr,
 				windowProp_.x,
 				windowProp_.y,
 				windowProp_.width,
@@ -211,5 +197,39 @@ namespace wx2
 	{
 		windowProp_.maximized = maximaize;
 		SendMessage(hwnd_, WM_SYSCOMMAND, windowProp_.maximized ? SC_MAXIMIZE : SC_RESTORE, 0);
+	}
+
+	void Window::OnMoving([[maybe_unused]] WPARAM wp, LPARAM lp)
+	{
+		auto rect = std::bit_cast<RECT*>(lp);
+		windowProp_.x = static_cast<int>(rect->left);
+		windowProp_.y = static_cast<int>(rect->top);
+		windowProp_.maximized = false;
+		windowProp_.fullscreen = false;
+	}
+
+	void Window::OnSizing([[maybe_unused]] WPARAM wp, LPARAM lp)
+	{
+		auto rect = std::bit_cast<RECT*>(lp);
+		windowProp_.x = static_cast<int>(rect->left);
+		windowProp_.y = static_cast<int>(rect->top);
+		windowProp_.width = static_cast<int>(rect->right - rect->left);
+		windowProp_.height = static_cast<int>(rect->bottom - rect->top);
+		windowProp_.maximized = false;
+		windowProp_.fullscreen = false;
+	}
+
+	void Window::OnDisplayModeChanged(WPARAM wp, [[maybe_unused]] LPARAM lp)
+	{
+		if      (wp == SC_MAXIMIZE) windowProp_.maximized = true;
+		else if (wp == SC_RESTORE)  windowProp_.maximized = false;
+	}
+
+	void Window::OnKeyDown(WPARAM wp, [[maybe_unused]] LPARAM lp)
+	{
+		if (wp == VK_F11) [[unlikely]]
+		{
+			SetFullscreen(!windowProp_.fullscreen);
+		}
 	}
 }
