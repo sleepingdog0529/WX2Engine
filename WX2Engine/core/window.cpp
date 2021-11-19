@@ -72,7 +72,7 @@ namespace wx2
 	LRESULT CALLBACK Window::HandleMessageRedirect(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp)
 	{
 		// パラメータからウィンドウコンテナにキャストする
-		Window* const window = std::bit_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+		auto* const window = std::bit_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 		if (!window) [[unlikely]]
 		{
 			WX2_LOG_CRITICAL("ウィンドウクラスがパラメータから取得できませんでした。");
@@ -92,33 +92,37 @@ namespace wx2
 				return TRUE;
 
 			case WM_SYSCOMMAND:
-				window->OnDisplayModeChanged(wp, lp);
+				if (wp == SC_MAXIMIZE ||
+					wp == SC_RESTORE)
+				{
+					window->OnDisplayModeChanged(wp, lp);
+					return 0;
+				}
 				break;
 				
 			case WM_KEYDOWN:
 				window->OnKeyDown(wp, lp);
-				break;
+				return 0;
 
 			case WM_DESTROY:
 				PostQuitMessage(0);
-				break;
+				return 0;
 
 			case WM_CLOSE:
 				DestroyWindow(hwnd);
-				break;
+				return 0;
 
 			default:
-				container->WindowProcedure(hwnd, msg, wp, lp);
 				break;
 		}
-		return 0;
+		container->WindowProcedure(hwnd, msg, wp, lp);
 	}
 
 	LRESULT CALLBACK Window::HandleMessageSetup(const HWND hwnd, const  UINT msg, const WPARAM wp, const LPARAM lp)
 	{
 		// パラメータからウィンドウコンテナにキャストする
 		const CREATESTRUCTW* const create = std::bit_cast<CREATESTRUCTW*>(lp);
-		Window* const window = std::bit_cast<Window*>(create->lpCreateParams);
+		auto* const window = std::bit_cast<Window*>(create->lpCreateParams);
 
 		if(msg == WM_NCCREATE)
 		{
@@ -201,7 +205,7 @@ namespace wx2
 
 	void Window::OnMoving([[maybe_unused]] WPARAM wp, LPARAM lp)
 	{
-		auto rect = std::bit_cast<RECT*>(lp);
+		const auto rect = std::bit_cast<RECT*>(lp);
 		windowProp_.x = static_cast<int>(rect->left);
 		windowProp_.y = static_cast<int>(rect->top);
 		windowProp_.maximized = false;
@@ -210,7 +214,7 @@ namespace wx2
 
 	void Window::OnSizing([[maybe_unused]] WPARAM wp, LPARAM lp)
 	{
-		auto rect = std::bit_cast<RECT*>(lp);
+		const auto rect = std::bit_cast<RECT*>(lp);
 		windowProp_.x = static_cast<int>(rect->left);
 		windowProp_.y = static_cast<int>(rect->top);
 		windowProp_.width = static_cast<int>(rect->right - rect->left);

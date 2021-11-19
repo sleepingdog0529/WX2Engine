@@ -21,6 +21,7 @@ namespace wx2
 		 * @param[in] windowProp ウィンドウ設定
 		 */
 		Window(WindowContainer* container, const WindowProperty& windowProp);
+
 		/**
 		 * @brief ウィンドウを閉じる
 		 */
@@ -34,6 +35,7 @@ namespace wx2
 		static LRESULT CALLBACK HandleMessageSetup(const HWND hwnd, const  UINT msg, const WPARAM wp, const LPARAM lp);
 
 		/**
+		 * @brief  ウィンドウハンドルを取得する
 		 * @return ウィンドウハンドル
 		 */
 		[[nodiscard]] HWND GetHandle() const
@@ -42,8 +44,8 @@ namespace wx2
 		}
 
 		/**
-		 * @brief 
-		 * @return 
+		 * @brief  ウィンドウ情報を取得する
+		 * @return ウィンドウ情報
 		 */
 		[[nodiscard]] const WindowProperty& GetWindowProperty() const
 		{
@@ -72,7 +74,7 @@ namespace wx2
 		//! ウィンドウ表示モード変更時のコールバック
 		void OnDisplayModeChanged(WPARAM wp, [[maybe_unused]] LPARAM lp);
 
-		//! キー押下時
+		//! キー押下時のコールバック
 		void OnKeyDown(WPARAM wp, LPARAM lp);
 
 		WindowContainer* container_;	//! ウィンドウコンテナ

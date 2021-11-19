@@ -7,8 +7,8 @@ namespace wx2
 		HRESULT hr;
 
 		// 機能レベル
-		D3D_FEATURE_LEVEL supported_feature_level = D3D_FEATURE_LEVEL_1_0_CORE;
-		std::array<D3D_FEATURE_LEVEL, 2> feature_levels = {
+		D3D_FEATURE_LEVEL supportedFeatureLevel = D3D_FEATURE_LEVEL_1_0_CORE;
+		std::array<D3D_FEATURE_LEVEL, 2> featureLevels = {
 			D3D_FEATURE_LEVEL_11_1,
 			D3D_FEATURE_LEVEL_11_0
 		};
@@ -24,11 +24,11 @@ namespace wx2
 			D3D_DRIVER_TYPE_HARDWARE,
 			nullptr,
 			frags,
-			feature_levels.data(),
-			feature_levels.size(),
+			featureLevels.data(),
+			featureLevels.size(),
 			D3D11_SDK_VERSION,
 			device_.GetAddressOf(),
-			&supported_feature_level,
+			&supportedFeatureLevel,
 			deviceContext_.GetAddressOf());
 		if (FAILED(hr))
 		{
@@ -79,7 +79,7 @@ namespace wx2
 		}
 
 		// スワップチェイン設定
-		DXGI_SWAP_CHAIN_DESC scd = {};
+		DXGI_SWAP_CHAIN_DESC scd{};
 		scd.OutputWindow = hwnd;
 		scd.BufferDesc.Width = windowProp.width;
 		scd.BufferDesc.Height = windowProp.height;
@@ -170,9 +170,9 @@ namespace wx2
 
 	}
 
-	Graphics::ComPtr<IDXGIAdapter> Graphics::GetAdapterByGpuMemory(IDXGIFactory* factory)
+	Graphics::ComPtr<IDXGIAdapter> Graphics::GetAdapterByGpuMemory(IDXGIFactory* factory) const
 	{
-		HRESULT hr;
+		HRESULT hr = 0;
 
 		// メイングラフィックカードを列挙
 		ComPtr<IDXGIAdapter> adapter;
@@ -184,7 +184,7 @@ namespace wx2
 			adapter->GetDesc(&ad);
 			std::string description = ToString(ad.Description);
 
-			int videoCardMem = static_cast<int>(ad.DedicatedVideoMemory) / 1024 / 1024;
+			const int videoCardMem = static_cast<int>(ad.DedicatedVideoMemory) / 1024 / 1024;
 			WX2_LOG_INFO("==================================================");
 			WX2_LOG_INFO("adapter[{}]: {}", i, description);
 			WX2_LOG_INFO(" - revision: {}", ad.Revision);
@@ -197,7 +197,7 @@ namespace wx2
 			for (int j = 0; adapter->EnumOutputs(j, output.GetAddressOf()) != DXGI_ERROR_NOT_FOUND; ++j)
 			{
 				UINT numModes = 0;
-				const DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
+				constexpr DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
 				// ディスプレイの表示モード数を取得
 				hr = output->GetDisplayModeList(format, 0, &numModes, nullptr);

@@ -20,7 +20,7 @@ namespace wx2
 		wndProp.height = 720;
 		wndProp.x = (screenWidth - wndProp.width) / 2;
 		wndProp.y = (screenHeight - wndProp.height) / 2;
-		wndProp.style = WS_OVERLAPPEDWINDOW | WS_THICKFRAME;
+		wndProp.style = WS_OVERLAPPEDWINDOW;
 		wndProp.ex_style = WS_EX_WINDOWEDGE;
 		wndProp.maximized = false;
 		wndProp.fullscreen = false;

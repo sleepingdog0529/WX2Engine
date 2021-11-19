@@ -31,11 +31,12 @@ namespace wx2
 		static constexpr int NUM_BLEND_STATE_ = 4;
 
 	public:
+
 		/**
-		 * @brief     グラフィックスの初期化処理
-		 * @param[in] 描画先ウィンドウハンドル
-		 * @param[in] ウィンドウ情報
-		 * @param[in] 垂直同期の使用
+		 * @brief  グラフィックスの初期化
+		 * @param  hwnd ウィンドウハンドル
+		 * @param  windowProp ウィンドウ情報
+		 * @param  vsync 垂直同期の使用
 		 */
 		void Initialize(HWND hwnd, const WindowProperty& windowProp, bool vsync);
 
@@ -44,12 +45,12 @@ namespace wx2
 		 * @brief  GPUメモリの最も大きいアダプタを取得
 		 * @return アダプタ
 		 */
-		ComPtr<IDXGIAdapter> GetAdapterByGpuMemory(IDXGIFactory* factory);
+		ComPtr<IDXGIAdapter> GetAdapterByGpuMemory(IDXGIFactory* factory) const;
 
 		ComPtr<IDXGISwapChain> swapChain_;
 		ComPtr<ID3D11Device> device_;
 		ComPtr<ID3D11DeviceContext> deviceContext_;
-		D3D_FEATURE_LEVEL featureLevel_;
+		D3D_FEATURE_LEVEL featureLevel_{};
 
 		ComPtr<ID3D11Texture2D> backBuffer_;
 		ComPtr<ID3D11RenderTargetView> renderTargetView_;
@@ -60,7 +61,7 @@ namespace wx2
 		ComPtr<ID3D11DepthStencilState> depthStencilState_;
 		ComPtr<ID3D11RasterizerState>	rasterizerState_;
 
-		D3D11_VIEWPORT viewport_;
+		D3D11_VIEWPORT viewport_{};
 
 		ComPtr<ID3D11BlendState> blendState_[NUM_BLEND_STATE_];
 		ComPtr<ID3D11SamplerState> samplerState_;

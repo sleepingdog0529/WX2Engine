@@ -41,7 +41,7 @@ namespace wx2
 
 	void WindowContainer::Serialize()
 	{
-		auto filePath = std::filesystem::path(CONFIG_DIR) / WINDOW_PROPERTY_FILE_NAME_;
+		const auto filePath = std::filesystem::path(CONFIG_DIR) / PROPERTY_FILE_NAME;
 		
 		std::ofstream ofs(filePath, std::ios::out);
 		cereal::JSONOutputArchive output(ofs);
@@ -50,7 +50,7 @@ namespace wx2
 
 	void WindowContainer::Deserialize()
 	{
-		auto filePath = std::filesystem::path(CONFIG_DIR) / WINDOW_PROPERTY_FILE_NAME_;
+		auto filePath = std::filesystem::path(CONFIG_DIR) / PROPERTY_FILE_NAME;
 
 		if (std::filesystem::exists(filePath))
 		{
