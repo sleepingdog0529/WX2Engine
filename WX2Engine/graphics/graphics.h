@@ -15,20 +15,20 @@ namespace wx2
 {
 	class Graphics
 	{
-	public:
-		enum BlendState
-		{
-			BS_NORM,
-			BS_ADD,
-			BS_SUB,
-			BS_MUL
-		};
-
 	private:
 		template <class T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-		static constexpr int NUM_BLEND_STATE_ = 4;
+		static constexpr int NUM_BLEND_STATE = 4;
+
+	public:
+		enum class BlendState
+		{
+			Default = 0,
+			Additive,
+			Subtractive,
+			Multiplicative
+		};
 
 	public:
 
@@ -38,7 +38,14 @@ namespace wx2
 		 * @param  windowProp ウィンドウ情報
 		 * @param  vsync 垂直同期の使用
 		 */
-		void Initialize(HWND hwnd, const WindowProperty& windowProp, bool vsync);
+		[[nodiscard]] bool Initialize(HWND hwnd, const WindowProperty& windowProp, bool vsync);
+
+
+		/**
+		 * @brief  
+		 * @param  blendState ブレンドモード
+		 */
+		void SetBlendState(const BlendState blendState) const;
 
 	private:
 		/**
@@ -63,7 +70,7 @@ namespace wx2
 
 		D3D11_VIEWPORT viewport_{};
 
-		ComPtr<ID3D11BlendState> blendState_[NUM_BLEND_STATE_];
+		ComPtr<ID3D11BlendState> blendState_[NUM_BLEND_STATE];
 		ComPtr<ID3D11SamplerState> samplerState_;
 	};
 }

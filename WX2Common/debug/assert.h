@@ -5,10 +5,9 @@
  * @brief	アサーション
  ********************************************************************/
 #pragma once
-#pragma warning(push, 0) 
+
 #define BOOST_ENABLE_ASSERT_HANDLER
 #include <boost/assert.hpp>
-#pragma warning(pop)
 
 #if defined(NDEBUG)
 
@@ -18,18 +17,16 @@
 #elif !defined(NDEBUG)
 
 /**
- * @brief	  デバッグビルド時にログを出力してブレークポイントを発生させる
- * @param[in] expr 判定式
- * @return
+ * @brief デバッグビルド時にログを出力してブレークポイントを発生させる
+ * @param expr 判定式
  */
 #define WX2_ASSERT(expr) BOOST_ASSERT(expr)
 
 /**
- * @brief	  デバッグビルド時にメッセージ付きでログを出力してブレークポイントを発生させる
- * @param[in] expr 判定式
- * @param[in] msg 書式文字列
- * @param[in] __VA_ARGS__ 書式引数
- * @return
+ * @brief デバッグビルド時にメッセージ付きでログを出力してブレークポイントを発生させる
+ * @param expr 判定式
+ * @param msg 書式文字列
+ * @param __VA_ARGS__ 書式引数
  */
 #define WX2_ASSERT_MSG(expr, msg, ...) BOOST_ASSERT_MSG(expr, std::format(msg, ##__VA_ARGS__).c_str())
 

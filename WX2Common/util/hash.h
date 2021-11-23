@@ -15,12 +15,12 @@ namespace wx2
 		using is_transparent = void;
 
 		/**
-		 * @brief     文字列のハッシュ値を求める
-		 * @param[in] 文字列ビュー
-		 * @return    ハッシュ値
+		 * @brief  文字列のハッシュ値を求める
+		 * @param strv 文字列ビュー
+		 * @return ハッシュ値
 		 */
-		std::size_t operator()(std::string_view strv) const {
-			std::hash<std::string_view> hasher;
+		std::size_t operator()(const std::string_view strv) const {
+			constexpr std::hash<std::string_view> hasher;
 			return hasher(strv);
 		}
 	};

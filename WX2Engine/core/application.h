@@ -22,7 +22,7 @@ namespace wx2
 		using WindowPtr = std::shared_ptr<Window>;
 
 		// エントリポイントでのみ実行を許可
-#ifdef NDEBUG
+#if defined(NDEBUG)
 		friend INT WINAPI ::WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
 #else
 		friend int ::main(int, char**);

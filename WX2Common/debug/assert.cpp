@@ -10,13 +10,14 @@ namespace boost
 	void assertion_failed(const char* expr, const char* function, const char* file, long line)
 	{
 		auto out = std::format(
+			"\n"
 			"==============< Assertion failed ! >==============\n"
 			"Expression: {}\n"
-			"Function: {}\n"
 			"File: {}\n"
+			"Function: {}\n"
 			"Line: {}\n"
 			"==================================================\n",
-			expr, function, file, line);
+			expr, file, function, line);
 
 		OutputDebugString(out.c_str());
 		WX2_LOG_ERROR("\n{}", out);
@@ -26,14 +27,15 @@ namespace boost
 	void assertion_failed_msg(char const* expr, char const* msg, char const* function, char const* file, long line)
 	{
 		auto out = std::format(
+			"\n"
 			"==============< Assertion failed ! >==============\n"
 			"Expression: {}\n"
 			"Message: {}\n"
-			"Function: {}\n"
 			"File: {}\n"
+			"Function: {}\n"
 			"Line: {}\n"
 			"==================================================\n",
-			expr, msg, function, file, line);
+			expr, msg, file, function, line);
 
 		OutputDebugString(out.c_str());
 		WX2_LOG_ERROR("\n{}", out);

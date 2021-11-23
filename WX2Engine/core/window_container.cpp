@@ -34,7 +34,7 @@ namespace wx2
 		return wndItr->second;
 	}
 
-	LRESULT WindowContainer::WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) const
+	LRESULT WindowContainer::WindowProcedure(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp)
 	{
 		return DefWindowProc(hwnd, msg, wp, lp);
 	}
@@ -50,9 +50,7 @@ namespace wx2
 
 	void WindowContainer::Deserialize()
 	{
-		auto filePath = std::filesystem::path(CONFIG_DIR) / PROPERTY_FILE_NAME;
-
-		if (std::filesystem::exists(filePath))
+		if (const auto filePath = std::filesystem::path(CONFIG_DIR) / PROPERTY_FILE_NAME; std::filesystem::exists(filePath))
 		{
 			std::ifstream ifs(filePath, std::ios::in);
 			cereal::JSONInputArchive input(ifs);

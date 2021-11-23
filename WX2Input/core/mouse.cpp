@@ -82,8 +82,6 @@ namespace wx2
 			state_.axises[CursorX] += static_cast<float>(stateBuffer.lX);
 			state_.axises[CursorY] += static_cast<float>(stateBuffer.lY);
 			state_.axises[WheellScroll] += static_cast<float>(stateBuffer.lZ) / static_cast<float>(WHEEL_DELTA);
-
-			std::cout << state_.current.buttons << std::endl;
 		}
 	}
 

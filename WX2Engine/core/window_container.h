@@ -15,7 +15,7 @@ namespace wx2
 	/**
 	 * @brief ウィンドウを格納するコンテナクラス
 	 */
-	class WindowContainer
+	class WindowContainer final
 	{
 	private:
 		using WindowPtr = std::shared_ptr<Window>;
@@ -54,7 +54,7 @@ namespace wx2
 		/**
 		 * @brief アプリケーションの全てのウィンドウ共通のウィンドウプロシージャ
 		 */
-		LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) const;
+		static LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
 
 	private:
 		/**

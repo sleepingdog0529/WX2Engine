@@ -5,10 +5,23 @@ namespace wx2
 	Application::Application()
 	{
 		// ロケールの設定
-		std::setlocale(LC_CTYPE, ".UTF-8");
+		std::ios_base::sync_with_stdio(false);
+		const std::locale defaultLoc("");
+		std::locale::global(defaultLoc);
+		const std::locale ctypeDefault(std::locale::classic(), defaultLoc, std::locale::ctype); 
+		std::wcout.imbue(ctypeDefault);
+		std::wcin.imbue(ctypeDefault);
 
 		WX2_LOG_TRACE("アプリケーション初期化開始");
+	}
 
+	Application::~Application()
+	{
+		WX2_LOG_TRACE("アプリケーション終了処理開始");
+	}
+
+	void Application::Run()
+	{
 		// 画面サイズ取得
 		const int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 		const int screenHeight = GetSystemMetrics(SM_CYSCREEN);
@@ -30,16 +43,16 @@ namespace wx2
 
 		input_.Initialize(mainWindow_->GetHandle());
 
-		graphics_.Initialize(mainWindow_->GetHandle(), mainWindow_->GetWindowProperty(), true);
-	}
+		bool res = graphics_.Initialize(
+			mainWindow_->GetHandle(),
+			mainWindow_->GetWindowProperty(),
+			true);
+		if (!res)
+		{
+			WX2_LOG_ERROR("グラフィックスエラーが発生したためアプリケーションを終了します。");
+			return;
+		}
 
-	Application::~Application()
-	{
-		WX2_LOG_TRACE("アプリケーション終了処理開始");
-	}
-
-	void Application::Run()
-	{
 		WX2_LOG_TRACE("アプリケーション実行開始");
 
 		// メインループ

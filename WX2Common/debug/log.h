@@ -5,9 +5,8 @@
  * @brief	ログを出力・記録する
  ********************************************************************/
 #pragma once
-#pragma warning(push, 0) 
+
 #include <spdlog/spdlog.h>
-#pragma warning(pop)
 #include "../util/macro.h"
 
 /**

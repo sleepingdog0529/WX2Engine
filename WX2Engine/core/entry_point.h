@@ -12,7 +12,7 @@ extern std::unique_ptr<wx2::Application> wx2::CreateApp();
 /**
  * @brief エントリポイント
  */
-#ifdef NDEBUG
+#if defined(NDEBUG)
 INT WINAPI WinMain(
 	_In_ HINSTANCE hInstance, 
 	_In_opt_ HINSTANCE hPrevInstance, 
@@ -28,7 +28,12 @@ int main(int argc, char** argv)
 {
 #endif
 	const auto app = wx2::CreateApp();
-
 	app->Run();
+
+	if(wx2::IS_DEBUGGING)
+	{
+		std::getchar();
+	}
+
 	return EXIT_SUCCESS;
 }

@@ -3,17 +3,17 @@
   <ItemGroup>
     <ClCompile Include="debug\assert.cpp" />
     <ClCompile Include="debug\log.cpp" />
-    <ClCompile Include="pch\pch.cpp" />
+    <ClCompile Include="util\debugging.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug\assert.h" />
     <ClInclude Include="debug\log.h" />
     <ClInclude Include="util\macro.h" />
     <ClInclude Include="util\string_helper.h" />
-    <ClInclude Include="pch\pch.h" />
     <ClInclude Include="WX2Common.h" />
     <ClInclude Include="debug\leak_detector.h" />
     <ClInclude Include="util\math_helper.h" />
     <ClInclude Include="util\hash.h" />
+    <ClInclude Include="util\com_exception.h" />
   </ItemGroup>
 </Project>

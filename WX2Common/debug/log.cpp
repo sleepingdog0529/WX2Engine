@@ -35,9 +35,9 @@ namespace wx2
 		}
 
 		// 東京の現在時刻を取得
-		auto now = ch::system_clock::now();
-		ch::sys_seconds nowSec = ch::floor<ch::seconds>(now);
-		ch::zoned_time zonedTime{ "Asia/Tokyo", nowSec };
+		const auto now = ch::system_clock::now();
+		const ch::sys_seconds nowSec = ch::floor<ch::seconds>(now);
+		const ch::zoned_time zonedTime{ "Asia/Tokyo", nowSec };
 
 		// ログファイルの生成先パス
 		const fs::path path = dir / std::format(FILE_NAME_, zonedTime);
