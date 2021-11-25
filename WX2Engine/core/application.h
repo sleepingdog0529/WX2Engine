@@ -6,8 +6,8 @@
  ********************************************************************/
 #pragma once
 #include <WX2Input.h>
+#include <WX2Graphics.h>
 #include "window_container.h"
-#include "../graphics/graphics.h"
 
 int main(int argc, char** argv);
 
@@ -45,7 +45,10 @@ namespace wx2
 		/**
 		 * @brief アプリケーションを実行する
 		 */
-		void Run();
+		int Run();
+
+
+		bool Update();
 
 		Logger log_;
 		WindowContainer windowContainer_;

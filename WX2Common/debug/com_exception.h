@@ -9,32 +9,33 @@
 #include <source_location>
 #include <comdef.h>
 
+/**
+ * @brief もし処理結果がエラーであったなら例外をスローする
+ * @param hr COMインターフェースの処理結果
+ */
 #define WX2_COM_ERROR_IF_FAILED(hr, ...)		\
 	if (FAILED(hr))								\
 	{											\
-		const auto location =					\
-			std::source_location::current();	\
-		throw wx2::ComException(				\
+		throw wx2::COMException(				\
 			hr,									\
-			std::format(__VA_ARGS__),			\
-			location);							\
+			std::format(__VA_ARGS__));			\
 	}
 
 namespace wx2
 {
-	class ComException
+	class COMException
 	{
 	public:
 		/**
 		 * @brief COMインターフェースの例外の初期化
 		 * @param hr COMインターフェースの処理結果
-		 * @param msg エラーメッセージ
-		 * @param location ファイル上でのエラー発生場所
+		 * @param msg エラー情報
+		 * @param location ソース上のエラー発生位置 ※必ずデフォルト引数を使用すること
 		 */
-		ComException(
+		COMException(
 			const HRESULT hr,
 			const std::string& msg,
-			const std::source_location& location)
+			const std::source_location& location = std::source_location::current())
 		{
 			const _com_error error(hr);
 
@@ -57,13 +58,13 @@ namespace wx2
 		/**
 		 * @return 例外の詳細情報の文字列
 		 */
-		[[nodiscard]] const char* what() const
+		[[nodiscard]] const std::string& what() const
 		{
-			return what_.c_str();
+			return what_;
 		}
 
 	private:
-		//! 例外の詳細情報の文字列
-		std::string what_;
+		//! 例外の詳細
+		std::string what_{};
 	};
 }

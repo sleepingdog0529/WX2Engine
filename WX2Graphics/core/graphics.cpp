@@ -158,13 +158,12 @@ namespace wx2
 			desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 			desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
 			hr = device_->CreateBlendState(&desc, blendState_[3].GetAddressOf());
-			hr = OLE_E_ADVISENOTSUPPORTED;
 			WX2_COM_ERROR_IF_FAILED(hr, "乗算ブレンドステートの作成に失敗しました。");
 
 			// ブレンドステート設定
 			SetBlendState(BlendState::Default);
 		}
-		catch (const ComException& exception)
+		catch (const COMException& exception)
 		{
 			WX2_LOG_ERROR(exception.what());
 			return false;
@@ -178,13 +177,12 @@ namespace wx2
 		if (static_cast<int>(blendState) < 0 && static_cast<int>(blendState) >= NUM_BLEND_STATE)
 		{
 			WX2_LOG_ERROR("ブレンドステートの値が範囲外です。");
-			exit(EXIT_FAILURE);
 		}
 		constexpr FLOAT blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		deviceContext_->OMSetBlendState(
 			blendState_[static_cast<std::size_t>(blendState)].Get(),
 			blendFactor, 
-			0xFFFFFFFF);
+			0xffffffff);
 	}
 
 	Graphics::ComPtr<IDXGIAdapter> Graphics::GetAdapterByGpuMemory(IDXGIFactory* factory) const

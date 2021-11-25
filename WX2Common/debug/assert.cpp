@@ -7,7 +7,11 @@
 // BOOST_ASSERT‚Ì“®ì‚ğ’è‹`
 namespace boost
 {
-	void assertion_failed(const char* expr, const char* function, const char* file, long line)
+	void assertion_failed(
+		const char* expr,
+		const char* function,
+		const char* file, 
+		const long line)
 	{
 		auto out = std::format(
 			"\n"
@@ -24,7 +28,12 @@ namespace boost
 		__debugbreak();
 	}
 
-	void assertion_failed_msg(char const* expr, char const* msg, char const* function, char const* file, long line)
+	void assertion_failed_msg(
+		char const* expr, 
+		char const* msg, 
+		char const* function, 
+		char const* file, 
+		const long line)
 	{
 		auto out = std::format(
 			"\n"

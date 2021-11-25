@@ -6,7 +6,6 @@
  ********************************************************************/
 #pragma once
 #include "window_container.h"
-#include "window_property.h"
 
 namespace wx2 
 {
@@ -20,7 +19,7 @@ namespace wx2
 		 * @param[in] container 格納先コンテナ
 		 * @param[in] windowProp ウィンドウ設定
 		 */
-		Window(WindowContainer* container, const WindowProperty& windowProp);
+		Window(WindowContainer* container, WindowProperty windowProp);
 
 		/**
 		 * @brief ウィンドウを閉じる

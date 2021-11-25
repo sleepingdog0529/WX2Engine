@@ -20,7 +20,7 @@ namespace wx2
 		WX2_LOG_TRACE("アプリケーション終了処理開始");
 	}
 
-	void Application::Run()
+	int Application::Run()
 	{
 		// 画面サイズ取得
 		const int screenWidth = GetSystemMetrics(SM_CXSCREEN);
@@ -50,17 +50,21 @@ namespace wx2
 		if (!res)
 		{
 			WX2_LOG_ERROR("グラフィックスエラーが発生したためアプリケーションを終了します。");
-			return;
+			return 1;
 		}
 
 		WX2_LOG_TRACE("アプリケーション実行開始");
 
 		// メインループ
-		windowContainer_.ProcessMessages([this]()
-		{
-			input_.Update();
+		WindowContainer::ProcessMessages([this]() { return Update(); });
 
-			return !input_.IsPressed(Keyboard::Escape);
-		});
+		return 0;
+	}
+
+	bool Application::Update()
+	{
+		input_.Update();
+
+		return !input_.IsPressed(Keyboard::Escape);
 	}
 }

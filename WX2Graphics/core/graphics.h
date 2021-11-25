@@ -9,7 +9,7 @@
 #include <wrl/client.h>
 #include <DirectXMath.h>
 #include <dxgi1_6.h>
-#include "../core/window_property.h"
+#include <WX2Common.h>
 
 namespace wx2
 {
@@ -31,7 +31,6 @@ namespace wx2
 		};
 
 	public:
-
 		/**
 		 * @brief  グラフィックスの初期化
 		 * @param  hwnd ウィンドウハンドル
@@ -66,7 +65,7 @@ namespace wx2
 		ComPtr<ID3D11DepthStencilView> depthStencilView_;
 
 		ComPtr<ID3D11DepthStencilState> depthStencilState_;
-		ComPtr<ID3D11RasterizerState>	rasterizerState_;
+		ComPtr<ID3D11RasterizerState> rasterizerState_;
 
 		D3D11_VIEWPORT viewport_{};
 

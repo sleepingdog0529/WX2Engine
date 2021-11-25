@@ -2,9 +2,9 @@
 
 namespace wx2
 {
-	Window::Window(WindowContainer* container, const WindowProperty& windowProp) :
+	Window::Window(WindowContainer* container, WindowProperty windowProp) :
 		container_(container),
-		windowProp_(windowProp)
+		windowProp_(std::move(windowProp))
 	{
 		WX2_ASSERT(windowProp_.width > 0);
 		WX2_ASSERT(windowProp_.height > 0);

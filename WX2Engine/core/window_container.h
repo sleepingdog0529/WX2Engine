@@ -6,7 +6,6 @@
  ********************************************************************/
 #pragma once
 #include "window.h"
-#include "window_property.h"
 
 namespace wx2
 {
@@ -48,8 +47,7 @@ namespace wx2
 		 * @brief     メッセージを処理しつつ合間に更新処理を呼び出す
 		 * @param[in] process アプリケーションの更新関数
 		 */
-		template <class F>
-		void ProcessMessages(F process) const;
+		static void ProcessMessages(const std::function<bool()>& process);
 
 		/**
 		 * @brief アプリケーションの全てのウィンドウ共通のウィンドウプロシージャ
@@ -81,23 +79,4 @@ namespace wx2
 			StringHash,
 			std::equal_to<>> windowProps_;
 	};
-
-	template<class F>
-	inline void WindowContainer::ProcessMessages(F process) const
-	{
-		MSG msg = {};
-
-		while (msg.message != WM_QUIT)
-		{
-			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-			else
-			{
-				if (!process()) break;
-			}
-		}
-	}
 }

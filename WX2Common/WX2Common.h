@@ -6,10 +6,11 @@
  ********************************************************************/
 #pragma once
 
+#include "info/window_property.h"
 #include "debug/assert.h"
 #include "debug/log.h"
-#include "util/com_exception.h"
-#include "util/debugging.h"
+#include "debug/com_exception.h"
+#include "debug/debugging.h"
 #include "util/hash.h"
 #include "util/macro.h"
 #include "util/math_helper.h"

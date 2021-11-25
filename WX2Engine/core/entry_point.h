@@ -28,12 +28,6 @@ int main(int argc, char** argv)
 {
 #endif
 	const auto app = wx2::CreateApp();
-	app->Run();
 
-	if(wx2::IS_DEBUGGING)
-	{
-		std::getchar();
-	}
-
-	return EXIT_SUCCESS;
+	return app->Run();
 }

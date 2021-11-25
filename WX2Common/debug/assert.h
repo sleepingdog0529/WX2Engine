@@ -6,7 +6,7 @@
  ********************************************************************/
 #pragma once
 
-#define BOOST_ENABLE_ASSERT_HANDLER
+#define BOOST_ENABLE_ASSERT_HANDLER // boost‚Ìassert‚Ìˆ—“à—e‚ğ‘‚«Š·‚¦‚é‚½‚ß‚Ìƒtƒ‰ƒO
 #include <boost/assert.hpp>
 
 #if defined(NDEBUG)

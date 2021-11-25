@@ -3,7 +3,7 @@
   <ItemGroup>
     <ClCompile Include="debug\assert.cpp" />
     <ClCompile Include="debug\log.cpp" />
-    <ClCompile Include="util\debugging.h" />
+    <ClCompile Include="debug\debugging.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug\assert.h" />
@@ -14,6 +14,8 @@
     <ClInclude Include="debug\leak_detector.h" />
     <ClInclude Include="util\math_helper.h" />
     <ClInclude Include="util\hash.h" />
-    <ClInclude Include="util\com_exception.h" />
+    <ClInclude Include="debug\com_exception.h" />
+    <ClInclude Include="debug\runtime_error.h" />
+    <ClInclude Include="info\window_property.h" />
   </ItemGroup>
 </Project>

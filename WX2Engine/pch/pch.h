@@ -8,6 +8,7 @@
 
 #include <WX2Common.h>
 #include <WX2Input.h>
+#include <WX2Graphics.h>
 
 #define STRICT
 #define WIN32_LEAN_AND_MEAN
