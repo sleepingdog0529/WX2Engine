@@ -5,9 +5,10 @@
  * @brief	ログを出力・記録する
  ********************************************************************/
 #pragma once
-
+#pragma warning(push, 0)
 #include <spdlog/spdlog.h>
 #include "../util/macro.h"
+#pragma warning(pop)
 
 /**
  * @brief	  ログを出力する
@@ -24,7 +25,7 @@ namespace wx2
 	/**
 	 * @brief ログの管理を行うクラス
 	 */
-	class Logger
+	class Logger final
 	{
 	private:
 		//! ログファイルの最大数
@@ -38,12 +39,12 @@ namespace wx2
 		/**
 		 * @brief ロガーの初期化、ファイルの数制御を行う
 		 */
-		Logger();
+		Logger() noexcept;
 
 		/**
 		 * @brief ロガーの終了処理
 		 */
-		virtual ~Logger();
+		~Logger() noexcept;
 
 		WX2_DISALLOW_COPY_AND_MOVE(Logger);
 

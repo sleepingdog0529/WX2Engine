@@ -2,7 +2,7 @@
 
 namespace wx2
 {
-	Window::Window(WindowContainer* container, WindowProperty windowProp) :
+	Window::Window(WindowContainer* container, WindowProperty windowProp) noexcept :
 		container_(container),
 		windowProp_(std::move(windowProp))
 	{
@@ -59,7 +59,7 @@ namespace wx2
 		SetFullscreen(windowProp_.fullscreen);
 	}
 
-	Window::~Window()
+	Window::~Window() noexcept
 	{
 		// ウィンドウを登録解除し、破棄する
 		if (hwnd_) [[likely]]
@@ -69,7 +69,7 @@ namespace wx2
 		}
 	}
 
-	LRESULT CALLBACK Window::HandleMessageRedirect(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp)
+	LRESULT CALLBACK Window::HandleMessageRedirect(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp) noexcept
 	{
 		// パラメータからウィンドウコンテナにキャストする
 		auto* const window = std::bit_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
@@ -118,7 +118,7 @@ namespace wx2
 		container->WindowProcedure(hwnd, msg, wp, lp);
 	}
 
-	LRESULT CALLBACK Window::HandleMessageSetup(const HWND hwnd, const  UINT msg, const WPARAM wp, const LPARAM lp)
+	LRESULT CALLBACK Window::HandleMessageSetup(const HWND hwnd, const  UINT msg, const WPARAM wp, const LPARAM lp) noexcept
 	{
 		// パラメータからウィンドウコンテナにキャストする
 		const CREATESTRUCTW* const create = std::bit_cast<CREATESTRUCTW*>(lp);
@@ -143,7 +143,7 @@ namespace wx2
 		return DefWindowProc(hwnd, msg, wp, lp);
 	}
 
-	void Window::SetFullscreen(const bool fullscreen)
+	void Window::SetFullscreen(const bool fullscreen) noexcept
 	{
 		windowProp_.fullscreen = fullscreen;
 
@@ -197,13 +197,13 @@ namespace wx2
 		}
 	}
 
-	void Window::SetMaximize(const bool maximaize)
+	void Window::SetMaximize(const bool maximaize) noexcept
 	{
 		windowProp_.maximized = maximaize;
 		SendMessage(hwnd_, WM_SYSCOMMAND, windowProp_.maximized ? SC_MAXIMIZE : SC_RESTORE, 0);
 	}
 
-	void Window::OnMoving([[maybe_unused]] WPARAM wp, LPARAM lp)
+	void Window::OnMoving([[maybe_unused]] const  WPARAM wp, const  LPARAM lp) noexcept
 	{
 		const auto rect = std::bit_cast<RECT*>(lp);
 		windowProp_.x = static_cast<int>(rect->left);
@@ -212,7 +212,7 @@ namespace wx2
 		windowProp_.fullscreen = false;
 	}
 
-	void Window::OnSizing([[maybe_unused]] WPARAM wp, LPARAM lp)
+	void Window::OnSizing([[maybe_unused]] const  WPARAM wp, const  LPARAM lp) noexcept
 	{
 		const auto rect = std::bit_cast<RECT*>(lp);
 		windowProp_.x = static_cast<int>(rect->left);
@@ -223,13 +223,13 @@ namespace wx2
 		windowProp_.fullscreen = false;
 	}
 
-	void Window::OnDisplayModeChanged(WPARAM wp, [[maybe_unused]] LPARAM lp)
+	void Window::OnDisplayModeChanged(const WPARAM wp, [[maybe_unused]] const  LPARAM lp) noexcept
 	{
 		if      (wp == SC_MAXIMIZE) windowProp_.maximized = true;
 		else if (wp == SC_RESTORE)  windowProp_.maximized = false;
 	}
 
-	void Window::OnKeyDown(WPARAM wp, [[maybe_unused]] LPARAM lp)
+	void Window::OnKeyDown(const WPARAM wp, [[maybe_unused]] const  LPARAM lp) noexcept
 	{
 		if (wp == VK_F11) [[unlikely]]
 		{

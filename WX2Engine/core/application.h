@@ -7,6 +7,7 @@
 #pragma once
 #include <WX2Input.h>
 #include <WX2Graphics.h>
+#include <WX2Physics.h>
 #include "window_container.h"
 
 int main(int argc, char** argv);
@@ -19,8 +20,6 @@ namespace wx2
 	class Application
 	{
 	private:
-		using WindowPtr = std::shared_ptr<Window>;
-
 		// エントリポイントでのみ実行を許可
 #if defined(NDEBUG)
 		friend INT WINAPI ::WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
@@ -28,16 +27,18 @@ namespace wx2
 		friend int ::main(int, char**);
 #endif
 
+		using WindowPtr = std::shared_ptr<Window>;
+
 	public:
 		/**
 		 * @brief  アプリケーション初期化
 		 */
-		Application();
+		Application() noexcept;
 
 		/**
 		 * @brief  アプリケーション終了
 		 */
-		virtual ~Application();
+		virtual ~Application() noexcept;
 
 		WX2_DISALLOW_COPY_AND_MOVE(Application);
 
@@ -45,21 +46,23 @@ namespace wx2
 		/**
 		 * @brief アプリケーションを実行する
 		 */
-		int Run();
+		int Run() noexcept;
 
 
-		bool Update();
+		bool Update() noexcept;
+		void Draw() noexcept;
 
 		Logger log_;
 		WindowContainer windowContainer_;
 		Input input_;
 		WindowPtr mainWindow_;
-		Graphics graphics_;
+		graphics::Graphics graphics_;
+		physics::Physics physics_;
 
 		//! 既にインスタンス化されているか
 		static inline bool instantiated_ = false;
 	};
 
 	//! クライアントが定義する
-	std::unique_ptr<Application> CreateApp();
+	std::unique_ptr<Application> CreateApp() noexcept;
 }

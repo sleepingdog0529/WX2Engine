@@ -61,37 +61,37 @@ namespace wx2
 		};
 
 	public:
-		Mouse();
-		~Mouse();
+		Mouse() noexcept;
+		~Mouse() noexcept;
 
 		WX2_DISALLOW_COPY_AND_MOVE(Mouse);
 
-		void Initialize(const DInputPtr& directInput, const HWND hwnd);
-		void Regist();
-		void Update();
+		void Initialize(const DInputPtr& directInput, const HWND hwnd) noexcept;
+		void Regist() noexcept;
+		void Update() noexcept;
 
-		[[nodiscard]] bool IsDown(const Buttons button) const
+		[[nodiscard]] bool IsDown(const Buttons button) const noexcept
 		{
 			return state_.current.buttons[button];
 		}
 
-		[[nodiscard]] bool IsPressed(const Buttons button) const
+		[[nodiscard]] bool IsPressed(const Buttons button) const noexcept
 		{
 			return state_.current.buttons[button] && !state_.previous.buttons[button];
 		}
 
-		[[nodiscard]] bool IsReleased(const Buttons button) const
+		[[nodiscard]] bool IsReleased(const Buttons button) const noexcept
 		{
 			return !state_.current.buttons[button] && state_.previous.buttons[button];
 		}
 
-		[[nodiscard]] float GetAxisVelocity(const Axises axises) const
+		[[nodiscard]] float GetAxisVelocity(const Axises axises) const noexcept
 		{
 			return state_.axises[axises];
 		}
 
 	private:
-		static BOOL CALLBACK SetupMouseCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);
+		static BOOL CALLBACK SetupMouseCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef) noexcept;
 
 		DInputPtr directInput_;
 		HWND hwnd_;

@@ -162,27 +162,27 @@ namespace wx2
 
 		WX2_DISALLOW_COPY_AND_MOVE(Keyboard);
 
-		void Initialize(const DInputPtr& directInput, HWND hwnd);
-		void Regist();
-		void Update();
+		void Initialize(const DInputPtr& directInput, HWND hwnd) noexcept;
+		void Regist() noexcept;
+		void Update() noexcept;
 
-		[[nodiscard]] bool IsDown(const Keys key) const
+		[[nodiscard]] bool IsDown(const Keys key) const noexcept
 		{
 			return state_.current.keys[key];
 		}
 
-		[[nodiscard]] bool IsPressed(const Keys key) const
+		[[nodiscard]] bool IsPressed(const Keys key) const noexcept
 		{
 			return state_.current.keys[key] && !state_.previous.keys[key];
 		}
 
-		[[nodiscard]] bool IsReleased(const Keys key) const
+		[[nodiscard]] bool IsReleased(const Keys key) const noexcept
 		{
 			return !state_.current.keys[key] && state_.previous.keys[key];
 		}
 
 	private:
-		static BOOL CALLBACK SetupKeyboardCallback(LPCDIDEVICEINSTANCE lpddi, const LPVOID pvRef);
+		static BOOL CALLBACK SetupKeyboardCallback(LPCDIDEVICEINSTANCE lpddi, const LPVOID pvRef) noexcept;
 
 		DInputPtr directInput_;
 		HWND hwnd_{};

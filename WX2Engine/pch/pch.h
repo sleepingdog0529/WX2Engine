@@ -6,9 +6,12 @@
  ********************************************************************/
 #pragma once
 
+#pragma warning(push, 0)
+
 #include <WX2Common.h>
 #include <WX2Input.h>
 #include <WX2Graphics.h>
+#include <WX2Physics.h>
 
 #define STRICT
 #define WIN32_LEAN_AND_MEAN
@@ -41,3 +44,5 @@
 #include <cereal/types/string.hpp>
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/memory.hpp>
+
+#pragma warning(pop)

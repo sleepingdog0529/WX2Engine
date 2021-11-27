@@ -19,7 +19,7 @@ public:
  * @brief  動作定義済アプリケーションの作成関数定義
  * @return アプリケーションポインタ
  */
-std::unique_ptr<wx2::Application> wx2::CreateApp()
+std::unique_ptr<wx2::Application> wx2::CreateApp() noexcept
 {
 	return std::make_unique<Game>();
 }

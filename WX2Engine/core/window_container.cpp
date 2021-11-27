@@ -3,12 +3,12 @@
 
 namespace wx2 
 {
-	WindowContainer::WindowContainer()
+	WindowContainer::WindowContainer() noexcept
 	{
 		Deserialize();
 	}
 
-	WindowContainer::~WindowContainer()
+	WindowContainer::~WindowContainer() noexcept
 	{
 		windowProps_.clear();
 		std::ranges::for_each(windows_,
@@ -20,7 +20,7 @@ namespace wx2
 		Serialize();
 	}
 
-	WindowContainer::WindowPtr WindowContainer::Create(const std::string& name, const WindowProperty& defaultProp)
+	WindowContainer::WindowPtr WindowContainer::Create(const std::string& name, const WindowProperty& defaultProp) noexcept
 	{
 		auto [propItr, unuse] = windowProps_.try_emplace(name, defaultProp);
 
@@ -34,7 +34,7 @@ namespace wx2
 		return wndItr->second;
 	}
 
-	void WindowContainer::ProcessMessages(const std::function<bool()>& process)
+	void WindowContainer::ProcessMessages(const std::function<bool()>& process) noexcept
 	{
 		MSG msg = {};
 
@@ -52,12 +52,12 @@ namespace wx2
 		}
 	}
 
-	LRESULT WindowContainer::WindowProcedure(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp)
+	LRESULT WindowContainer::WindowProcedure(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp) noexcept
 	{
 		return DefWindowProc(hwnd, msg, wp, lp);
 	}
 
-	void WindowContainer::Serialize()
+	void WindowContainer::Serialize() noexcept
 	{
 		const auto filePath = std::filesystem::path(CONFIG_DIR) / PROPERTY_FILE_NAME;
 		
@@ -66,7 +66,7 @@ namespace wx2
 		output(cereal::make_nvp("windowContainer", windowProps_));
 	}
 
-	void WindowContainer::Deserialize()
+	void WindowContainer::Deserialize() noexcept
 	{
 		if (const auto filePath = std::filesystem::path(CONFIG_DIR) / PROPERTY_FILE_NAME; std::filesystem::exists(filePath))
 		{

@@ -10,6 +10,7 @@
 #include "debug/assert.h"
 #include "debug/log.h"
 #include "debug/com_exception.h"
+#include "debug/runtime_errer.h"
 #include "debug/debugging.h"
 #include "util/hash.h"
 #include "util/macro.h"

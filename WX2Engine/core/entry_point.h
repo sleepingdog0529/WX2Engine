@@ -7,7 +7,7 @@
 #pragma once
 #include "application.h"
 
-extern std::unique_ptr<wx2::Application> wx2::CreateApp();
+extern std::unique_ptr<wx2::Application> wx2::CreateApp() noexcept;
 
 /**
  * @brief エントリポイント

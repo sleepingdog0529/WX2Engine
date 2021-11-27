@@ -19,25 +19,25 @@ namespace wx2
 		 * @param[in] container 格納先コンテナ
 		 * @param[in] windowProp ウィンドウ設定
 		 */
-		Window(WindowContainer* container, WindowProperty windowProp);
+		Window(WindowContainer* container, WindowProperty windowProp) noexcept;
 
 		/**
 		 * @brief ウィンドウを閉じる
 		 */
-		~Window();
+		~Window() noexcept;
 
 		WX2_DISALLOW_COPY_AND_MOVE(Window);
 
 		//! ウィンドウのウィンドウプロシージャ
-		static LRESULT CALLBACK HandleMessageRedirect(const HWND hwnd, const UINT msg, const  WPARAM wp, const  LPARAM lp);
+		static LRESULT CALLBACK HandleMessageRedirect(const HWND hwnd, const UINT msg, const  WPARAM wp, const  LPARAM lp) noexcept;
 		//! ウィンドウのウィンドウプロシージャ
-		static LRESULT CALLBACK HandleMessageSetup(const HWND hwnd, const  UINT msg, const WPARAM wp, const LPARAM lp);
+		static LRESULT CALLBACK HandleMessageSetup(const HWND hwnd, const  UINT msg, const WPARAM wp, const LPARAM lp) noexcept;
 
 		/**
 		 * @brief  ウィンドウハンドルを取得する
 		 * @return ウィンドウハンドル
 		 */
-		[[nodiscard]] HWND GetHandle() const
+		[[nodiscard]] HWND GetHandle() const noexcept
 		{
 			return hwnd_;
 		}
@@ -46,7 +46,7 @@ namespace wx2
 		 * @brief  ウィンドウ情報を取得する
 		 * @return ウィンドウ情報
 		 */
-		[[nodiscard]] const WindowProperty& GetWindowProperty() const
+		[[nodiscard]] const WindowProperty& GetWindowProperty() const noexcept
 		{
 			return windowProp_;
 		}
@@ -55,26 +55,26 @@ namespace wx2
 		 * @brief ウィンドウのフルスクリーン状態を設定する
 		 * @param fullscreen フルスクリーンにするか
 		 */
-		void SetFullscreen(bool fullscreen);
+		void SetFullscreen(bool fullscreen) noexcept;
 
 		/**
 		 * @brief ウィンドウの最大化状態を設定する
 		 * @param maximaize 最大化するか
 		 */
-		void SetMaximize(const bool maximaize);
+		void SetMaximize(const bool maximaize) noexcept;
 
 	private:
 		//! ウィンドウ移動時のコールバック
-		void OnMoving(WPARAM wp, LPARAM lp);
+		void OnMoving(const WPARAM wp, const  LPARAM lp) noexcept;
 
 		//! ウィンドウサイズ変更時のコールバック
-		void OnSizing(WPARAM wp, LPARAM lp);
+		void OnSizing(const WPARAM wp, const LPARAM lp) noexcept;
 
 		//! ウィンドウ表示モード変更時のコールバック
-		void OnDisplayModeChanged(WPARAM wp, [[maybe_unused]] LPARAM lp);
+		void OnDisplayModeChanged(const WPARAM wp, const  LPARAM lp) noexcept;
 
 		//! キー押下時のコールバック
-		void OnKeyDown(WPARAM wp, LPARAM lp);
+		void OnKeyDown(const WPARAM wp, const LPARAM lp) noexcept;
 
 		WindowContainer* container_;	//! ウィンドウコンテナ
 		HWND hwnd_;						//! ウィンドウハンドル

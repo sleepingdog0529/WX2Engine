@@ -2,7 +2,7 @@
 
 namespace wx2
 {
-	Application::Application()
+	Application::Application() noexcept
 	{
 		// ロケールの設定
 		std::ios_base::sync_with_stdio(false);
@@ -15,12 +15,12 @@ namespace wx2
 		WX2_LOG_TRACE("アプリケーション初期化開始");
 	}
 
-	Application::~Application()
+	Application::~Application() noexcept
 	{
 		WX2_LOG_TRACE("アプリケーション終了処理開始");
 	}
 
-	int Application::Run()
+	int Application::Run() noexcept
 	{
 		// 画面サイズ取得
 		const int screenWidth = GetSystemMetrics(SM_CXSCREEN);
@@ -49,8 +49,15 @@ namespace wx2
 			true);
 		if (!res)
 		{
-			WX2_LOG_ERROR("グラフィックスエラーが発生したためアプリケーションを終了します。");
-			return 1;
+			WX2_LOG_ERROR("グラフィックスのエラーが発生したためアプリケーションを終了します。");
+			return EXIT_FAILURE;
+		}
+
+		res = physics_.Initialize(4);
+		if (!res)
+		{
+			WX2_LOG_ERROR("物理演算のエラーが発生したためアプリケーションを終了します。");
+			return EXIT_FAILURE;
 		}
 
 		WX2_LOG_TRACE("アプリケーション実行開始");
@@ -58,13 +65,22 @@ namespace wx2
 		// メインループ
 		WindowContainer::ProcessMessages([this]() { return Update(); });
 
-		return 0;
+		return EXIT_SUCCESS;
 	}
 
-	bool Application::Update()
+	bool Application::Update() noexcept
 	{
 		input_.Update();
 
-		return !input_.IsPressed(Keyboard::Escape);
+		const auto& keyboard = input_.GetKeyboard();
+
+		Draw();
+
+		return !keyboard.IsPressed(Keyboard::Escape);
+	}
+
+	void Application::Draw() noexcept
+	{
+		const auto& devices = graphics_.GetDevice();
 	}
 }

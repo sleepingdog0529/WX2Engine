@@ -3,9 +3,9 @@
 
 namespace wx2
 {
-	Joypad::Joypad() :
-		directInput_(),
-		hwnd_()
+	Joypad::Joypad() 
+		: directInput_()
+		, hwnd_()
 	{
 	}
 

@@ -5,7 +5,7 @@
 
 namespace wx2
 {
-	void Input::Initialize(const HWND hwnd)
+	void Input::Initialize(const HWND hwnd) noexcept
 	{
 		if (const HRESULT hr = DirectInput8Create(
 			GetModuleHandle(nullptr),
@@ -25,7 +25,7 @@ namespace wx2
 		mouse_.Regist();
 	}
 
-	void Input::Update()
+	void Input::Update() noexcept
 	{
 		keyboard_.Update();
 		mouse_.Update();

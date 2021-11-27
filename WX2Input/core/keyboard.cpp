@@ -3,7 +3,7 @@
 
 namespace wx2
 {
-	Keyboard::~Keyboard()
+	Keyboard::~Keyboard() noexcept
 	{
 		for (auto& [device, instance, capability] : keyboards_)
 		{
@@ -14,7 +14,7 @@ namespace wx2
 		}
 	}
 
-	void Keyboard::Initialize(const DInputPtr& directInput, const HWND hwnd)
+	void Keyboard::Initialize(const DInputPtr& directInput, const HWND hwnd) noexcept
 	{
 		WX2_ASSERT_MSG(directInput, "IDirectInputDevice8がnullptrです。");
 		WX2_ASSERT_MSG(IsWindowEnabled(hwnd) != 0, "ウィンドウハンドルが無効です。");
@@ -22,7 +22,7 @@ namespace wx2
 		hwnd_ = hwnd;
 	}
 
-	void Keyboard::Regist()
+	void Keyboard::Regist() noexcept
 	{
 		if (const HRESULT hr = directInput_->EnumDevices(
 			DI8DEVTYPE_KEYBOARD,
@@ -35,7 +35,7 @@ namespace wx2
 		}
 	}
 
-	void Keyboard::Update()
+	void Keyboard::Update() noexcept
 	{
 		state_.previous = state_.current;
 		std::memset(&state_.current, 0, sizeof(state_.current));
@@ -73,7 +73,7 @@ namespace wx2
 
 
 
-	BOOL Keyboard::SetupKeyboardCallback(LPCDIDEVICEINSTANCE lpddi, const LPVOID pvRef)
+	BOOL Keyboard::SetupKeyboardCallback(LPCDIDEVICEINSTANCE lpddi, const LPVOID pvRef) noexcept
 	{
 		WX2_ASSERT_MSG(
 			GET_DIDEVICE_TYPE(lpddi->dwDevType) == DI8DEVTYPE_KEYBOARD,

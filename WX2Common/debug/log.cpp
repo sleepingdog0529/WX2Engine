@@ -10,7 +10,7 @@
 
 namespace wx2
 {
-	Logger::Logger()
+	Logger::Logger() noexcept
 	{
 		namespace fs = std::filesystem;
 		namespace vs = std::views;
@@ -56,7 +56,7 @@ namespace wx2
 		set_default_logger(logger_);
 	}
 
-	Logger::~Logger()
+	Logger::~Logger() noexcept
 	{
 		// ÉçÉKÅ[ÇèIóπÇ≥ÇπÇÈ
 		spdlog::shutdown();

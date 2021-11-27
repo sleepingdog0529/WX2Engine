@@ -7,5 +7,7 @@
 #pragma once
 
 #if 1
+#pragma warning(push, 0)
 #include <vld/vld.h>
+#pragma warning(pop)
 #endif

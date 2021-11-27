@@ -26,12 +26,12 @@ namespace wx2
 		/**
 		 * @brief ウィンドウ設定のデシリアライズを行う
 		 */
-		WindowContainer();
+		WindowContainer() noexcept;
 
 		/**
 		 * @brief ウィンドウ設定のシリアライズを行う
 		 */
-		virtual ~WindowContainer();
+		virtual ~WindowContainer() noexcept;
 
 		WX2_DISALLOW_COPY_AND_MOVE(WindowContainer);
 
@@ -41,29 +41,29 @@ namespace wx2
 		 * @param[in] defaultProp シリアライズ済みのデータが無い場合に使用するウィンドウ設定
 		 * @return    WindowPtr 作成したウィンドウのポインタ
 		 */
-		WindowPtr Create(const std::string& name, const WindowProperty& defaultProp);
+		WindowPtr Create(const std::string& name, const WindowProperty& defaultProp) noexcept;
 
 		/**
 		 * @brief     メッセージを処理しつつ合間に更新処理を呼び出す
 		 * @param[in] process アプリケーションの更新関数
 		 */
-		static void ProcessMessages(const std::function<bool()>& process);
+		static void ProcessMessages(const std::function<bool()>& process) noexcept;
 
 		/**
 		 * @brief アプリケーションの全てのウィンドウ共通のウィンドウプロシージャ
 		 */
-		static LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
+		static LRESULT CALLBACK WindowProcedure(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp) noexcept;
 
 	private:
 		/**
 		 * @brief ウィンドウ設定をシリアライズ化してファイルに保存する
 		 */
-		void Serialize();
+		void Serialize() noexcept;
 
 		/**
 		 * @brief ウィンドウ設定をシリアライズ化してファイルに保存する
 		 */
-		void Deserialize();
+		void Deserialize() noexcept;
 
 		//! ウィンドウポインタの連想配列
 		std::unordered_map<

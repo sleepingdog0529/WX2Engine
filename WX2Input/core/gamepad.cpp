@@ -3,13 +3,13 @@
 
 namespace wx2
 {
-	Gamepad::Gamepad() :
-		states_{},
-		buffer_()
+	Gamepad::Gamepad() noexcept
+		: states_{}
+		, buffer_()
 	{
 	}
 
-	void Gamepad::Update()
+	void Gamepad::Update() noexcept
 	{
 		// コントローラーの最大接続数分ループ
 		for (auto& [curt, prev] : states_)

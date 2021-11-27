@@ -19,7 +19,7 @@ namespace wx2
 		 * @param strv 文字列ビュー
 		 * @return ハッシュ値
 		 */
-		std::size_t operator()(const std::string_view strv) const {
+		std::size_t operator()(const std::string_view strv) const noexcept {
 			constexpr std::hash<std::string_view> hasher;
 			return hasher(strv);
 		}

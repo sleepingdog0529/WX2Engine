@@ -15,7 +15,7 @@
     <ClInclude Include="util\math_helper.h" />
     <ClInclude Include="util\hash.h" />
     <ClInclude Include="debug\com_exception.h" />
-    <ClInclude Include="debug\runtime_error.h" />
     <ClInclude Include="info\window_property.h" />
+    <ClInclude Include="debug\runtime_errer.h" />
   </ItemGroup>
 </Project>

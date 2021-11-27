@@ -17,10 +17,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug\assert.h" />
-    <ClInclude Include="debug\runtime_error.h" />
     <ClInclude Include="debug\leak_detector.h" />
     <ClInclude Include="debug\log.h" />
     <ClInclude Include="debug\com_exception.h" />
+    <ClInclude Include="debug\runtime_errer.h" />
     <ClInclude Include="info\window_property.h" />
     <ClInclude Include="util\hash.h" />
     <ClInclude Include="util\math_helper.h" />

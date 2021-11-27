@@ -76,34 +76,34 @@ namespace wx2
 		};
 
 	public:
-		Gamepad();
+		Gamepad() noexcept;
 		~Gamepad() = default;
 
 		WX2_DISALLOW_COPY_AND_MOVE(Gamepad);
 
-		void Update();
+		void Update() noexcept;
 
-		[[nodiscard]] bool IsDown(const Buttons button, const size_t user = 0) const
+		[[nodiscard]] bool IsDown(const Buttons button, const size_t user = 0) const noexcept
 		{
 			return states_[user].current.buttons[button];
 		}
 
-		[[nodiscard]] bool IsPressed(const Buttons button, const size_t user = 0) const
+		[[nodiscard]] bool IsPressed(const Buttons button, const size_t user = 0) const noexcept
 		{
 			return states_[user].current.buttons[button] && !states_[user].previous.buttons[button];
 		}
 
-		[[nodiscard]] bool IsReleased(const Buttons button, const size_t user = 0) const
+		[[nodiscard]] bool IsReleased(const Buttons button, const size_t user = 0) const noexcept
 		{
 			return !states_[user].current.buttons[button] && states_[user].previous.buttons[button];
 		}
 
-		[[nodiscard]] float GetAxisValue(const Axises axises, const size_t user = 0) const
+		[[nodiscard]] float GetAxisValue(const Axises axises, const size_t user = 0) const noexcept
 		{
 			return states_[user].current.axises[axises];
 		}
 
-		[[nodiscard]] float GetAxisVelocity(const Axises axises, const size_t user = 0) const
+		[[nodiscard]] float GetAxisVelocity(const Axises axises, const size_t user = 0) const noexcept
 		{
 			return states_[user].current.axises[axises] - states_[user].previous.axises[axises];
 		}

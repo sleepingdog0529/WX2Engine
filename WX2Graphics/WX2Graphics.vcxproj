@@ -11,11 +11,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\blend_state.h" />
+    <ClInclude Include="core\constant_buffer.h" />
+    <ClInclude Include="core\constant_buffer_type.h" />
     <ClInclude Include="core\graphics.h" />
+    <ClInclude Include="core\device.h" />
+    <ClInclude Include="core\index_buffer.h" />
+    <ClInclude Include="core\pixel_shader.h" />
+    <ClInclude Include="core\sampler_state.h" />
+    <ClInclude Include="core\vertex_buffer.h" />
+    <ClInclude Include="core\vertex_shader.h" />
+    <ClInclude Include="core\vertex_type.h" />
     <ClInclude Include="WX2Graphics.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="core\blend_state.cpp" />
+    <ClCompile Include="core\device.cpp" />
     <ClCompile Include="core\graphics.cpp" />
+    <ClCompile Include="core\index_buffer.cpp" />
+    <ClCompile Include="core\pixel_shader.cpp" />
+    <ClCompile Include="core\sampler_state.cpp" />
+    <ClCompile Include="core\vertex_shader.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -105,9 +121,10 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>$(ProjectDir)pch\pch.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
       <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Input;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>

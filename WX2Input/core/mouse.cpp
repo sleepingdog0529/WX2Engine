@@ -6,12 +6,12 @@
 
 namespace wx2
 {
-	Mouse::Mouse() :
-		hwnd_()
+	Mouse::Mouse() noexcept
+		: hwnd_()
 	{
 	}
 
-	Mouse::~Mouse()
+	Mouse::~Mouse() noexcept
 	{
 		for (auto& [device, instance, capability] : mouses_)
 		{
@@ -22,7 +22,7 @@ namespace wx2
 		}
 	}
 
-	void Mouse::Initialize(const DInputPtr& directInput, const HWND hwnd)
+	void Mouse::Initialize(const DInputPtr& directInput, const HWND hwnd) noexcept
 	{
 		WX2_ASSERT_MSG(directInput, "IDirectInputDevice8がnullptrです。");
 		WX2_ASSERT_MSG(IsWindowEnabled(hwnd) != 0, "ウィンドウハンドルが無効です。");
@@ -30,7 +30,7 @@ namespace wx2
 		hwnd_ = hwnd;
 	}
 
-	void Mouse::Regist()
+	void Mouse::Regist() noexcept
 	{
 		if (const HRESULT hr = directInput_->EnumDevices(
 			DI8DEVTYPE_MOUSE,
@@ -43,7 +43,7 @@ namespace wx2
 		}
 	}
 
-	void Mouse::Update()
+	void Mouse::Update() noexcept
 	{
 		state_.previous = state_.current;
 		std::memset(&state_.current, 0, sizeof(state_.current));
@@ -85,7 +85,7 @@ namespace wx2
 		}
 	}
 
-	BOOL Mouse::SetupMouseCallback(LPCDIDEVICEINSTANCE lpddi, const LPVOID pvRef)
+	BOOL Mouse::SetupMouseCallback(LPCDIDEVICEINSTANCE lpddi, const LPVOID pvRef) noexcept
 	{
 		WX2_ASSERT_MSG(
 			GET_DIDEVICE_TYPE(lpddi->dwDevType) == DI8DEVTYPE_MOUSE,

@@ -14,7 +14,7 @@ namespace wx2
 	 * @return •„†‚Ì’l
 	 */
 	template <typename T>
-	constexpr T Sign(T val)
+	constexpr T Sign(T val) noexcept
 	{
 		return (val > T(0)) - (val < T(0));
 	}
@@ -29,7 +29,7 @@ namespace wx2
 	 * @return •ÏŠ·‚µ‚½’l
 	 */
 	template <typename T>
-	constexpr T Remap(T val, T inMin, T inMax, T outMin, T outMax)
+	constexpr T Remap(T val, T inMin, T inMax, T outMin, T outMax) noexcept
 	{
 		return (val - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 	}

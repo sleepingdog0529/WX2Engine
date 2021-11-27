@@ -13,7 +13,7 @@ namespace wx2
 	 * @param  strv 文字列ビュー
 	 * @return 変換後の文字列
 	 */
-	inline std::string ToString(std::string_view strv) 
+	inline std::string ToString(std::string_view strv) noexcept
 	{
 		return { strv.data(), strv.size() };
 	}
@@ -23,18 +23,18 @@ namespace wx2
 	 * @param  wstr ワイド文字列
 	 * @return 変換後の文字列
 	 */
-	inline std::string ToString(const std::wstring& wstr)
+	inline std::string ToString(const std::wstring& wstr) noexcept
 	{
-		std::size_t len = wstr.size();
-		std::size_t converted_len;
+		const std::size_t len = wstr.size();
+		std::size_t convertedLen;
 
 		std::vector<char> conv;
 		conv.resize(sizeof(char) * len * 2 + 1);
-		if (wcstombs_s(&converted_len, conv.data(), sizeof(char) * len * 2 + 1, wstr.c_str(), len * 2) != 0 ||
+		if (wcstombs_s(&convertedLen, conv.data(), sizeof(char) * len * 2 + 1, wstr.c_str(), len * 2) != 0 ||
 			conv[0] == '\0')
 		{
 			WX2_LOG_ERROR("ワイド文字列から文字列への変換に失敗しました。");
-			exit(EXIT_FAILURE);
+			return "";
 		}
 
 		std::string conv_str(conv.begin(), conv.end());

@@ -10,16 +10,20 @@
 #include <comdef.h>
 
 /**
- * @brief もし処理結果がエラーであったなら例外をスローする
+ * @brief もしCOMインターフェースの処理結果がエラーであったなら例外をスローする
  * @param hr COMインターフェースの処理結果
+ * @param __VA_ARGS__ フォーマットメッセージ
  */
-#define WX2_COM_ERROR_IF_FAILED(hr, ...)		\
-	if (FAILED(hr))								\
-	{											\
-		throw wx2::COMException(				\
-			hr,									\
-			std::format(__VA_ARGS__));			\
-	}
+#define WX2_COM_ERROR_IF_FAILED(hr, ...)	\
+	do										\
+	{										\
+		if (FAILED(hr))						\
+		{									\
+			throw wx2::COMException(		\
+				hr,							\
+				std::format(__VA_ARGS__));	\
+		}									\
+	} while(0)
 
 namespace wx2
 {
@@ -35,7 +39,7 @@ namespace wx2
 		COMException(
 			const HRESULT hr,
 			const std::string& msg,
-			const std::source_location& location = std::source_location::current())
+			const std::source_location& location = std::source_location::current()) noexcept
 		{
 			const _com_error error(hr);
 
@@ -58,7 +62,7 @@ namespace wx2
 		/**
 		 * @return 例外の詳細情報の文字列
 		 */
-		[[nodiscard]] const std::string& what() const
+		[[nodiscard]] const std::string& what() const noexcept
 		{
 			return what_;
 		}

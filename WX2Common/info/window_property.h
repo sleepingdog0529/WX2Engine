@@ -5,9 +5,11 @@
  * @brief	ウィンドウ情報
  ********************************************************************/
 #pragma once
+#pragma warning(push, 0)
 #include <cereal/cereal.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/types/string.hpp>
+#pragma warning(pop)
 
 namespace wx2 
 {
@@ -29,7 +31,7 @@ namespace wx2
 		friend cereal::access;
 
 		template <class Archive>
-		void serialize(Archive& archive)
+		void serialize(Archive& archive) noexcept
 		{
 			archive(
 				CEREAL_NVP(title),
