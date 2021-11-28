@@ -24,6 +24,7 @@
     <ClInclude Include="info\window_property.h" />
     <ClInclude Include="util\hash.h" />
     <ClInclude Include="util\math_helper.h" />
+    <ClInclude Include="util\timer.h" />
     <ClInclude Include="WX2Common.h" />
     <ClInclude Include="util\macro.h" />
     <ClInclude Include="util\string_helper.h" />

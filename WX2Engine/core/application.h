@@ -52,12 +52,13 @@ namespace wx2
 		bool Update() noexcept;
 		void Draw() noexcept;
 
+		Timer<> timer_;
 		Logger log_;
 		WindowContainer windowContainer_;
 		Input input_;
 		WindowPtr mainWindow_;
 		graphics::Graphics graphics_;
-		physics::Physics physics_;
+		//physics::Physics physics_;
 
 		//! 既にインスタンス化されているか
 		static inline bool instantiated_ = false;

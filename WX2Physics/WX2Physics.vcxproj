@@ -10,13 +10,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="core\physics.h" />
-    <ClInclude Include="WX2Physics.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="core\physics.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

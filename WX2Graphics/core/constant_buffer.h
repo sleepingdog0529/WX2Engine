@@ -56,8 +56,8 @@ namespace wx2::graphics
 				0,
 				&msr);
 			WX2_COM_ERROR_IF_FAILED(hr, "定数バッファのマップに失敗しました。");
-
-			std::copy_n(msr.pData, sizeof(DataType), &data_);
+			
+			std::copy(msr.pData, msr.pData + sizeof(DataType), &data_);
 			deviceContext->Unmap(buffer_.Get(), 0);
 		}
 

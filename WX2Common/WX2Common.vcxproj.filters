@@ -17,5 +17,6 @@
     <ClInclude Include="debug\com_exception.h" />
     <ClInclude Include="info\window_property.h" />
     <ClInclude Include="debug\runtime_errer.h" />
+    <ClInclude Include="util\timer.h" />
   </ItemGroup>
 </Project>

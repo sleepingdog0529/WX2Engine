@@ -39,13 +39,17 @@ namespace wx2::graphics
 		 */
 		[[nodiscard]] bool Initialize(HWND hwnd, const WindowProperty& windowProp, bool vsync) noexcept;
 
-		[[nodiscard]] const Device& GetDevice() const noexcept { return devices_; }
-		[[nodiscard]] const BlendState& GetBlendState() const noexcept { return blendState_; }
-		[[nodiscard]] const ConstantBuffer<cb::WVPMatrix>& GetConstantBufferWVP() const noexcept { return constantBufferWVP_; }
-		[[nodiscard]] const IndexBuffer& GetIndexBuffer() const noexcept { return indexBuffer_; }
-		[[nodiscard]] const VertexBuffer<DirectX::XMFLOAT3>& GetVertexBuffer() const noexcept { return vertexBuffer_; }
-		[[nodiscard]] const VertexShader& GetVertexShader() const noexcept { return vertexShader_; }
-		[[nodiscard]] const PixelShader& GetPixelShader() const noexcept { return pixelShader_; }
+		[[nodiscard]] Device& GetDevice() noexcept { return devices_; }
+		[[nodiscard]] BlendState& GetBlendState() noexcept { return blendState_; }
+		[[nodiscard]] ConstantBuffer<cb::WVPMatrix>& GetConstantBufferWVP() noexcept { return constantBufferWVP_; }
+		[[nodiscard]] IndexBuffer& GetIndexBuffer() noexcept { return indexBuffer_; }
+		[[nodiscard]] VertexBuffer<DirectX::XMFLOAT3>& GetVertexBuffer() noexcept { return vertexBuffer_; }
+		[[nodiscard]] VertexShader& GetVertexShader() noexcept { return vertexShader_; }
+		[[nodiscard]] PixelShader& GetPixelShader() noexcept { return pixelShader_; }
+
+		[[nodiscard]] ID3D11RenderTargetView* GetRenderTargetView() const noexcept { return renderTargetView_.Get(); }
+		[[nodiscard]] const D3D11_VIEWPORT* GetViewport() const noexcept { return &viewport_; }
+		[[nodiscard]] IDXGISwapChain* GetSwapChain() const noexcept { return swapChain_.Get(); }
 
 	private:
 		Device devices_;
