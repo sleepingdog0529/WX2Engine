@@ -8,5 +8,5 @@
 
 namespace wx2
 {
-	static constexpr const char* CONFIG_DIR = ".\\config";
+	static constexpr const char* CONFIG_DIR = ".\\asset\\config";
 }

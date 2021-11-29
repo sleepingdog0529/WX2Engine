@@ -18,5 +18,6 @@
     <ClInclude Include="info\window_property.h" />
     <ClInclude Include="debug\runtime_errer.h" />
     <ClInclude Include="util\timer.h" />
+    <ClInclude Include="util\safe_release.h" />
   </ItemGroup>
 </Project>

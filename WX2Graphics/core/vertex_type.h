@@ -13,4 +13,9 @@ namespace wx2::graphics
 	{
 		DirectX::XMFLOAT3 position;
 	};
+
+	struct ModelVertex
+	{
+		DirectX::XMFLOAT3 position;
+	};
 }

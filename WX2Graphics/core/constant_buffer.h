@@ -20,7 +20,7 @@ namespace wx2::graphics
 		ConstantBuffer() = default;
 		~ConstantBuffer() = default;
 
-		WX2_DISALLOW_COPY_AND_MOVE(ConstantBuffer);
+		DataType data{};
 
 		void Initialize(Device* devices)
 		{
@@ -56,9 +56,9 @@ namespace wx2::graphics
 				0,
 				&msr);
 			WX2_COM_ERROR_IF_FAILED(hr, "定数バッファのマップに失敗しました。");
-			
-			std::copy(msr.pData, msr.pData + sizeof(DataType), &data_);
-			deviceContext->Unmap(buffer_.Get(), 0);
+
+			std::memcpy(msr.pData, &data, sizeof(data));
+;			deviceContext->Unmap(buffer_.Get(), 0);
 		}
 
 		void VSBind(const UINT startSlot) noexcept
@@ -75,11 +75,7 @@ namespace wx2::graphics
 			deviceContext->PSSetConstantBuffers(startSlot, 1, buffer_.GetAddressOf());
 		}
 
-		[[nodiscard]] DataType* GetData() noexcept { return &data_; }
-
 	private:
-		DataType data_;
-
 		Device* devices_{};
 		ComPtr<ID3D11Buffer> buffer_{};
 	};

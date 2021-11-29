@@ -31,7 +31,6 @@ namespace wx2::graphics
 	{
 		auto* deviceContext = devices_->GetDeviceContext();
 
-		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		deviceContext->IASetIndexBuffer(buffer_.Get(), DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
+		deviceContext->IASetIndexBuffer(buffer_.Get(), DXGI_FORMAT_R32_UINT, 0);
 	}
 }

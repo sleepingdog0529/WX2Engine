@@ -15,5 +15,6 @@
 #include "util/hash.h"
 #include "util/macro.h"
 #include "util/math_helper.h"
+#include "util/safe_release.h"
 #include "util/string_helper.h"
 #include "util/timer.h"

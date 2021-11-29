@@ -21,8 +21,6 @@ namespace wx2::graphics
 		IndexBuffer() = default;
 		~IndexBuffer() = default;
 
-		WX2_DISALLOW_COPY_AND_MOVE(IndexBuffer);
-
 		void Initialize(Device* devices, std::span<DWORD> indices);
 
 		void Bind() const noexcept;

@@ -6,14 +6,23 @@ namespace wx2::graphics
 	{
 		try
 		{
+			windowProperty_ = windowProp;
+
 			devices_.Initialize();
 
-			auto* device = devices_.GetDevice();
-			auto* deviceContext = devices_.GetDeviceContext();
+			auto* dev = devices_.GetDevice();
+			auto* devCon = devices_.GetDeviceContext();
+
+			HRESULT hr;
+
+#if !defined(NDEBUG)
+			hr = dev->QueryInterface(IID_PPV_ARGS(debug_.GetAddressOf()));
+			WX2_COM_ERROR_IF_FAILED(hr, "ID3Dデバッグの登録に失敗しました。");
+#endif
 
 			// インターフェース取得
 			ComPtr<IDXGIDevice> dxgiDevice;
-			HRESULT hr = device->QueryInterface(IID_PPV_ARGS(dxgiDevice.GetAddressOf()));
+			hr = dev->QueryInterface(IID_PPV_ARGS(dxgiDevice.GetAddressOf()));
 			WX2_COM_ERROR_IF_FAILED(hr, "DXGIデバイスの問い合わせに失敗しました。");
 
 			// アダプター取得
@@ -31,7 +40,7 @@ namespace wx2::graphics
 			for (int i = 0; i <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; i++)
 			{
 				UINT quality;
-				if (SUCCEEDED(device->CheckMultisampleQualityLevels(DXGI_FORMAT_D24_UNORM_S8_UINT, i, &quality)))
+				if (SUCCEEDED(dev->CheckMultisampleQualityLevels(DXGI_FORMAT_D24_UNORM_S8_UINT, i, &quality)))
 				{
 					if (0 < quality)
 					{
@@ -44,9 +53,9 @@ namespace wx2::graphics
 			// スワップチェイン設定
 			DXGI_SWAP_CHAIN_DESC scd{};
 			scd.OutputWindow = hwnd;
-			scd.BufferDesc.Width = windowProp.width;
-			scd.BufferDesc.Height = windowProp.height;
-			scd.Windowed = !windowProp.fullscreen;
+			scd.BufferDesc.Width = windowProperty_.width;
+			scd.BufferDesc.Height = windowProperty_.height;
+			scd.Windowed = !windowProperty_.fullscreen;
 			scd.BufferDesc.RefreshRate.Numerator = 60;
 			scd.BufferDesc.RefreshRate.Denominator = 1;
 			scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -58,7 +67,7 @@ namespace wx2::graphics
 			scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 			scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-			hr = factory->CreateSwapChain(device, &scd, swapChain_.GetAddressOf());
+			hr = factory->CreateSwapChain(dev, &scd, swapChain_.GetAddressOf());
 			WX2_COM_ERROR_IF_FAILED(hr, "スワップチェインの作成に失敗しました。");
 
 			// スワップチェインのバッファ取得
@@ -66,61 +75,50 @@ namespace wx2::graphics
 			WX2_COM_ERROR_IF_FAILED(hr, "バックバッファの作成に失敗しました。");
 
 			// レンダーターゲットビュー作成
-			hr = device->CreateRenderTargetView(backBuffer_.Get(), nullptr, renderTargetView_.GetAddressOf());
+			hr = dev->CreateRenderTargetView(backBuffer_.Get(), nullptr, renderTargetView_.GetAddressOf());
 			WX2_COM_ERROR_IF_FAILED(hr, "レンダーターゲットビューの作成に失敗しました。");
 
 			// デプスステンシルバッファ作成
-			CD3D11_TEXTURE2D_DESC dsbd(DXGI_FORMAT_D24_UNORM_S8_UINT, windowProp.width, windowProp.height);
+			CD3D11_TEXTURE2D_DESC dsbd(DXGI_FORMAT_D24_UNORM_S8_UINT, windowProperty_.width, windowProperty_.height);
 			dsbd.MipLevels = 1;
 			dsbd.SampleDesc = msaa;
 			dsbd.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-			hr = device->CreateTexture2D(&dsbd, nullptr, depthStencilBuffer_.GetAddressOf());
+			hr = dev->CreateTexture2D(&dsbd, nullptr, depthStencilBuffer_.GetAddressOf());
 			WX2_COM_ERROR_IF_FAILED(hr, "デプスステンシルバッファの作成に失敗しました。");
 
 			// デプスステンシルビュー作成
-			hr = device->CreateDepthStencilView(depthStencilBuffer_.Get(), nullptr, depthStencilView_.GetAddressOf());
+			hr = dev->CreateDepthStencilView(depthStencilBuffer_.Get(), nullptr, depthStencilView_.GetAddressOf());
 			WX2_COM_ERROR_IF_FAILED(hr, "デプスステンシルビューの作成に失敗しました。");
 
 			// レンダーターゲットビュー設定
-			deviceContext->OMSetRenderTargets(1, renderTargetView_.GetAddressOf(), depthStencilView_.Get());
+			devCon->OMSetRenderTargets(1, renderTargetView_.GetAddressOf(), depthStencilView_.Get());
 
 			// デプスステンシルステート作成
 			CD3D11_DEPTH_STENCIL_DESC dsd(D3D11_DEFAULT);
-			hr = device->CreateDepthStencilState(&dsd, depthStencilState_.GetAddressOf());
+			hr = dev->CreateDepthStencilState(&dsd, depthStencilState_.GetAddressOf());
 			WX2_COM_ERROR_IF_FAILED(hr, "デプスステンシルステートの作成に失敗しました。");
 
 			// ビューポート設定
 			viewport_.TopLeftX = 0.0f;
 			viewport_.TopLeftY = 0.0f;
-			viewport_.Width = static_cast<float>(windowProp.width);
-			viewport_.Height = static_cast<float>(windowProp.height);
+			viewport_.Width = static_cast<float>(windowProperty_.width);
+			viewport_.Height = static_cast<float>(windowProperty_.height);
 			viewport_.MinDepth = 0.0f;
 			viewport_.MaxDepth = 1.0f;
 
 			// ラスタライザステートの作成
 			CD3D11_RASTERIZER_DESC rd(D3D11_DEFAULT);
-			device->CreateRasterizerState(&rd, rasterizerState_.GetAddressOf());
+			dev->CreateRasterizerState(&rd, rasterizerState_.GetAddressOf());
 
 			blendState_.Initialize(&devices_);
 
 			constantBufferWVP_.Initialize(&devices_);
 
-			DWORD indices[] = { 0, 1, 2 };
+			DWORD indices[] = { 0,1,2,0,2,3 };
 			indexBuffer_.Initialize(&devices_, indices);
 
-			DirectX::XMFLOAT3 vertices[] = {
-				{ 0,  0,  0},
-				{ 1, -1,  0},
-				{-1, -1,  0} };
-			vertexBuffer_.Initialize(&devices_, vertices);
-
-			D3D11_INPUT_ELEMENT_DESC layoutDescs[] =
-			{
-				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-			};
-			vertexShader_.Initialize(&devices_, ".\\shader\\simple.hlsl", layoutDescs);
-
-			pixelShader_.Initialize(&devices_, ".\\shader\\simple.hlsl");
+			InitializePipeline();
+			InitializeGraphics();
 		}
 		catch (const COMException& exception)
 		{
@@ -128,5 +126,96 @@ namespace wx2::graphics
 			return false;
 		}
 		return true;
+	}
+
+	void Graphics::DrawBegin() noexcept
+	{
+		auto* devCon = devices_.GetDeviceContext();
+
+		devCon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		blendState_.Bind(BlendState::Mode::Default);
+
+		constexpr float clearColor[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
+		devCon->ClearRenderTargetView(renderTargetView_.Get(), clearColor);
+		devCon->ClearDepthStencilView(
+			depthStencilView_.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+		devCon->RSSetViewports(1, &viewport_);
+		devCon->RSSetState(rasterizerState_.Get());
+		devCon->OMSetDepthStencilState(
+			depthStencilState_.Get(), 0);
+		devCon->OMSetRenderTargets(
+			1, renderTargetView_.GetAddressOf(), depthStencilView_.Get());
+	}
+
+	void Graphics::DrawEnd() const noexcept
+	{
+		swapChain_->Present(0, 0);
+	}
+
+	void Graphics::RenderFrame() noexcept
+	{
+		DrawBegin();
+
+		vertexShader_.Bind();
+		pixelShader_.Bind();
+
+		constantBufferWVP_.data.world = DirectX::XMMatrixIdentity();
+		constantBufferWVP_.data.projection = DirectX::XMMatrixPerspectiveFovLH(
+			DirectX::XM_PIDIV4,
+			static_cast<float>(windowProperty_.width) / static_cast<float>(windowProperty_.height),
+			0.01f,
+			1000.0f);
+		constantBufferWVP_.data.view = DirectX::XMMatrixLookAtLH(
+			DirectX::XMVECTORF32{ 0.0f, 0.0f, 100.0f },
+			DirectX::XMVectorZero(),
+			DirectX::XMVECTORF32{ 0.0f, 1.0f, 0.0f });
+		constantBufferWVP_.ApplyChange();
+		constantBufferWVP_.VSBind(0);
+
+		model_.Draw(DirectX::XMMatrixScaling(0.01f, 0.01f, 0.01f));
+
+		DrawEnd();
+	}
+
+	void Graphics::InitializePipeline()
+	{
+		DirectX::XMFLOAT3 vertices[] =
+		{
+			{ DirectX::XMFLOAT3(-0.5f,-0.5f,0) },
+			{ DirectX::XMFLOAT3(0.5f,-0.5f,0)  },
+			{ DirectX::XMFLOAT3(0.5f, 0.5f,0)  },
+			{ DirectX::XMFLOAT3(-0.5f, 0.5f,0) }
+		};
+		vertexBuffer_.Initialize(&devices_, vertices);
+
+		D3D11_INPUT_ELEMENT_DESC layoutDescs[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		};
+		vertexShader_.Initialize(&devices_, ".\\asset\\shader\\simple.hlsl", layoutDescs);
+
+		pixelShader_.Initialize(&devices_, ".\\asset\\shader\\simple.hlsl");
+	}
+
+	void Graphics::InitializeGraphics()
+	{
+		auto* dev = devices_.GetDevice();
+		auto* devCon = devices_.GetDeviceContext();
+
+
+		blendState_.Bind(BlendState::Mode::Default);
+
+		CD3D11_SAMPLER_DESC sd(D3D11_DEFAULT);
+		sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+
+		HRESULT hr = dev->CreateSamplerState(&sd, samplerState_.GetAddressOf());
+		WX2_COM_ERROR_IF_FAILED(hr, "サンプラーステートの作成に失敗しました。");
+
+		modelLoader_.Initialize(&devices_, &constantBufferWVP_);
+		model_ = modelLoader_.Load(".\\asset\\model\\WG.fbx");
 	}
 }

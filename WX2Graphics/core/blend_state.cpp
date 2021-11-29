@@ -42,9 +42,6 @@ namespace wx2::graphics
 		desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
 		hr = device->CreateBlendState(&desc, blendState_[3].GetAddressOf());
 		WX2_COM_ERROR_IF_FAILED(hr, "ブレンドステートの乗算モードの作成に失敗しました。");
-
-		// 通常モードに設定
-		Bind(Mode::Default);
 	}
 
 	void BlendState::Bind(const Mode mode) const noexcept

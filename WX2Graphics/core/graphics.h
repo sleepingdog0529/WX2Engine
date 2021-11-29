@@ -16,6 +16,7 @@
 #include "vertex_type.h"
 #include "vertex_shader.h"
 #include "pixel_shader.h"
+#include "model_loader.h"
 
 namespace wx2::graphics
 {
@@ -39,9 +40,14 @@ namespace wx2::graphics
 		 */
 		[[nodiscard]] bool Initialize(HWND hwnd, const WindowProperty& windowProp, bool vsync) noexcept;
 
+		void DrawBegin() noexcept;
+		void DrawEnd() const noexcept;
+
+		void RenderFrame() noexcept;
+
 		[[nodiscard]] Device& GetDevice() noexcept { return devices_; }
 		[[nodiscard]] BlendState& GetBlendState() noexcept { return blendState_; }
-		[[nodiscard]] ConstantBuffer<cb::WVPMatrix>& GetConstantBufferWVP() noexcept { return constantBufferWVP_; }
+		[[nodiscard]] ConstantBuffer<WVPMatrix>& GetConstantBufferWVP() noexcept { return constantBufferWVP_; }
 		[[nodiscard]] IndexBuffer& GetIndexBuffer() noexcept { return indexBuffer_; }
 		[[nodiscard]] VertexBuffer<DirectX::XMFLOAT3>& GetVertexBuffer() noexcept { return vertexBuffer_; }
 		[[nodiscard]] VertexShader& GetVertexShader() noexcept { return vertexShader_; }
@@ -50,15 +56,26 @@ namespace wx2::graphics
 		[[nodiscard]] ID3D11RenderTargetView* GetRenderTargetView() const noexcept { return renderTargetView_.Get(); }
 		[[nodiscard]] const D3D11_VIEWPORT* GetViewport() const noexcept { return &viewport_; }
 		[[nodiscard]] IDXGISwapChain* GetSwapChain() const noexcept { return swapChain_.Get(); }
+		[[nodiscard]] ID3D11SamplerState* GetSamplerState() const noexcept { return samplerState_.Get(); }
 
 	private:
+		void InitializePipeline();
+		void InitializeGraphics();
+
+		WindowProperty windowProperty_;
+
 		Device devices_;
 		BlendState blendState_;
-		ConstantBuffer<cb::WVPMatrix> constantBufferWVP_;
+		ConstantBuffer<WVPMatrix> constantBufferWVP_;
 		IndexBuffer indexBuffer_;
 		VertexBuffer<DirectX::XMFLOAT3> vertexBuffer_;
 		VertexShader vertexShader_;
 		PixelShader pixelShader_;
+
+		ModelLoader modelLoader_;
+		Model model_;
+
+		ComPtr<ID3D11Debug> debug_{};
 
 		ComPtr<IDXGISwapChain> swapChain_{};
 		D3D_FEATURE_LEVEL featureLevel_{};

@@ -53,12 +53,12 @@ namespace wx2
 			return EXIT_FAILURE;
 		}
 
-		//res = physics_.Initialize(4);
-		//if (!res)
-		//{
-		//	WX2_LOG_ERROR("物理演算のエラーが発生したためアプリケーションを終了します。");
-		//	return EXIT_FAILURE;
-		//}
+		res = physics_.Initialize(4);
+		if (!res)
+		{
+			WX2_LOG_ERROR("物理演算のエラーが発生したためアプリケーションを終了します。");
+			return EXIT_FAILURE;
+		}
 
 		WX2_LOG_TRACE("アプリケーション実行開始");
 
@@ -80,7 +80,7 @@ namespace wx2
 		if (const auto elapced = timer_.ElapcedTime(); elapced >= 1s / 60)
 		{
 			timer_.Start();
-			Draw();
+			graphics_.RenderFrame();
 		}
 
 		// ESCキーが押されていたらアプリケーション終了
@@ -93,33 +93,19 @@ namespace wx2
 
 		constexpr auto pi = static_cast<float>(std::numbers::pi);
 
-		const auto& device = graphics_.GetDevice().GetDevice();
-		const auto& deviceContext = graphics_.GetDevice().GetDeviceContext();
-
-		static float rad = 0.0f;
-		rad = std::fmodf(rad + 0.0001f, pi * 2.0f);
-
-		const float clearColor[4] = { std::cosf(rad) * 0.5f + 0.5f, 0.0f, 1.0f, 1.0f};
-		deviceContext->ClearRenderTargetView(graphics_.GetRenderTargetView(), clearColor);
-		deviceContext->RSSetViewports(1, graphics_.GetViewport());
+		const auto& devices = graphics_.GetDevice();
+		const auto& dev = devices.GetDevice();
+		const auto& devCon = devices.GetDeviceContext();
 		
 		graphics_.GetVertexShader().Bind();
 		graphics_.GetPixelShader().Bind();
-
-		const WindowProperty wndProp = mainWindow_->GetWindowProperty();
-
+		
 		auto& constantBuffer = graphics_.GetConstantBufferWVP();
-		auto* data = constantBuffer.GetData();
-		data->world = DX::XMMatrixIdentity();
-		data->view = DX::XMMatrixLookAtLH(
+		constantBuffer.data.world = DX::XMMatrixIdentity();
+		constantBuffer.data.view = DX::XMMatrixLookAtLH(
 			DX::XMVECTORF32{ 0.0f, 0.0f, -1.0f },
 			DX::XMVectorZero(),
-			DX::XMVECTORF32{ 0.0f, 1.0f, 0.0f });
-		data->projection = DX::XMMatrixPerspectiveFovLH(
-			pi,
-			static_cast<float>(wndProp.width) / static_cast<float>(wndProp.height),
-			0.1f,
-			1000.0f);
+			DX::XMVECTORF32{ 0.0f, 100.0f, 0.0f });
 		constantBuffer.ApplyChange();
 		constantBuffer.VSBind(0);
 
@@ -127,9 +113,6 @@ namespace wx2
 		const auto& indexBuffer = graphics_.GetIndexBuffer();
 		indexBuffer.Bind();
 
-		deviceContext->DrawIndexed(indexBuffer.NumIndices(), 0, 0);
-
-		auto* swapChain = graphics_.GetSwapChain();
-		swapChain->Present(0, NULL);
+		devCon->DrawIndexed(indexBuffer.NumIndices(), 0, 0);
 	}
 }

@@ -58,7 +58,7 @@ namespace wx2
 		Input input_;
 		WindowPtr mainWindow_;
 		graphics::Graphics graphics_;
-		//physics::Physics physics_;
+		physics::Physics physics_;
 
 		//! 既にインスタンス化されているか
 		static inline bool instantiated_ = false;

@@ -27,8 +27,6 @@ namespace wx2::graphics
 		VertexBuffer() = default;
 		~VertexBuffer() = default;
 
-		WX2_DISALLOW_COPY_AND_MOVE(VertexBuffer);
-
 		void Initialize(Device* devices, std::span<VertexType> vertices)
 		{
 			WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");

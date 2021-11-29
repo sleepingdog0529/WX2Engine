@@ -10,11 +10,11 @@ struct PSInput
 	float4 pos : SV_POSITION;
 };
 
-PSInput VSMain(float4 pos : POSITION) : SV_POSITION
+PSInput VSMain(float3 pos : POSITION) : SV_POSITION
 {
 	PSInput psIn;
 
-	psIn.pos = mul(worldMatrix, pos);
+	psIn.pos = mul(worldMatrix, float4(pos, 1.0f));
 	psIn.pos = mul(viewMatrix, psIn.pos);
 	psIn.pos = mul(projectionMatrix, psIn.pos);
 
