@@ -8,6 +8,7 @@ namespace wx2
 		// コントローラーの最大接続数分ループ
 		for (auto& [curt, prev] : states_)
 		{
+			// 状態更新
 			prev = curt;
 			curt = {};
 
