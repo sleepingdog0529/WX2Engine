@@ -9,6 +9,7 @@ namespace wx2
 		for (auto& [curt, prev] : states_)
 		{
 			prev = std::move(curt);
+			curt = {};
 
 			// コントローラー状態取得
 			if (SUCCEEDED(XInputGetState(0, &buffer_)))
