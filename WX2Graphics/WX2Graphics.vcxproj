@@ -23,6 +23,7 @@
     <ClInclude Include="core\pixel_shader.h" />
     <ClInclude Include="core\sampler_state.h" />
     <ClInclude Include="core\texture.h" />
+    <ClInclude Include="core\texture_type.h" />
     <ClInclude Include="core\vertex_buffer.h" />
     <ClInclude Include="core\vertex_shader.h" />
     <ClInclude Include="core\vertex_type.h" />

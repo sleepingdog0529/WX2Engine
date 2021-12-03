@@ -15,6 +15,7 @@
 #include "vertex_buffer.h"
 #include "index_buffer.h"
 #include "texture.h"
+#include "texture_type.h"
 
 namespace wx2::graphics
 {
@@ -28,7 +29,7 @@ namespace wx2::graphics
 			Device* devices, 
 			std::span<ModelVertex> vertices, 
 			std::span<DWORD> indices,
-			const std::map<std::string, Texture>& textures,
+			const std::map<TextureType, Texture>& textures,
 			const DirectX::XMMATRIX& transformMatrix);
 
 		void Draw() const noexcept;
@@ -36,12 +37,14 @@ namespace wx2::graphics
 		[[nodiscard]] const DirectX::XMMATRIX& GetTransformMatrix() const noexcept { return transformMatrix_; }
 
 	private:
+		void PSBindTexture(const UINT slot, const TextureType& texType) const noexcept;
+
 		Device* devices_{};
 		VertexBuffer<ModelVertex> vertexBuffer_;
 		IndexBuffer indexBuffer_;
 		std::vector<ModelVertex> vertices_{};
 		std::vector<DWORD> indices_{};
-		std::map<std::string, Texture> textures_{};
+		std::map<TextureType, Texture> textures_{};
 		DirectX::XMMATRIX transformMatrix_{};
 	};
 }

@@ -29,5 +29,9 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\simple.hlsl" />
+    <FxCompile Include="asset\shader\simple.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="asset\shader\header\normal.hlsli" />
   </ItemGroup>
 </Project>

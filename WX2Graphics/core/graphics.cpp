@@ -136,7 +136,7 @@ namespace wx2::graphics
 
 		blendState_.Bind(BlendState::Mode::Default);
 
-		constexpr float clearColor[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
+		constexpr float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 		devCon->ClearRenderTargetView(renderTargetView_.Get(), clearColor);
 		devCon->ClearDepthStencilView(
 			depthStencilView_.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
@@ -147,6 +147,8 @@ namespace wx2::graphics
 			depthStencilState_.Get(), 0);
 		devCon->OMSetRenderTargets(
 			1, renderTargetView_.GetAddressOf(), depthStencilView_.Get());
+
+		devCon->PSSetSamplers(0, 1, samplerState_.GetAddressOf());
 	}
 
 	void Graphics::DrawEnd() const noexcept
@@ -192,7 +194,11 @@ namespace wx2::graphics
 
 		D3D11_INPUT_ELEMENT_DESC layoutDescs[] =
 		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT   , 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "NORMAL"  , 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TANGENT" , 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
 		vertexShader_.Initialize(&devices_, ".\\asset\\shader\\simple.hlsl", layoutDescs);
 

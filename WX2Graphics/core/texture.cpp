@@ -38,12 +38,15 @@ namespace wx2::graphics
 		{
 			WX2_LOG_WARN("ファイルからのテクスチャの読み込みに失敗しました。パス: {}", filePath.string());
 
-			InitializeColorTexture({1.0f, 0.0f, 1.0f, 1.0f}, 1, 1);
+			Initialize(devices, { 1.0f, 0.0f, 1.0f, 1.0f });
 		}
 	}
 
 	void Texture::Initialize(Device* devices, const uint8_t* data, size_t size)
 	{
+		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
+		devices_ = devices;
+
 		auto* dev = devices_->GetDevice();
 
 		const HRESULT hr = DirectX::CreateWICTextureFromMemory(
@@ -57,19 +60,28 @@ namespace wx2::graphics
 		{
 			WX2_LOG_WARN("メモリからのテクスチャの読み込みに失敗しました。");
 
-			InitializeColorTexture({ 1.0f, 0.0f, 1.0f, 1.0f }, 1, 1);
+			Initialize(devices, { 1.0f, 0.0f, 1.0f, 1.0f });
 		}
 	}
 
-	void Texture::InitializeColorTexture(const DirectX::XMFLOAT4& colorData, const UINT width, const UINT height)
+	void Texture::Initialize(Device* devices, const DirectX::XMFLOAT4& color)
 	{
-		const CD3D11_TEXTURE2D_DESC td(DXGI_FORMAT_R8G8B8A8_UNORM, width, height);
+		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
+		devices_ = devices;
+
+		const CD3D11_TEXTURE2D_DESC td(DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1);
 
 		ID3D11Texture2D* tex = nullptr;
 
+		std::array<BYTE, 4> colorData;
+		colorData[0] = static_cast<BYTE>(color.x * 255.0f);
+		colorData[1] = static_cast<BYTE>(color.y * 255.0f);
+		colorData[2] = static_cast<BYTE>(color.z * 255.0f);
+		colorData[3] = static_cast<BYTE>(color.w * 255.0f);
+
 		D3D11_SUBRESOURCE_DATA srd{};
-		srd.pSysMem = &colorData;
-		srd.SysMemPitch = width * sizeof(DirectX::XMFLOAT4);
+		srd.pSysMem = colorData.data();
+		srd.SysMemPitch = sizeof(colorData);
 
 		const auto dev = devices_->GetDevice();
 

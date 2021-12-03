@@ -18,6 +18,7 @@
     <ClInclude Include="core\model_bank.h" />
     <ClInclude Include="core\model_loader.h" />
     <ClInclude Include="core\texture.h" />
+    <ClInclude Include="core\texture_type.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\graphics.cpp" />

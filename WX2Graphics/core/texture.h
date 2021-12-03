@@ -24,8 +24,7 @@ namespace wx2::graphics
 
 		void Initialize(Device* devices, const std::filesystem::path& filePath);
 		void Initialize(Device* devices, const uint8_t* data, size_t size);
-
-		void InitializeColorTexture(const DirectX::XMFLOAT4& colorData, UINT width, UINT height);
+		void Initialize(Device* devices, const DirectX::XMFLOAT4& color);
 
 		void BindPS(const UINT slot) const noexcept;
 

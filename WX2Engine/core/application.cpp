@@ -100,14 +100,14 @@ namespace wx2
 		graphics_.GetVertexShader().Bind();
 		graphics_.GetPixelShader().Bind();
 		
-		auto& constantBuffer = graphics_.GetConstantBufferWVP();
-		constantBuffer.data.world = DX::XMMatrixIdentity();
-		constantBuffer.data.view = DX::XMMatrixLookAtLH(
-			DX::XMVECTORF32{ 0.0f, 0.0f, -1.0f },
-			DX::XMVectorZero(),
-			DX::XMVECTORF32{ 0.0f, 100.0f, 0.0f });
-		constantBuffer.ApplyChange();
-		constantBuffer.VSBind(0);
+		//auto& constantBuffer = graphics_.GetConstantBufferWVP();
+		//constantBuffer.data.world = DX::XMMatrixIdentity();
+		//constantBuffer.data.view = DX::XMMatrixLookAtLH(
+		//	DX::XMVECTORF32{ 0.0f, 0.0f, -1.0f },
+		//	DX::XMVectorZero(),
+		//	DX::XMVECTORF32{ 0.0f, 100.0f, 0.0f });
+		//constantBuffer.ApplyChange();
+		//constantBuffer.VSBind(0);
 
 		graphics_.GetVertexBuffer().Bind();
 		const auto& indexBuffer = graphics_.GetIndexBuffer();

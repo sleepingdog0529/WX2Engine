@@ -17,5 +17,9 @@ namespace wx2::graphics
 	struct ModelVertex
 	{
 		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT2 texcoord;
+		DirectX::XMFLOAT3 normal;
+		DirectX::XMFLOAT3 tangent;
+		DirectX::XMFLOAT3 binormal;
 	};
 }

@@ -6,7 +6,7 @@ namespace wx2::graphics
 		Device* devices, 
 		std::span<ModelVertex> vertices,
 		std::span<DWORD> indices,
-		const std::map<std::string, Texture>& textures,
+		const std::map<TextureType, Texture>& textures,
 		const DirectX::XMMATRIX& transformMatrix)
 	{
 		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
@@ -15,13 +15,12 @@ namespace wx2::graphics
 		transformMatrix_ = transformMatrix;
 
 		vertices_.resize(vertices.size());
-		std::ranges::copy(vertices, vertices_.begin());
+		std::ranges::move(vertices, vertices_.begin());
 
 		indices_.resize(indices.size());
-		std::ranges::copy(indices, indices_.begin());
+		std::ranges::move(indices, indices_.begin());
 
-		indices_.resize(textures.size());
-		std::copy(textures.begin(), textures.end(), textures_.begin());
+		textures_ = std::move(textures);
 
 		vertexBuffer_.Initialize(devices_, vertices_);
 		indexBuffer_.Initialize(devices_, indices_);
@@ -32,8 +31,21 @@ namespace wx2::graphics
 		vertexBuffer_.Bind();
 		indexBuffer_.Bind();
 
-		auto* devCon =  devices_->GetDeviceContext();
+		PSBindTexture(0, TextureType::Diffuse);
+
+		auto* devCon = devices_->GetDeviceContext();
 
 		devCon->DrawIndexed(static_cast<UINT>(indices_.size()), 0, 0);
+	}
+
+	void Mesh::PSBindTexture(const UINT slot, const TextureType& texType) const noexcept
+	{
+		const auto itr = textures_.find(texType);
+		if (itr == textures_.end())
+		{
+			return;
+		}
+
+		itr->second.BindPS(slot);
 	}
 }

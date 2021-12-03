@@ -2,6 +2,7 @@
 #include <boost/lexical_cast.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+
 namespace wx2::graphics
 {
 	void ModelLoader::Initialize(
@@ -17,6 +18,10 @@ namespace wx2::graphics
 
 	Model ModelLoader::Load(const std::filesystem::path& filePath)
 	{
+		WX2_ASSERT_MSG(std::filesystem::exists(filePath), "モデルファイルが存在しません。");;
+
+		const auto directory = filePath.parent_path();
+
 		Assimp::Importer importer;
 
 		const aiScene* scene = importer.ReadFile(
@@ -29,12 +34,13 @@ namespace wx2::graphics
 		WX2_RUNTIME_ERROR_IF_FAILED(scene, "モデルファイルの読み込みに失敗しました。パス: {}", filePath.string());
 
 		std::vector<Mesh> meshes;
-		return ProcessNode(meshes, scene->mRootNode, scene, DirectX::XMMatrixIdentity());
+		return ProcessNode(meshes, scene->mRootNode, scene, directory, DirectX::XMMatrixIdentity());
 	}
 
 	Mesh ModelLoader::ProcessMesh(
 		const aiMesh* aiMesh,
 		const aiScene* aiScene,
+		const std::filesystem::path& directory,
 		const DirectX::XMMATRIX transformMatrix) const noexcept
 	{
 		std::vector<ModelVertex> vertices;
@@ -48,15 +54,34 @@ namespace wx2::graphics
 			vertex.position.y = aiMesh->mVertices[i].y;
 			vertex.position.z = aiMesh->mVertices[i].z;
 
-			//if (aiMesh->mTextureCoords[0]) {
-			//	vertex.texcoord.x = (float)aiMesh->mTextureCoords[0][i].x;
-			//	vertex.texcoord.y = (float)aiMesh->mTextureCoords[0][i].y;
-			//}
+			if (aiMesh->HasTextureCoords(0))
+			{
+				vertex.texcoord.x = aiMesh->mTextureCoords[0][i].x;
+				vertex.texcoord.y = aiMesh->mTextureCoords[0][i].y;
+			}
+
+			if (aiMesh->HasNormals())
+			{
+				vertex.normal.x = aiMesh->mNormals[i].x;
+				vertex.normal.x = aiMesh->mNormals[i].y;
+				vertex.normal.x = aiMesh->mNormals[i].z;
+
+				if (aiMesh->HasTangentsAndBitangents())
+				{
+					vertex.tangent.x = aiMesh->mTangents[i].x;
+					vertex.tangent.y = aiMesh->mTangents[i].y;
+					vertex.tangent.z = aiMesh->mTangents[i].z;
+
+					vertex.binormal.x = aiMesh->mBitangents[i].x;
+					vertex.binormal.y = aiMesh->mBitangents[i].y;
+					vertex.binormal.z = aiMesh->mBitangents[i].z;
+				}
+			}
 
 			vertices.push_back(vertex);
 		}
 
-		for (int i = 0; i < aiMesh->mNumFaces; i++) 
+		for (int i = 0; i < aiMesh->mNumFaces; i++)
 		{
 			const aiFace face = aiMesh->mFaces[i];
 
@@ -66,30 +91,34 @@ namespace wx2::graphics
 			}
 		}
 
+		const aiMaterial* aiMat = aiScene->mMaterials[aiMesh->mMaterialIndex];
+		const auto textures = LoadMaterialTextures(aiMat, aiScene, directory);
+
 		Mesh mesh;
-		mesh.Initialize(devices_, vertices, indices, transformMatrix);
+		mesh.Initialize(devices_, vertices, indices, textures, transformMatrix);
 		return mesh;
 	}
 
 	Model ModelLoader::ProcessNode(
-		std::vector<Mesh>& meshes, 
+		std::vector<Mesh>& meshes,
 		const aiNode* aiNode,
-		const aiScene* aiScene, 
+		const aiScene* aiScene,
+		const std::filesystem::path& directory,
 		const DirectX::XMMATRIX parentTransformMatrix) noexcept
 	{
 		const DirectX::XMMATRIX nodeTransformMatrix =
 			XMMatrixTranspose(DirectX::XMMATRIX(&aiNode->mTransformation.a1)) * parentTransformMatrix;
 
-		for (UINT i = 0; i < aiNode->mNumMeshes; i++) 
+		for (UINT i = 0; i < aiNode->mNumMeshes; i++)
 		{
 			const aiMesh* mesh = aiScene->mMeshes[aiNode->mMeshes[i]];
 
-			meshes.push_back(ProcessMesh(mesh, aiScene, nodeTransformMatrix));
+			meshes.push_back(ProcessMesh(mesh, aiScene, directory, nodeTransformMatrix));
 		}
 
-		for (UINT i = 0; i < aiNode->mNumChildren; i++) 
+		for (UINT i = 0; i < aiNode->mNumChildren; i++)
 		{
-			ProcessNode(meshes, aiNode->mChildren[i], aiScene, nodeTransformMatrix);
+			ProcessNode(meshes, aiNode->mChildren[i], aiScene, directory, nodeTransformMatrix);
 		}
 
 		Model model;
@@ -144,36 +173,112 @@ namespace wx2::graphics
 		return TextureStorageType::None;
 	}
 
-	std::map<std::string, Texture> ModelLoader::LoadMaterialTextures(
+	std::map<TextureType, Texture> ModelLoader::LoadMaterialTextures(
 		const aiMaterial* aiMat,
-		const aiTextureType aiType,
-		std::string typeName, 
-		const aiScene* aiScene)
+		const aiScene* aiScene,
+		const std::filesystem::path& directory) const
 	{
-		std::map<std::string, Texture> textures;
+		std::map<TextureType, Texture> textures;
 
-		const auto texCount = aiMat->GetTextureCount(aiType);
-		for (UINT i = 0; i < texCount; i++)
+		for (int i = 0; i < aiTextureType::aiTextureType_UNKNOWN; i++)
 		{
-			aiString path;
-			aiMat->GetTexture(aiType, i, &path);
+			const auto aiTexType = static_cast<aiTextureType>(i);
+			const auto texCount = aiMat->GetTextureCount(aiTexType);
 
-			// TODO: 既にロードしてあればそれを使うようにする
-
-			const auto storeType = DetermineTextureStorageType(aiScene, aiMat, i, aiType);
-			switch (storeType)
+			const auto texTypeItr = TEXTURE_TYPE_TRANSLATOR.find(aiTexType);
+			if (texTypeItr == TEXTURE_TYPE_TRANSLATOR.end())
 			{
-			case TextureStorageType::EmbeddedIndexCompressed:
+				continue;
+			}
+
+			const auto texType = texTypeItr->second;
+
+			if (texCount > 0)
+			{
+				for (int j = 0; j < texCount; j++)
 				{
-					const int index = boost::lexical_cast<int>(&path.C_Str()[1]);
-					Texture embeddedIndexedTexture;
-					embeddedIndexedTexture.Initialize(
-						devices_, 
-						reinterpret_cast<uint8_t*>(aiScene->mTextures[index]->pcData),
-						aiScene->mTextures[index]->mWidth);
+					aiString path;
+					aiMat->GetTexture(aiTexType, j, &path);
+
+					// TODO: 既にロードしてあればそれを使うようにする
+
+					switch (DetermineTextureStorageType(aiScene, aiMat, j, aiTexType))
+					{
+					case TextureStorageType::EmbeddedIndexCompressed:
+					{
+						const int index = boost::lexical_cast<int>(&path.C_Str()[1]);
+
+						Texture embeddedIndexedTexture;
+						embeddedIndexedTexture.Initialize(
+							devices_,
+							reinterpret_cast<uint8_t*>(aiScene->mTextures[index]->pcData),
+							aiScene->mTextures[index]->mWidth);
+
+						textures.emplace(texType, std::move(embeddedIndexedTexture));
+						break;
+					}
+					case TextureStorageType::EmbeddedCompressed:
+					{
+						const aiTexture* texture =
+							aiScene->GetEmbeddedTexture(path.C_Str());
+
+						Texture embeddedTexture;
+						embeddedTexture.Initialize(
+							devices_,
+							reinterpret_cast<uint8_t*>(texture->pcData),
+							texture->mWidth);
+
+						textures.emplace(texType, std::move(embeddedTexture));
+						break;
+					}
+					case TextureStorageType::Disk:
+					{
+						const auto fileName = directory / path.C_Str();
+
+						Texture diskTexture;
+						diskTexture.Initialize(devices_, fileName);
+
+						textures.emplace(texType, std::move(diskTexture));
+						break;
+					}
+					default:
+						WX2_LOG_WARN("非対応のテクスチャ保存形式です。");
+						break;
+					}
+				}
+			}
+			else
+			{
+				switch (texType)
+				{
+				case TextureType::Diffuse:
+				{
+					aiColor3D aiColor;
+					aiMat->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
+
+					Texture diffuseTexture;
+					diffuseTexture.Initialize(
+						devices_,
+						{ aiColor.r, aiColor.g, aiColor.b, 1.0f });
+
+					textures.emplace(texType, std::move(diffuseTexture));
+					break;
+				}
+				case TextureType::Normals:
+				{
+					Texture normalTexture;
+					normalTexture.Initialize(
+						devices_,
+						{ 0.5f, 0.5f, 1.0f, 1.0f });
+
+					textures.emplace(texType, std::move(normalTexture));
+					break;
+				}
+				default:
 					break;
 				}
 			}
 		}
+		return textures;
 	}
 }
