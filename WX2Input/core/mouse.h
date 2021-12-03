@@ -85,9 +85,9 @@ namespace wx2
 			return !state_.current.buttons[button] && state_.previous.buttons[button];
 		}
 
-		[[nodiscard]] float GetAxisVelocity(const Axises axises) const noexcept
+		[[nodiscard]] float GetAxisVelocity(const Axises axis) const noexcept
 		{
-			return state_.axises[axises];
+			return state_.axises[axis];
 		}
 
 	private:
