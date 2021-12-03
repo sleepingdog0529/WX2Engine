@@ -48,7 +48,6 @@ namespace wx2
 		 */
 		int Run() noexcept;
 
-
 		bool Update() noexcept;
 		void Draw() noexcept;
 

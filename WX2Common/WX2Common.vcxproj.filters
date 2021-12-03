@@ -4,6 +4,7 @@
     <ClCompile Include="debug\assert.cpp" />
     <ClCompile Include="debug\log.cpp" />
     <ClCompile Include="debug\debugging.h" />
+    <ClCompile Include="util\file_dialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug\assert.h" />
@@ -19,5 +20,6 @@
     <ClInclude Include="debug\runtime_errer.h" />
     <ClInclude Include="util\timer.h" />
     <ClInclude Include="util\safe_release.h" />
+    <ClInclude Include="util\file_dialog.h" />
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ namespace wx2
 		// コントローラーの最大接続数分ループ
 		for (auto& [curt, prev] : states_)
 		{
-			prev = std::move(curt);
+			prev = curt;
 			curt = {};
 
 			// コントローラー状態取得
