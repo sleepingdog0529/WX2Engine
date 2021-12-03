@@ -3,19 +3,12 @@
 
 namespace wx2
 {
-	Gamepad::Gamepad() noexcept
-		: states_{}
-		, buffer_()
-	{
-	}
-
 	void Gamepad::Update() noexcept
 	{
 		// コントローラーの最大接続数分ループ
 		for (auto& [curt, prev] : states_)
 		{
-			prev = curt;
-			curt = {};
+			prev = std::move(curt);
 
 			// コントローラー状態取得
 			if (SUCCEEDED(XInputGetState(0, &buffer_)))
@@ -39,18 +32,18 @@ namespace wx2
 				// 軸値をfloat型の0~1に変換
 				const float lt = static_cast<float>(buffer_.Gamepad.bLeftTrigger)  / static_cast<float>(UCHAR_MAX);
 				const float rt = static_cast<float>(buffer_.Gamepad.bRightTrigger) / static_cast<float>(UCHAR_MAX);
-				const float lx = static_cast<float>(buffer_.Gamepad.sThumbLX) / static_cast<float>(SHRT_MAX);
-				const float ly = static_cast<float>(buffer_.Gamepad.sThumbLY) / static_cast<float>(SHRT_MAX);
-				const float rx = static_cast<float>(buffer_.Gamepad.sThumbRX) / static_cast<float>(SHRT_MAX);
-				const float ry = static_cast<float>(buffer_.Gamepad.sThumbRY) / static_cast<float>(SHRT_MAX);
+				const float ltx = static_cast<float>(buffer_.Gamepad.sThumbLX) / static_cast<float>(SHRT_MAX);
+				const float lty = static_cast<float>(buffer_.Gamepad.sThumbLY) / static_cast<float>(SHRT_MAX);
+				const float rtx = static_cast<float>(buffer_.Gamepad.sThumbRX) / static_cast<float>(SHRT_MAX);
+				const float rty = static_cast<float>(buffer_.Gamepad.sThumbRY) / static_cast<float>(SHRT_MAX);
 
 				// デッドゾーンを適応して軸値を格納
 				curt.axises[LTrigger] = std::clamp(Remap(lt, TRIGGER_DEADZONE, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f);
 				curt.axises[RTrigger] = std::clamp(Remap(rt, TRIGGER_DEADZONE, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f);
-				curt.axises[LThumbX]  = std::clamp(Remap(std::fabsf(lx), LEFT_THUMB_DEADZONE, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(lx);
-				curt.axises[LThumbY]  = std::clamp(Remap(std::fabsf(ly), LEFT_THUMB_DEADZONE, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(ly);
-				curt.axises[RThumbX]  = std::clamp(Remap(std::fabsf(rx), RIGHT_THUMB_DEADZONE, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(rx);
-				curt.axises[RThumbY]  = std::clamp(Remap(std::fabsf(ry), RIGHT_THUMB_DEADZONE, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(ry);
+				curt.axises[LThumbX]  = std::clamp(Remap(std::fabsf(ltx), LEFT_THUMB_DEADZONE, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(ltx);
+				curt.axises[LThumbY]  = std::clamp(Remap(std::fabsf(lty), LEFT_THUMB_DEADZONE, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(lty);
+				curt.axises[RThumbX]  = std::clamp(Remap(std::fabsf(rtx), RIGHT_THUMB_DEADZONE, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(rtx);
+				curt.axises[RThumbY]  = std::clamp(Remap(std::fabsf(rty), RIGHT_THUMB_DEADZONE, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f) * Sign(rty);
 			}
 		}
 	}

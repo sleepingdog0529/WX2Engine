@@ -37,7 +37,7 @@ namespace wx2
 			A,
 			B,
 			X,
-			Y,
+			Y
 		};
 
 		enum Axises
@@ -47,7 +47,7 @@ namespace wx2
 			LThumbX,
 			LThumbY,
 			RThumbX,
-			RThumbY,
+			RThumbY
 		};
 
 	private:
@@ -76,7 +76,7 @@ namespace wx2
 		};
 
 	public:
-		Gamepad() noexcept;
+		Gamepad() = default;
 		~Gamepad() = default;
 
 		WX2_DISALLOW_COPY_AND_MOVE(Gamepad);
@@ -98,18 +98,18 @@ namespace wx2
 			return !states_[user].current.buttons[button] && states_[user].previous.buttons[button];
 		}
 
-		[[nodiscard]] float GetAxisValue(const Axises axises, const size_t user = 0) const noexcept
+		[[nodiscard]] float GetAxisValue(const Axises axis, const size_t user = 0) const noexcept
 		{
-			return states_[user].current.axises[axises];
+			return states_[user].current.axises[axis];
 		}
 
-		[[nodiscard]] float GetAxisVelocity(const Axises axises, const size_t user = 0) const noexcept
+		[[nodiscard]] float GetAxisVelocity(const Axises axis, const size_t user = 0) const noexcept
 		{
-			return states_[user].current.axises[axises] - states_[user].previous.axises[axises];
+			return states_[user].current.axises[axis] - states_[user].previous.axises[axis];
 		}
 
 	private:
-		std::array<GamepadState, XUSER_MAX_COUNT> states_;
-		XINPUT_STATE buffer_;
+		std::array<GamepadState, XUSER_MAX_COUNT> states_{};
+		XINPUT_STATE buffer_{};
 	};
 }
