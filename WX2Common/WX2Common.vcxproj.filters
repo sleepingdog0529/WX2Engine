@@ -5,6 +5,7 @@
     <ClCompile Include="debug\log.cpp" />
     <ClCompile Include="debug\debugging.h" />
     <ClCompile Include="util\file_dialog.cpp" />
+    <ClCompile Include="util\thread_pool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug\assert.h" />
@@ -13,7 +14,6 @@
     <ClInclude Include="util\string_helper.h" />
     <ClInclude Include="WX2Common.h" />
     <ClInclude Include="debug\leak_detector.h" />
-    <ClInclude Include="util\math_helper.h" />
     <ClInclude Include="util\hash.h" />
     <ClInclude Include="debug\com_exception.h" />
     <ClInclude Include="info\window_property.h" />
@@ -21,5 +21,6 @@
     <ClInclude Include="util\timer.h" />
     <ClInclude Include="util\safe_release.h" />
     <ClInclude Include="util\file_dialog.h" />
+    <ClInclude Include="util\thread_pool.h" />
   </ItemGroup>
 </Project>

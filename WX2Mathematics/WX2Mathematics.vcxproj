@@ -10,13 +10,25 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="core\matrix.h" />
+    <ClInclude Include="core\scalar.h" />
+    <ClInclude Include="core\vector3.h" />
+    <ClInclude Include="WX2Mathematics.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core\matrix.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="core\vector3.inl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{df121e6f-5a96-49ca-ac93-40db331a2ca2}</ProjectGuid>
-    <RootNamespace>WX2Engine</RootNamespace>
+    <ProjectGuid>{6FAD5A02-71F3-46BD-9CD5-230569B24F91}</ProjectGuid>
+    <RootNamespace>WX2Mathematics</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>WX2Engine</ProjectName>
+    <ProjectName>WX2Mathematics</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -67,10 +79,11 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;NOMINMAX;WIN32_LEAN_AND_MEAN;STRICT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>$(ProjectDir)pch\pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Physics;</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Mathematics;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -85,8 +98,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Input;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Physics</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vld.lib;WX2CommonD.lib;WX2InputD.lib;WX2GraphicsD.lib;WX2PhysicsD.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>WX2CommonD.lib;xinput.lib;dinput8.lib;dxguid.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -98,10 +111,11 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;NOMINMAX;WIN32_LEAN_AND_MEAN;STRICT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>$(ProjectDir)pch\pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Physics</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Mathematics;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -118,36 +132,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Input;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Physics</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2Common.lib;WX2Input.lib;WX2Graphics.lib;WX2Physics.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>WX2Common.lib;xinput.lib;dinput8.lib;dxguid.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="core\entity_manager.cpp" />
-    <ClCompile Include="core\window.cpp" />
-    <ClCompile Include="core\scene.cpp" />
-    <ClCompile Include="core\application.cpp" />
-    <ClCompile Include="core\window_container.cpp" />
-    <ClCompile Include="pch\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="core\component.h" />
-    <ClInclude Include="core\component_array.h" />
-    <ClInclude Include="core\constant.h" />
-    <ClInclude Include="core\entity.h" />
-    <ClInclude Include="core\entity_manager.h" />
-    <ClInclude Include="core\scene_parameter.h" />
-    <ClInclude Include="core\window.h" />
-    <ClInclude Include="core\scene.h" />
-    <ClInclude Include="core\window_container.h" />
-    <ClInclude Include="core\entry_point.h" />
-    <ClInclude Include="core\application.h" />
-    <ClInclude Include="pch\pch.h" />
-    <ClInclude Include="WX2Engine.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

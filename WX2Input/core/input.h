@@ -29,7 +29,7 @@ namespace wx2
 
 		WX2_DISALLOW_COPY_AND_MOVE(Input);
 
-		void Initialize(const HWND hwnd) noexcept;
+		bool Initialize(const HWND hwnd) noexcept;
 		void Update() noexcept;
 
 		[[nodiscard]] const Keyboard& GetKeyboard() const noexcept { return keyboard_; }

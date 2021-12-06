@@ -18,21 +18,20 @@ namespace wx2
 	{
 		WX2_ASSERT_MSG(directInput, "IDirectInputDevice8がnullptrです。");
 		WX2_ASSERT_MSG(IsWindowEnabled(hwnd) != 0, "ウィンドウハンドルが無効です。");
+
 		directInput_ = directInput;
 		hwnd_ = hwnd;
 	}
 
-	void Keyboard::Regist() noexcept
+	void Keyboard::Regist()
 	{
-		if (const HRESULT hr = directInput_->EnumDevices(
+		const HRESULT hr = directInput_->EnumDevices(
 			DI8DEVTYPE_KEYBOARD,
 			SetupKeyboardCallback,
 			this,
-			DIEDFL_ATTACHEDONLY); FAILED(hr))
-		{
-			WX2_LOG_ERROR("ジョイスティックデバイスの作成に失敗しました。");
-			exit(EXIT_FAILURE);
-		}
+			DIEDFL_ATTACHEDONLY);
+
+		WX2_COM_ERROR_IF_FAILED(hr, "キーボードデバイスの作成に失敗しました。");
 	}
 
 	void Keyboard::Update() noexcept
@@ -63,7 +62,7 @@ namespace wx2
 				continue;
 			}
 
-			// キー報を格納
+			// キー情報を格納
 			for (std::size_t i = 0; i < NUM_KEYS; ++i)
 			{
 				state_.current.keys[i] = state_.current.keys[i] || (stateBuffer[i] & 0x80);
@@ -80,11 +79,7 @@ namespace wx2
 			"マウス以外のデバイスは列挙できません");
 
 		auto* keyboard = static_cast<Keyboard*>(pvRef);
-		if(!keyboard)
-		{
-			WX2_LOG_CRITICAL("Keyboardクラスがnullptrです。");
-			return DIENUM_STOP;
-		}
+		WX2_ASSERT_MSG(keyboard, "Keyboardクラスがnullptrです。");
 
 		// デバイス作成済みの場合スキップする
 		if (std::ranges::any_of(keyboard->keyboards_,

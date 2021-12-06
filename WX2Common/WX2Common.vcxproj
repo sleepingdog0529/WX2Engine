@@ -15,6 +15,7 @@
     <ClCompile Include="debug\debugging.h" />
     <ClCompile Include="debug\log.cpp" />
     <ClCompile Include="util\file_dialog.cpp" />
+    <ClCompile Include="util\thread_pool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug\assert.h" />
@@ -25,8 +26,8 @@
     <ClInclude Include="info\window_property.h" />
     <ClInclude Include="util\file_dialog.h" />
     <ClInclude Include="util\hash.h" />
-    <ClInclude Include="util\math_helper.h" />
     <ClInclude Include="util\safe_release.h" />
+    <ClInclude Include="util\thread_pool.h" />
     <ClInclude Include="util\timer.h" />
     <ClInclude Include="WX2Common.h" />
     <ClInclude Include="util\macro.h" />
@@ -101,6 +102,7 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <DisableSpecificWarnings>26812</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,6 +135,7 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <DisableSpecificWarnings>26812</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

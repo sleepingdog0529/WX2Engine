@@ -10,7 +10,6 @@
 #include <bitset>
 #include <dinput.h>
 #include <wrl/client.h>
-#include <Eigen/Core>
 #pragma warning(pop)
 
 namespace wx2

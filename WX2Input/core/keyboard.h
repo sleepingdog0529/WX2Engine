@@ -158,12 +158,12 @@ namespace wx2
 
 	public:
 		Keyboard() = default;
-		~Keyboard();
+		~Keyboard() noexcept;
 
 		WX2_DISALLOW_COPY_AND_MOVE(Keyboard);
 
 		void Initialize(const DInputPtr& directInput, HWND hwnd) noexcept;
-		void Regist() noexcept;
+		void Regist();
 		void Update() noexcept;
 
 		[[nodiscard]] bool IsDown(const Keys key) const noexcept

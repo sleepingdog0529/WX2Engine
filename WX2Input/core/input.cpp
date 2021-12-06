@@ -1,21 +1,19 @@
 #include "input.h"
-#include <algorithm>
-#include <iostream>
 #include <ranges>
 
 namespace wx2
 {
-	void Input::Initialize(const HWND hwnd) noexcept
+	bool Input::Initialize(const HWND hwnd) noexcept
 	{
-		if (const HRESULT hr = DirectInput8Create(
+		if (FAILED(DirectInput8Create(
 			GetModuleHandle(nullptr),
 			DIRECTINPUT_VERSION,
 			IID_IDirectInput8,
 			&directInput_,
-			nullptr); FAILED(hr))
+			nullptr)))
 		{
 			WX2_LOG_ERROR("DirectInput8ÇÃçÏê¨Ç…é∏îsÇµÇ‹ÇµÇΩÅB");
-			exit(EXIT_FAILURE);
+			return false;
 		}
 
 		keyboard_.Initialize(directInput_, hwnd);

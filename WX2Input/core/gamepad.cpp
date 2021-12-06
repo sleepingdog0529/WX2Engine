@@ -1,4 +1,5 @@
 #include "gamepad.h"
+#include <WX2Mathematics.h>
 #include <algorithm>
 
 namespace wx2

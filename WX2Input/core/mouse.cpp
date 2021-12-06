@@ -1,7 +1,4 @@
 #include "mouse.h"
-
-#include <iostream>
-
 #include "input.h"
 
 namespace wx2
@@ -38,7 +35,7 @@ namespace wx2
 			this,
 			DIEDFL_ATTACHEDONLY); FAILED(hr))
 		{
-			WX2_LOG_ERROR("ジョイスティックデバイスの作成に失敗しました。");
+			WX2_LOG_ERROR("マウスデバイスの作成に失敗しました。");
 			exit(EXIT_FAILURE);
 		}
 	}

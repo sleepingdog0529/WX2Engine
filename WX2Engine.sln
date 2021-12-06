@@ -20,6 +20,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Common", "WX2Common\WX2C
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Input", "WX2Input\WX2Input.vcxproj", "{65182225-DF4D-4F88-A70D-2C8E3FC0837D}"
 	ProjectSection(ProjectDependencies) = postProject
+		{6FAD5A02-71F3-46BD-9CD5-230569B24F91} = {6FAD5A02-71F3-46BD-9CD5-230569B24F91}
 		{15E3903F-D8AD-4B65-88A8-C27A79974449} = {15E3903F-D8AD-4B65-88A8-C27A79974449}
 	EndProjectSection
 EndProject
@@ -29,6 +30,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Graphics", "WX2Graphics\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Physics", "WX2Physics\WX2Physics.vcxproj", "{29CBABDE-B7D2-4864-9967-EFB8ACF66936}"
+	ProjectSection(ProjectDependencies) = postProject
+		{15E3903F-D8AD-4B65-88A8-C27A79974449} = {15E3903F-D8AD-4B65-88A8-C27A79974449}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Mathematics", "WX2Mathematics\WX2Mathematics.vcxproj", "{6FAD5A02-71F3-46BD-9CD5-230569B24F91}"
 	ProjectSection(ProjectDependencies) = postProject
 		{15E3903F-D8AD-4B65-88A8-C27A79974449} = {15E3903F-D8AD-4B65-88A8-C27A79974449}
 	EndProjectSection
@@ -81,6 +87,14 @@ Global
 		{29CBABDE-B7D2-4864-9967-EFB8ACF66936}.Release|x64.Build.0 = Release|x64
 		{29CBABDE-B7D2-4864-9967-EFB8ACF66936}.Release|x86.ActiveCfg = Release|x64
 		{29CBABDE-B7D2-4864-9967-EFB8ACF66936}.Release|x86.Build.0 = Release|x64
+		{6FAD5A02-71F3-46BD-9CD5-230569B24F91}.Debug|x64.ActiveCfg = Debug|x64
+		{6FAD5A02-71F3-46BD-9CD5-230569B24F91}.Debug|x64.Build.0 = Debug|x64
+		{6FAD5A02-71F3-46BD-9CD5-230569B24F91}.Debug|x86.ActiveCfg = Debug|x64
+		{6FAD5A02-71F3-46BD-9CD5-230569B24F91}.Debug|x86.Build.0 = Debug|x64
+		{6FAD5A02-71F3-46BD-9CD5-230569B24F91}.Release|x64.ActiveCfg = Release|x64
+		{6FAD5A02-71F3-46BD-9CD5-230569B24F91}.Release|x64.Build.0 = Release|x64
+		{6FAD5A02-71F3-46BD-9CD5-230569B24F91}.Release|x86.ActiveCfg = Release|x64
+		{6FAD5A02-71F3-46BD-9CD5-230569B24F91}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

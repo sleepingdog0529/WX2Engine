@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="WX2Mathematics.h" />
+    <ClInclude Include="core\scalar.h" />
+    <ClInclude Include="core\matrix.h" />
+    <ClInclude Include="core\vector3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core\matrix.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="core\vector3.inl" />
+  </ItemGroup>
+</Project>
