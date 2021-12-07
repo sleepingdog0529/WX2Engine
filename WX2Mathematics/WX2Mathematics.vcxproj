@@ -11,16 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\matrix.h" />
-    <ClInclude Include="core\scalar.h" />
-    <ClInclude Include="core\vector3.h" />
+    <ClInclude Include="core\core.h" />
     <ClInclude Include="WX2Mathematics.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core\matrix.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="core\vector3.inl" />
+    <None Include="core\core.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -83,7 +78,7 @@
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Mathematics;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -99,7 +94,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2CommonD.lib;xinput.lib;dinput8.lib;dxguid.lib;</AdditionalDependencies>
+      <AdditionalDependencies>WX2CommonD.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -115,7 +110,7 @@
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Mathematics;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -133,7 +128,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2Common.lib;xinput.lib;dinput8.lib;dxguid.lib;</AdditionalDependencies>
+      <AdditionalDependencies>WX2Common.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

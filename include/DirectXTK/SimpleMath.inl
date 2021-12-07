@@ -1,3 +1,4 @@
+#include "..\..\WX2Mathematics\core\core.h"
 //-------------------------------------------------------------------------------------
 // SimpleMath.inl -- Simplified C++ Math wrapper for DirectXMath
 //
@@ -1486,6 +1487,11 @@ inline bool Vector4::InBounds(const Vector4& Bounds) const noexcept
     XMVECTOR v1 = XMLoadFloat4(this);
     XMVECTOR v2 = XMLoadFloat4(&Bounds);
     return XMVector4InBounds(v1, v2);
+}
+
+inline void wx2::Vector4::Normalized() noexcept
+{
+	vector_ = Vector4(XMVector4Normalize(vector_))
 }
 
 inline float Vector4::Length() const noexcept

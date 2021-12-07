@@ -2,14 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="WX2Mathematics.h" />
-    <ClInclude Include="core\scalar.h" />
-    <ClInclude Include="core\matrix.h" />
-    <ClInclude Include="core\vector3.h" />
+    <ClInclude Include="core\core.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core\matrix.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="core\vector3.inl" />
+    <None Include="core\core.inl" />
   </ItemGroup>
 </Project>

@@ -6,14 +6,12 @@
  ********************************************************************/
 #pragma once
 #include <DirectXMath.h>
+//#include "vector3.h"
 
 namespace wx2
 {
 	class Matrix final
 	{
-	private:
-		using XMMATRIX = DirectX::XMMATRIX;
-
 	public:
 		constexpr Matrix() noexcept;
 		constexpr Matrix(
@@ -33,14 +31,23 @@ namespace wx2
 		Matrix(Matrix&&) = default;
 		Matrix& operator=(Matrix&&) = default;
 
-		explicit Matrix(const XMMATRIX& other) noexcept;
-		Matrix& operator=(const XMMATRIX& rhs) noexcept;
-		explicit Matrix(XMMATRIX&& other) noexcept;
-		Matrix& operator=(XMMATRIX&& rhs) noexcept;
+		Vector3 operator [] (const std::size_t index) const noexcept;
 
-		static Matrix Identity() { return Matrix(DirectX::XMMatrixIdentity()); }
+		static constexpr Matrix Identity() noexcept;
+
+		[[nodiscard]] Vector3 Right()    const noexcept;
+		[[nodiscard]] Vector3 Left()     const noexcept;
+		[[nodiscard]] Vector3 Up()       const noexcept;
+		[[nodiscard]] Vector3 Down()     const noexcept;
+		[[nodiscard]] Vector3 Backward() const noexcept;
+		[[nodiscard]] Vector3 Forward()  const noexcept;
 
 	private:
-		XMMATRIX matrix_;
+		Matrix(const DirectX::XMMATRIX& other) noexcept
+			: matrix_(other) {}
+
+		DirectX::XMMATRIX matrix_;
 	};
 }
+
+#include "matrix.inl"

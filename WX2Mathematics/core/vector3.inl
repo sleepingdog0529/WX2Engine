@@ -1,5 +1,6 @@
-#include "vector3.h"
 #pragma once
+#include "vector3.h"
+#include <WX2Common.h>
 
 namespace wx2
 {
@@ -15,49 +16,64 @@ namespace wx2
 
 	inline Vector3 Vector3::operator-() const noexcept
 	{
-		Vector3 v;
-		v.vector_ = DirectX::XMVectorNegate(vector_);
-		return v;
+		return DirectX::XMVectorNegate(vector_);
 	}
 
 	inline Vector3 Vector3::operator+(const Vector3& rhs) const noexcept
 	{
-		return Vector3();
+		return DirectX::XMVectorAdd(vector_, rhs.vector_);
 	}
 
 	inline Vector3 Vector3::operator-(const Vector3& rhs) const noexcept
 	{
-		return Vector3();
+		return DirectX::XMVectorSubtract(vector_, rhs.vector_);
 	}
 
 	inline Vector3 Vector3::operator*(const float rhs) const noexcept
 	{
-		return Vector3();
+		return DirectX::XMVectorScale(vector_, rhs);
 	}
 
 	inline Vector3 Vector3::operator/(const float rhs) const noexcept
 	{
-		return Vector3();
+		WX2_ASSERT_MSG(rhs != 0.0f, "0除算が発生しました。");
+		return DirectX::XMVectorScale(vector_, 1.0f / rhs);
 	}
 
 	inline Vector3& Vector3::operator+=(const Vector3& rhs) noexcept
 	{
-		// TODO: return ステートメントをここに挿入します
+		vector_ = DirectX::XMVectorAdd(vector_, rhs.vector_);
+		return *this;
 	}
 
 	inline Vector3& Vector3::operator-=(const Vector3& rhs) noexcept
 	{
-		// TODO: return ステートメントをここに挿入します
+		vector_ = DirectX::XMVectorSubtract(vector_, rhs.vector_);
+		return *this;
 	}
 
 	inline Vector3& Vector3::operator*=(const float rhs) noexcept
 	{
-		// TODO: return ステートメントをここに挿入します
+		vector_ = DirectX::XMVectorScale(vector_, rhs);
+		return *this;
 	}
 
 	inline Vector3& Vector3::operator/=(const float rhs) noexcept
 	{
-		// TODO: return ステートメントをここに挿入します
+		WX2_ASSERT_MSG(rhs != 0.0f, "0除算が発生しました。");
+		vector_ = DirectX::XMVectorScale(vector_, 1.0f / rhs);
+		return *this;
+	}
+
+	inline float Vector3::operator[](const std::size_t index) const noexcept
+	{
+		WX2_ASSERT_MSG(index < 3, "添え字の値が範囲外です。");
+		return vector_.m128_f32[index];
+	}
+
+	inline void Vector3::Normalized() noexcept
+	{
+		vector_ = DirectX::XMVector3Normalize(vector_);
 	}
 
 	inline float Vector3::Length() const noexcept
@@ -68,5 +84,10 @@ namespace wx2
 	inline float Vector3::LengthSquared() const noexcept
 	{
 		return DirectX::XMVectorGetX(DirectX::XMVector3LengthSq(vector_));
+	}
+
+	inline Vector3 Vector3::Normalize(const Vector3& v) noexcept
+	{
+		return DirectX::XMVector3Normalize(v.vector_);
 	}
 }

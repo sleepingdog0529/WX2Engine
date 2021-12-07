@@ -53,13 +53,6 @@ namespace wx2
 			return EXIT_FAILURE;
 		}
 
-		res = physics_.Initialize(4);
-		if (!res)
-		{
-			WX2_LOG_ERROR("物理演算のエラーが発生したためアプリケーションを終了します。");
-			return EXIT_FAILURE;
-		}
-
 		WX2_LOG_TRACE("アプリケーション実行開始");
 
 		// メインループ
