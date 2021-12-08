@@ -207,9 +207,9 @@ namespace wx2
 		return Vector2(DirectX::XMVector2Refract(ivec.vector_, nvec.vector_, refractionIndex));
 	}
 
-	inline Vector2 Vector2::Transform(const Vector2& v, const Quaternion& quat) noexcept
+	inline Vector2 Vector2::Transform(const Vector2& v, const Quaternion& q) noexcept
 	{
-		return Vector2(DirectX::XMVector3Rotate(v.vector_, quat));
+		return Vector2(DirectX::XMVector3Rotate(v.vector_, q));
 	}
 
 	inline Vector2 Vector2::Transform(const Vector2& v, const Matrix& m) noexcept
@@ -222,9 +222,9 @@ namespace wx2
 		return Vector2(DirectX::XMVector2TransformNormal(v.vector_, m));
 	}
 
-	inline Vector2 Vector2::FromAngle(const float radians) noexcept
+	inline Vector2 Vector2::FromAngle(const float angle) noexcept
 	{
-		return { std::cosf(radians), std::sinf(radians) };
+		return { std::cosf(angle), std::sinf(angle) };
 	}
 
 	std::ostream& operator<<(std::ostream& stream, const Vector2& v)
@@ -414,9 +414,9 @@ namespace wx2
 		return Vector3(DirectX::XMVector3Refract(ivec.vector_, nvec.vector_, refractionIndex));
 	}
 
-	inline Vector3 Vector3::Transform(const Vector3& v, const Quaternion& quat) noexcept
+	inline Vector3 Vector3::Transform(const Vector3& v, const Quaternion& q) noexcept
 	{
-		return Vector3(DirectX::XMVector3Rotate(v.vector_, quat));
+		return Vector3(DirectX::XMVector3Rotate(v.vector_, q));
 	}
 
 	inline Vector3 Vector3::Transform(const Vector3& v, const Matrix& m) noexcept
@@ -625,19 +625,19 @@ namespace wx2
 		return Vector4(DirectX::XMVector4Refract(ivec.vector_, nvec.vector_, refractionIndex));
 	}
 
-	inline Vector4 Vector4::Transform(const Vector2& v, const Quaternion& quat) noexcept
+	inline Vector4 Vector4::Transform(const Vector2& v, const Quaternion& q) noexcept
 	{
-		return Vector4(DirectX::XMVectorSelect(v, DirectX::XMVector3Rotate(v, quat), DirectX::g_XMSelect1110));
+		return Vector4(DirectX::XMVectorSelect(v, DirectX::XMVector3Rotate(v, q), DirectX::g_XMSelect1110));
 	}
 
-	inline Vector4 Vector4::Transform(const Vector3& v, const Quaternion& quat) noexcept
+	inline Vector4 Vector4::Transform(const Vector3& v, const Quaternion& q) noexcept
 	{
-		return Vector4(DirectX::XMVectorSelect(v, DirectX::XMVector3Rotate(v, quat), DirectX::g_XMSelect1110));
+		return Vector4(DirectX::XMVectorSelect(v, DirectX::XMVector3Rotate(v, q), DirectX::g_XMSelect1110));
 	}
 
-	inline Vector4 Vector4::Transform(const Vector4& v, const Quaternion& quat) noexcept
+	inline Vector4 Vector4::Transform(const Vector4& v, const Quaternion& q) noexcept
 	{
-		return Vector4(DirectX::XMVectorSelect(v.vector_, DirectX::XMVector3Rotate(v.vector_, quat), DirectX::g_XMSelect1110));
+		return Vector4(DirectX::XMVectorSelect(v.vector_, DirectX::XMVector3Rotate(v.vector_, q), DirectX::g_XMSelect1110));
 	}
 
 	inline Vector4 Vector4::Transform(const Vector4& v, const Matrix& m) noexcept
@@ -922,19 +922,19 @@ namespace wx2
 		return Matrix(DirectX::XMMatrixScaling(scale, scale, scale));
 	}
 
-	inline Matrix Matrix::RotationX(const float radians) noexcept
+	inline Matrix Matrix::RotationX(const float rotation) noexcept
 	{
-		return Matrix(DirectX::XMMatrixRotationX(radians));
+		return Matrix(DirectX::XMMatrixRotationX(rotation));
 	}
 
-	inline Matrix Matrix::RotationY(const float radians) noexcept
+	inline Matrix Matrix::RotationY(const float rotation) noexcept
 	{
-		return Matrix(DirectX::XMMatrixRotationY(radians));
+		return Matrix(DirectX::XMMatrixRotationY(rotation));
 	}
 
-	inline Matrix Matrix::RotationZ(const float radians) noexcept
+	inline Matrix Matrix::RotationZ(const float rotation) noexcept
 	{
-		return Matrix(DirectX::XMMatrixRotationZ(radians));
+		return Matrix(DirectX::XMMatrixRotationZ(rotation));
 	}
 
 	inline Matrix Matrix::FromAxisAngle(const Vector3& axis, const float radians) noexcept

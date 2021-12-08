@@ -12,9 +12,6 @@ namespace wx2
 		std::wcout.imbue(ctypeDefault);
 		std::wcin.imbue(ctypeDefault);
 
-		auto m = Matrix::Translation(1, 0, 0);
-		m *= Matrix::FromAxisAngle(Vector3::Normalize(Vector3::Up() + Vector3::Right()), PI);
-
 		WX2_LOG_TRACE("アプリケーション初期化開始");
 	}
 

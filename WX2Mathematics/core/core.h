@@ -117,12 +117,12 @@ namespace wx2
 		static Vector2 Barycentric(const Vector2& v1, const Vector2& v2, const Vector2& v3, float f, float g) noexcept;
 		static Vector2 CatmullRom(const Vector2& v1, const Vector2& v2, const Vector2& v3, const Vector2& v4, float t) noexcept;
 		static Vector2 Hermite(const Vector2& v1, const Vector2& t1, const Vector2& v2, const Vector2& t2, float t) noexcept;
-		static Vector2 Reflect(const Vector2& v, const Vector2& normv) noexcept;
-		static Vector2 Refract(const Vector2& v, const Vector2& normv, float refractionIndex) noexcept;
+		static Vector2 Reflect(const Vector2& ivec, const Vector2& nvec) noexcept;
+		static Vector2 Refract(const Vector2& ivec, const Vector2& nvec, float refractionIndex) noexcept;
 		static Vector2 Transform(const Vector2& v, const Quaternion& q) noexcept;
 		static Vector2 Transform(const Vector2& v, const Matrix& m) noexcept;
 		static Vector2 TransformNormal(const Vector2& v, const Matrix& m) noexcept;
-		static Vector2 FromAngle(const float radians) noexcept;
+		static Vector2 FromAngle(const float angle) noexcept;
 
 		static constexpr Vector2 Zero()		noexcept { return{  0.0f,  0.0f }; }
 		static constexpr Vector2 One()		noexcept { return{  1.0f,  1.0f }; }
@@ -205,8 +205,8 @@ namespace wx2
 		static Vector3 Barycentric(const Vector3& v1, const Vector3& v2, const Vector3& v3, float f, float g) noexcept;
 		static Vector3 CatmullRom(const Vector3& v1, const Vector3& v2, const Vector3& v3, const Vector3& v4, float t) noexcept;
 		static Vector3 Hermite(const Vector3& v1, const Vector3& t1, const Vector3& v2, const Vector3& t2, float t) noexcept;
-		static Vector3 Reflect(const Vector3& v, const Vector3& normv) noexcept;
-		static Vector3 Refract(const Vector3& v, const Vector3& normv, float refractionIndex) noexcept;
+		static Vector3 Reflect(const Vector3& ivec, const Vector3& nvec) noexcept;
+		static Vector3 Refract(const Vector3& ivec, const Vector3& nvec, float refractionIndex) noexcept;
 		static Vector3 Transform(const Vector3& v, const Quaternion& q) noexcept;
 		static Vector3 Transform(const Vector3& v, const Matrix& m) noexcept;
 		static Vector3 TransformNormal(const Vector3& v, const Matrix& m) noexcept;
@@ -296,8 +296,8 @@ namespace wx2
 		static Vector4 Barycentric(const Vector4& v1, const Vector4& v2, const Vector4& v3, float f, float g) noexcept;
 		static Vector4 CatmullRom(const Vector4& v1, const Vector4& v2, const Vector4& v3, const Vector4& v4, float t) noexcept;
 		static Vector4 Hermite(const Vector4& v1, const Vector4& t1, const Vector4& v2, const Vector4& t2, float t) noexcept;
-		static Vector4 Reflect(const Vector4& v, const Vector4& normv) noexcept;
-		static Vector4 Refract(const Vector4& v, const Vector4& normv, float refractionIndex) noexcept;
+		static Vector4 Reflect(const Vector4& ivec, const Vector4& nvec) noexcept;
+		static Vector4 Refract(const Vector4& ivec, const Vector4& nvec, float refractionIndex) noexcept;
 		static Vector4 Transform(const Vector2& v, const Quaternion& q) noexcept;
 		static Vector4 Transform(const Vector3& v, const Quaternion& q) noexcept;
 		static Vector4 Transform(const Vector4& v, const Quaternion& q) noexcept;
@@ -381,9 +381,9 @@ namespace wx2
 		static Matrix Scale(const Vector3& scales) noexcept;
 		static Matrix Scale(float xs, float ys, float zs) noexcept;
 		static Matrix Scale(float scale) noexcept;
-		static Matrix RotationX(float radians) noexcept;
-		static Matrix RotationY(float radians) noexcept;
-		static Matrix RotationZ(float radians) noexcept;
+		static Matrix RotationX(float rotation) noexcept;
+		static Matrix RotationY(float rotation) noexcept;
+		static Matrix RotationZ(float rotation) noexcept;
 		static Matrix FromAxisAngle(const Vector3& axis, float radians) noexcept;
 		static Matrix PerspectiveFieldOfView(float fov, float aspectRatio, float nearPlane, float farPlane) noexcept;
 		static Matrix Perspective(float width, float height, float nearPlane, float farPlane) noexcept;
@@ -447,7 +447,7 @@ namespace wx2
 		static Quaternion Normalize(const Quaternion& q) noexcept;
 		static Quaternion Conjugate(const Quaternion& q) noexcept;
 		static Quaternion Inverse(const Quaternion& q) noexcept;
-		static Quaternion FromAxisAngle(const Vector3& axis, float radians) noexcept;
+		static Quaternion FromAxisAngle(const Vector3& axis, float angle) noexcept;
 		static Quaternion FromYawPitchRoll(float yaw, float pitch, float roll) noexcept;
 		static Quaternion FromRotationMatrix(const Matrix& m) noexcept;
 		static Quaternion Lerp(const Quaternion& q1, const Quaternion& q2, float t) noexcept;
