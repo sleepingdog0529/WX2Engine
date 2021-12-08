@@ -58,7 +58,7 @@ namespace wx2::graphics
 			WX2_COM_ERROR_IF_FAILED(hr, "定数バッファのマップに失敗しました。");
 
 			std::memcpy(msr.pData, &data, sizeof(data));
-;			deviceContext->Unmap(buffer_.Get(), 0);
+			;			deviceContext->Unmap(buffer_.Get(), 0);
 		}
 
 		void VSBind(const UINT startSlot) noexcept

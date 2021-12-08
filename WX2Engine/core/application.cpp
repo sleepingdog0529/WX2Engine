@@ -8,9 +8,12 @@ namespace wx2
 		std::ios_base::sync_with_stdio(false);
 		const std::locale defaultLoc("");
 		std::locale::global(defaultLoc);
-		const std::locale ctypeDefault(std::locale::classic(), defaultLoc, std::locale::ctype); 
+		const std::locale ctypeDefault(std::locale::classic(), defaultLoc, std::locale::ctype);
 		std::wcout.imbue(ctypeDefault);
 		std::wcin.imbue(ctypeDefault);
+
+		auto m = Matrix::Translation(1, 0, 0);
+		m *= Matrix::FromAxisAngle(Vector3::Normalize(Vector3::Up() + Vector3::Right()), PI);
 
 		WX2_LOG_TRACE("アプリケーション初期化開始");
 	}
@@ -89,10 +92,10 @@ namespace wx2
 		const auto& devices = graphics_.GetDevice();
 		const auto& dev = devices.GetDevice();
 		const auto& devCon = devices.GetDeviceContext();
-		
+
 		graphics_.GetVertexShader().Bind();
 		graphics_.GetPixelShader().Bind();
-		
+
 		//auto& constantBuffer = graphics_.GetConstantBufferWVP();
 		//constantBuffer.data.world = DX::XMMatrixIdentity();
 		//constantBuffer.data.view = DX::XMMatrixLookAtLH(

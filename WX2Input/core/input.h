@@ -33,8 +33,8 @@ namespace wx2
 		void Update() noexcept;
 
 		[[nodiscard]] const Keyboard& GetKeyboard() const noexcept { return keyboard_; }
-		[[nodiscard]] const Mouse& GetMouse()       const noexcept { return mouse_;    }
-		[[nodiscard]] const Gamepad& GetGamepad()   const noexcept { return gamepad_;  }
+		[[nodiscard]] const Mouse& GetMouse()       const noexcept { return mouse_; }
+		[[nodiscard]] const Gamepad& GetGamepad()   const noexcept { return gamepad_; }
 
 	private:
 		DInputPtr directInput_;

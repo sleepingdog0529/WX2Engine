@@ -70,8 +70,6 @@ namespace wx2
 		}
 	}
 
-
-
 	BOOL Keyboard::SetupKeyboardCallback(LPCDIDEVICEINSTANCE lpddi, const LPVOID pvRef) noexcept
 	{
 		WX2_ASSERT_MSG(

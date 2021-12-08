@@ -26,8 +26,8 @@ namespace wx2::graphics
 		~Mesh() = default;
 
 		void Initialize(
-			Device* devices, 
-			std::span<ModelVertex> vertices, 
+			Device* devices,
+			std::span<ModelVertex> vertices,
 			std::span<DWORD> indices,
 			const std::map<TextureType, Texture>& textures,
 			const DirectX::XMMATRIX& transformMatrix);

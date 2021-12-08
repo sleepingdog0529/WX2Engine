@@ -54,7 +54,7 @@ namespace wx2::graphics
 
 	private:
 		Mesh ProcessMesh(
-			const aiMesh* aiMesh, 
+			const aiMesh* aiMesh,
 			const aiScene* aiScene,
 			const std::filesystem::path& directory,
 			const DirectX::XMMATRIX transformMatrix) const noexcept;

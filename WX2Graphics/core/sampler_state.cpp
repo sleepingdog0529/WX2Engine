@@ -2,5 +2,4 @@
 
 namespace wx2::graphics
 {
-
 }

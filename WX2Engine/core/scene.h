@@ -20,6 +20,5 @@ namespace wx2
 		void Draw();
 
 	private:
-
 	};
 }

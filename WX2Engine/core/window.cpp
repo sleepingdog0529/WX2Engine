@@ -32,28 +32,28 @@ namespace wx2
 			exit(EXIT_FAILURE);
 		}
 
-		// ウィンドウを作成
-		hwnd_ = CreateWindowEx(
-			windowProp_.ex_style,
-			className_.c_str(),
-			windowProp_.title.c_str(),
-			windowProp_.style,
-			windowProp_.x,
-			windowProp_.y,
-			windowProp_.width,
-			windowProp_.height,
-			nullptr,
-			nullptr,
-			hinst,
-			this
-		);
+			// ウィンドウを作成
+			hwnd_ = CreateWindowEx(
+				windowProp_.ex_style,
+				className_.c_str(),
+				windowProp_.title.c_str(),
+				windowProp_.style,
+				windowProp_.x,
+				windowProp_.y,
+				windowProp_.width,
+				windowProp_.height,
+				nullptr,
+				nullptr,
+				hinst,
+				this
+			);
 		if (!hwnd_) [[unlikely]]
 		{
 			WX2_LOG_ERROR("ウィンドウの作成に失敗しました。エラーコード: {}", GetLastError());
 			exit(EXIT_FAILURE);
 		}
 
-		// ウィンドウを可視化、更新
+			// ウィンドウを可視化、更新
 		UpdateWindow(hwnd_);
 
 		SetFullscreen(windowProp_.fullscreen);
@@ -83,37 +83,37 @@ namespace wx2
 
 		switch (msg)
 		{
-			case WM_MOVING: 
-				window->OnMoving(wp, lp); 
-				return TRUE;
+		case WM_MOVING:
+			window->OnMoving(wp, lp);
+			return TRUE;
 
-			case WM_SIZING: 
-				window->OnSizing(wp, lp); 
-				return TRUE;
+		case WM_SIZING:
+			window->OnSizing(wp, lp);
+			return TRUE;
 
-			case WM_SYSCOMMAND:
-				if (wp == SC_MAXIMIZE ||
-					wp == SC_RESTORE)
-				{
-					window->OnDisplayModeChanged(wp, lp);
-					return 0;
-				}
-				break;
-				
-			case WM_KEYDOWN:
-				window->OnKeyDown(wp, lp);
+		case WM_SYSCOMMAND:
+			if (wp == SC_MAXIMIZE ||
+				wp == SC_RESTORE)
+			{
+				window->OnDisplayModeChanged(wp, lp);
 				return 0;
+			}
+			break;
 
-			case WM_DESTROY:
-				PostQuitMessage(0);
-				return 0;
+		case WM_KEYDOWN:
+			window->OnKeyDown(wp, lp);
+			return 0;
 
-			case WM_CLOSE:
-				DestroyWindow(hwnd);
-				return 0;
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			return 0;
 
-			default:
-				break;
+		case WM_CLOSE:
+			DestroyWindow(hwnd);
+			return 0;
+
+		default:
+			break;
 		}
 		container->WindowProcedure(hwnd, msg, wp, lp);
 	}
@@ -124,7 +124,7 @@ namespace wx2
 		const CREATESTRUCTW* const create = std::bit_cast<CREATESTRUCTW*>(lp);
 		auto* const window = std::bit_cast<Window*>(create->lpCreateParams);
 
-		if(msg == WM_NCCREATE)
+		if (msg == WM_NCCREATE)
 		{
 			if (!window) [[unlikely]]
 			{
@@ -132,7 +132,7 @@ namespace wx2
 				exit(EXIT_FAILURE);
 			}
 
-			// ウィンドウプロシージャを差し替え
+				// ウィンドウプロシージャを差し替え
 			SetWindowLongPtr(hwnd, GWLP_USERDATA, std::bit_cast<LONG_PTR>(window));
 			SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(HandleMessageRedirect));
 
@@ -152,11 +152,11 @@ namespace wx2
 			// ウィンドウスタイルからフルスクリーンに
 			// 不要なフラグを取り除いて適応
 			SetWindowLong(
-				hwnd_, 
+				hwnd_,
 				GWL_STYLE,
 				~(WS_CAPTION | WS_THICKFRAME) & windowProp_.style);
 			SetWindowLong(
-				hwnd_, 
+				hwnd_,
 				GWL_EXSTYLE,
 				~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE) & windowProp_.ex_style);
 
@@ -165,9 +165,9 @@ namespace wx2
 			mi.cbSize = sizeof(mi);
 			GetMonitorInfo(MonitorFromWindow(hwnd_, MONITOR_DEFAULTTONEAREST), &mi);
 			SetWindowPos(
-				hwnd_, 
-				nullptr, 
-				mi.rcMonitor.left, 
+				hwnd_,
+				nullptr,
+				mi.rcMonitor.left,
 				mi.rcMonitor.top,
 				mi.rcMonitor.right - mi.rcMonitor.left,
 				mi.rcMonitor.bottom - mi.rcMonitor.top,
@@ -225,7 +225,7 @@ namespace wx2
 
 	void Window::OnDisplayModeChanged(const WPARAM wp, [[maybe_unused]] const  LPARAM lp) noexcept
 	{
-		if      (wp == SC_MAXIMIZE) windowProp_.maximized = true;
+		if (wp == SC_MAXIMIZE) windowProp_.maximized = true;
 		else if (wp == SC_RESTORE)  windowProp_.maximized = false;
 	}
 

@@ -3,7 +3,7 @@
 namespace wx2::graphics
 {
 	void Mesh::Initialize(
-		Device* devices, 
+		Device* devices,
 		std::span<ModelVertex> vertices,
 		std::span<DWORD> indices,
 		const std::map<TextureType, Texture>& textures,

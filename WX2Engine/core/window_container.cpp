@@ -1,7 +1,7 @@
 #include "window_container.h"
 #include "constant.h"
 
-namespace wx2 
+namespace wx2
 {
 	WindowContainer::WindowContainer() noexcept
 	{
@@ -13,9 +13,9 @@ namespace wx2
 		windowProps_.clear();
 		std::ranges::for_each(windows_,
 			[this](const std::pair<std::string, WindowPtr>& p)
-		{
-			windowProps_.try_emplace(p.first, p.second->GetWindowProperty());
-		});
+			{
+				windowProps_.try_emplace(p.first, p.second->GetWindowProperty());
+			});
 
 		Serialize();
 	}
@@ -60,7 +60,7 @@ namespace wx2
 	void WindowContainer::Serialize() noexcept
 	{
 		const auto filePath = std::filesystem::path(CONFIG_DIR) / PROPERTY_FILE_NAME;
-		
+
 		std::ofstream ofs(filePath, std::ios::out);
 		cereal::JSONOutputArchive output(ofs);
 		output(cereal::make_nvp("windowContainer", windowProps_));

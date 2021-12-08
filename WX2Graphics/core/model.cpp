@@ -4,7 +4,7 @@ namespace wx2::graphics
 {
 	void Model::Initialize(
 		Device* devices,
-		ConstantBuffer<WVPMatrix>* constantBufferWVP, 
+		ConstantBuffer<WVPMatrix>* constantBufferWVP,
 		std::span<Mesh> meshes)
 	{
 		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");

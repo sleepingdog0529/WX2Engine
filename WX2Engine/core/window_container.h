@@ -67,15 +67,15 @@ namespace wx2
 
 		//! ウィンドウポインタの連想配列
 		std::unordered_map<
-			std::string, 
-			WindowPtr, 
+			std::string,
+			WindowPtr,
 			StringHash,
 			std::equal_to<>> windows_;
 
 		//! ウィンドウ設定の連想配列
 		std::unordered_map<
-			std::string, 
-			WindowProperty, 
+			std::string,
+			WindowProperty,
 			StringHash,
 			std::equal_to<>> windowProps_;
 	};

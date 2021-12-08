@@ -7,7 +7,7 @@
 #pragma once
 #include "window_container.h"
 
-namespace wx2 
+namespace wx2
 {
 	class WindowContainer;
 

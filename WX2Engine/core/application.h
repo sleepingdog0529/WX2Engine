@@ -21,7 +21,7 @@ namespace wx2
 	private:
 		// エントリポイントでのみ実行を許可
 #if defined(NDEBUG)
-		friend INT WINAPI ::WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
+		friend INT WINAPI::WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
 #else
 		friend int ::main(int, char**);
 #endif

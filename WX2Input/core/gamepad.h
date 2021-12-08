@@ -52,12 +52,12 @@ namespace wx2
 
 	private:
 		// 左スティックのデッドゾーン(0 ~ 1)
-		static constexpr float LEFT_THUMB_DEADZONE = 
-			XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE / static_cast<float>(SHRT_MAX); 
+		static constexpr float LEFT_THUMB_DEADZONE =
+			XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE / static_cast<float>(SHRT_MAX);
 
 		// 左スティックのデッドゾーン(0 ~ 1)
 		static constexpr float RIGHT_THUMB_DEADZONE =
-			XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE / static_cast<float>(SHRT_MAX); 
+			XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE / static_cast<float>(SHRT_MAX);
 
 		// 両トリガーのデッドゾーン(0 ~ 1)
 		static constexpr float TRIGGER_DEADZONE =

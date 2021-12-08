@@ -5,7 +5,7 @@
  * @brief	ƒ}ƒEƒX“ü—Í
 *********************************************************************/
 #pragma once
-#pragma warning(push, 0) 
+#pragma warning(push, 0)
 #include <WX2Common.h>
 #include <bitset>
 #include <dinput.h>
@@ -45,7 +45,7 @@ namespace wx2
 
 		struct MouseState
 		{
-			struct 
+			struct
 			{
 				std::bitset<NUM_BUTTONS> buttons;
 			} current, previous;

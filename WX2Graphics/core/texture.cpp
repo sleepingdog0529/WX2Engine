@@ -16,7 +16,7 @@ namespace wx2::graphics
 		const auto dev = devices_->GetDevice();
 
 		HRESULT hr;
-		
+
 		if (ext == ".dds")
 		{
 			hr = DirectX::CreateDDSTextureFromFile(

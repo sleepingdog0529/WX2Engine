@@ -210,7 +210,6 @@ namespace wx2::graphics
 		auto* dev = devices_.GetDevice();
 		auto* devCon = devices_.GetDeviceContext();
 
-
 		blendState_.Bind(BlendState::Mode::Default);
 
 		CD3D11_SAMPLER_DESC sd(D3D11_DEFAULT);

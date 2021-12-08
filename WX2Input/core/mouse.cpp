@@ -60,7 +60,7 @@ namespace wx2
 			}
 
 			std::memset(&stateBuffer, 0, sizeof(stateBuffer));
-			
+
 			// ƒ}ƒEƒXó‘ÔŽæ“¾
 			hr = device->GetDeviceState(static_cast<DWORD>(sizeof(stateBuffer)), &stateBuffer);
 			if (FAILED(hr))

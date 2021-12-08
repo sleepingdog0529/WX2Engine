@@ -13,7 +13,6 @@ namespace wx2::graphics
 {
 	struct test
 	{
-		
 	};
 
 	template <typename VertexType>
