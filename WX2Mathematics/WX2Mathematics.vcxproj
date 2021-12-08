@@ -17,9 +17,6 @@
   <ItemGroup>
     <None Include="core\core.inl" />
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="core\core.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

@@ -1,4 +1,5 @@
 #pragma once
+#include "core.h"
 
 namespace wx2
 {
@@ -32,12 +33,12 @@ namespace wx2
 		return Vector2(DirectX::XMVectorSubtract(vector_, rhs.vector_));
 	}
 
-	inline Vector2 Vector2::operator*(float rhs) const noexcept
+	inline Vector2 Vector2::operator*(const float rhs) const noexcept
 	{
 		return Vector2(DirectX::XMVectorScale(vector_, rhs));
 	}
 
-	inline Vector2 Vector2::operator/(float rhs) const noexcept
+	inline Vector2 Vector2::operator/(const float rhs) const noexcept
 	{
 		WX2_ASSERT_MSG(rhs != 0.0f, "0除算が発生しました。");
 		return Vector2(DirectX::XMVectorScale(vector_, 1.0f / rhs));
@@ -55,26 +56,26 @@ namespace wx2
 		return *this;
 	}
 
-	inline Vector2& Vector2::operator*=(float rhs) noexcept
+	inline Vector2& Vector2::operator*=(const float rhs) noexcept
 	{
 		vector_ = DirectX::XMVectorScale(vector_, rhs);
 		return *this;
 	}
 
-	inline Vector2& Vector2::operator/=(float rhs) noexcept
+	inline Vector2& Vector2::operator/=(const float rhs) noexcept
 	{
 		WX2_ASSERT_MSG(rhs != 0.0f, "0除算が発生しました。");
 		vector_ = DirectX::XMVectorScale(vector_, 1.0f / rhs);
 		return *this;
 	}
 
-	inline const float& Vector2::operator[](std::size_t index) const noexcept
+	inline const float& Vector2::operator[](const std::size_t index) const noexcept
 	{
 		WX2_ASSERT_MSG(index < 2, "添え字の値が範囲外です。");
 		return vector_.m128_f32[index];
 	}
 
-	inline float& Vector2::operator[](std::size_t index) noexcept
+	inline float& Vector2::operator[](const std::size_t index) noexcept
 	{
 		WX2_ASSERT_MSG(index < 2, "添え字の値が範囲外です。");
 		return vector_.m128_f32[index];
@@ -100,9 +101,28 @@ namespace wx2
 		return DirectX::XMVectorGetX(DirectX::XMVector2LengthSq(vector_));
 	}
 
-	inline Vector2 Vector2::Normalize(const Vector2& v) noexcept
+	inline float Vector2::Angle() const noexcept
 	{
-		return Vector2(DirectX::XMVector2Normalize(v.vector_));
+		return std::atan2f(vector_.m128_f32[1], vector_.m128_f32[0]);
+	}
+
+	inline bool Vector2::InBounds(const Vector2& v, const Vector2& bounds) noexcept
+	{
+		return DirectX::XMVector2InBounds(v.vector_, bounds.vector_);
+	}
+
+	inline float Vector2::Distance(const Vector2& v1, const Vector2& v2) noexcept
+	{
+		return DirectX::XMVectorGetX(
+				   DirectX::XMVector2Length(
+					   DirectX::XMVectorSubtract(v1.vector_, v2.vector_)));
+	}
+
+	inline float Vector2::DistanceSquared(const Vector2& v1, const Vector2& v2) noexcept
+	{
+		return DirectX::XMVectorGetX(
+				   DirectX::XMVector2LengthSq(
+				       DirectX::XMVectorSubtract(v1.vector_, v2.vector_)));
 	}
 
 	inline float Vector2::Dot(const Vector2& v1, const Vector2& v2) noexcept
@@ -113,6 +133,104 @@ namespace wx2
 	inline Vector2 Vector2::Cross(const Vector2& v1, const Vector2& v2) noexcept
 	{
 		return Vector2(DirectX::XMVector2Cross(v1.vector_, v2.vector_));
+	}
+
+	inline Vector2 Vector2::Normalize(const Vector2& v) noexcept
+	{
+		return Vector2(DirectX::XMVector2Normalize(v.vector_));
+	}
+
+	inline Vector2 Vector2::Clamp(const Vector2& v, const Vector2& vmin, const Vector2& vmax) noexcept
+	{
+		return Vector2(DirectX::XMVectorClamp(v.vector_, vmin.vector_, vmax.vector_));
+	}
+
+	inline Vector2 Vector2::Min(const Vector2& v1, const Vector2& v2) noexcept
+	{
+		return Vector2(DirectX::XMVectorMin(v1.vector_, v2.vector_));
+	}
+
+	inline Vector2 Vector2::Max(const Vector2& v1, const Vector2& v2) noexcept
+	{
+		return Vector2(DirectX::XMVectorMax(v1.vector_, v2.vector_));
+	}
+
+	inline Vector2 Vector2::Lerp(const Vector2& v1, const Vector2& v2, const float t) noexcept
+	{
+		return Vector2(DirectX::XMVectorLerp(v1.vector_, v2.vector_, t));
+	}
+
+	inline Vector2 Vector2::SmoothStep(const Vector2& v1, const Vector2& v2, const float t) noexcept
+	{
+		float st = std::clamp(t, 1.0f, 0.0f);
+		st = st * st * (3.0f - 2.0f * st);
+		return Vector2(DirectX::XMVectorLerp(v1.vector_, v2.vector_, st));
+	}
+
+	inline Vector2 Vector2::Barycentric(
+		const Vector2& v1,
+		const Vector2& v2, 
+		const Vector2& v3,
+		const float f,
+		const float g) noexcept
+	{
+		return Vector2(DirectX::XMVectorBaryCentric(v1.vector_, v2.vector_, v3.vector_, f, g));
+	}
+
+	inline Vector2 Vector2::CatmullRom(
+		const Vector2& v1,
+		const Vector2& v2,
+		const Vector2& v3, 
+		const Vector2& v4,
+		const float t) noexcept
+	{
+		return Vector2(DirectX::XMVectorCatmullRom(v1.vector_, v2.vector_, v3.vector_, v4.vector_, t));
+	}
+
+	inline Vector2 Vector2::Hermite(
+		const Vector2& v1, 
+		const Vector2& t1,
+		const Vector2& v2, 
+		const Vector2& t2,
+		const float t) noexcept
+	{
+		return Vector2(DirectX::XMVectorHermite(v1.vector_, t1.vector_, v2.vector_, t2.vector_, t));
+	}
+
+	inline Vector2 Vector2::Reflect(const Vector2& ivec, const Vector2& nvec) noexcept
+	{
+		return Vector2(DirectX::XMVector2Reflect(ivec.vector_, nvec.vector_));
+	}
+
+	inline Vector2 Vector2::Refract(const Vector2& ivec, const Vector2& nvec, const float refractionIndex) noexcept
+	{
+		return Vector2(DirectX::XMVector2Refract(ivec.vector_, nvec.vector_, refractionIndex));
+	}
+
+	inline Vector2 Vector2::Transform(const Vector2& v, const Quaternion& quat) noexcept
+	{
+		return Vector2(DirectX::XMVector3Rotate(v.vector_, quat));
+	}
+
+	inline Vector2 Vector2::Transform(const Vector2& v, const Matrix& m) noexcept
+	{
+		return Vector2(DirectX::XMVector2TransformCoord(v.vector_, m));
+	}
+
+	inline Vector2 Vector2::TransformNormal(const Vector2& v, const Matrix& m) noexcept
+	{
+		return Vector2(DirectX::XMVector2TransformNormal(v.vector_, m));
+	}
+
+	inline Vector2 Vector2::FromAngle(const float radians) noexcept
+	{
+		return { std::cosf(radians), std::sinf(radians) };
+	}
+
+	std::ostream& operator<<(std::ostream& stream, const Vector2& v)
+	{
+		stream << std::format("({}, {})", v[0], v[1]);
+		return stream;
 	}
 #pragma endregion Vector2
 
@@ -210,19 +328,105 @@ namespace wx2
 		return DirectX::XMVectorGetX(DirectX::XMVector3LengthSq(vector_));
 	}
 
-	inline Vector3 Vector3::Normalize(const Vector3& v) noexcept
+	inline bool Vector3::InBounds(const Vector3& v, const Vector3& bounds) noexcept
 	{
-		return Vector3(DirectX::XMVector3Normalize(v));
+		return DirectX::XMVector3InBounds(v.vector_, bounds.vector_);
+	}
+
+	inline float Vector3::Distance(const Vector3& v1, const Vector3& v2) noexcept
+	{
+		return DirectX::XMVectorGetX(
+				   DirectX::XMVector3Length(
+					   DirectX::XMVectorSubtract(v1.vector_, v2.vector_)));
+	}
+
+	inline float Vector3::DistanceSquared(const Vector3& v1, const Vector3& v2) noexcept
+	{
+		return DirectX::XMVectorGetX(
+				   DirectX::XMVector3LengthSq(
+					   DirectX::XMVectorSubtract(v1.vector_, v2.vector_)));
 	}
 
 	inline float Vector3::Dot(const Vector3& v1, const Vector3& v2) noexcept
 	{
-		return DirectX::XMVectorGetX(DirectX::XMVector3Dot(v1, v2));
+		return DirectX::XMVectorGetX(DirectX::XMVector3Dot(v1.vector_, v2.vector_));
 	}
 
 	inline Vector3 Vector3::Cross(const Vector3& v1, const Vector3& v2) noexcept
 	{
-		return Vector3(DirectX::XMVector3Cross(v1, v2));
+		return Vector3(DirectX::XMVector3Cross(v1.vector_, v2.vector_));
+	}
+
+	inline Vector3 Vector3::Normalize(const Vector3& v) noexcept
+	{
+		return Vector3(DirectX::XMVector3Normalize(v.vector_));
+	}
+
+	inline Vector3 Vector3::Clamp(const Vector3& v, const Vector3& vmin, const Vector3& vmax) noexcept
+	{
+		return Vector3(DirectX::XMVectorClamp(v.vector_, vmin.vector_, vmax.vector_));
+	}
+
+	inline Vector3 Vector3::Min(const Vector3& v1, const Vector3& v2) noexcept
+	{
+		return Vector3(DirectX::XMVectorMin(v1.vector_, v2.vector_));
+	}
+
+	inline Vector3 Vector3::Max(const Vector3& v1, const Vector3& v2) noexcept
+	{
+		return Vector3(DirectX::XMVectorMax(v1.vector_, v2.vector_));
+	}
+
+	inline Vector3 Vector3::Lerp(const Vector3& v1, const Vector3& v2, const float t) noexcept
+	{
+		return Vector3(DirectX::XMVectorLerp(v1.vector_, v2.vector_, t));
+	}
+
+	inline Vector3 Vector3::SmoothStep(const Vector3& v1, const Vector3& v2, float t) noexcept
+	{
+		float st = std::clamp(t, 0.0f, 1.0f);
+		st = st * st * (3.f - 2.f * st);
+		return Vector3(DirectX::XMVectorLerp(v1.vector_, v2.vector_, st));
+	}
+
+	inline Vector3 Vector3::Barycentric(const Vector3& v1, const Vector3& v2, const Vector3& v3, const float f, const float g) noexcept
+	{
+		return Vector3(DirectX::XMVectorBaryCentric(v1.vector_, v2.vector_, v3.vector_, f, g));
+	}
+
+	inline Vector3 Vector3::CatmullRom(const Vector3& v1, const Vector3& v2, const Vector3& v3, const Vector3& v4, float t) noexcept
+	{
+		return Vector3(DirectX::XMVectorCatmullRom(v1.vector_, v2.vector_, v3.vector_, v4.vector_, t));
+	}
+
+	inline Vector3 Vector3::Hermite(const Vector3& v1, const Vector3& t1, const Vector3& v2, const Vector3& t2, float t) noexcept
+	{
+		return Vector3(DirectX::XMVectorHermite(v1.vector_, t1.vector_, v2.vector_, t2.vector_, t));
+	}
+
+	inline Vector3 Vector3::Reflect(const Vector3& ivec, const Vector3& nvec) noexcept
+	{
+		return Vector3(DirectX::XMVector3Reflect(ivec.vector_, nvec.vector_));
+	}
+
+	inline Vector3 Vector3::Refract(const Vector3& ivec, const Vector3& nvec, const float refractionIndex) noexcept
+	{
+		return Vector3(DirectX::XMVector3Refract(ivec.vector_, nvec.vector_, refractionIndex));
+	}
+
+	inline Vector3 Vector3::Transform(const Vector3& v, const Quaternion& quat) noexcept
+	{
+		return Vector3(DirectX::XMVector3Rotate(v.vector_, quat));
+	}
+
+	inline Vector3 Vector3::Transform(const Vector3& v, const Matrix& m) noexcept
+	{
+		return Vector3(DirectX::XMVector3TransformCoord(v.vector_, m));
+	}
+
+	inline Vector3 Vector3::TransformNormal(const Vector3& v, const Matrix& m) noexcept
+	{
+		return Vector3(DirectX::XMVector3TransformNormal(v.vector_, m));
 	}
 #pragma endregion Vector3
 
@@ -320,9 +524,23 @@ namespace wx2
 		return DirectX::XMVectorGetX(DirectX::XMVector4LengthSq(vector_));
 	}
 
-	inline Vector4 Vector4::Normalize(const Vector4& v) noexcept
+	inline bool Vector4::InBounds(const Vector4& v, const Vector4& bounds) noexcept
 	{
-		return Vector4(DirectX::XMVector4Normalize(v.vector_));
+		return DirectX::XMVector4InBounds(v.vector_, bounds.vector_);
+	}
+
+	inline float Vector4::Distance(const Vector4& v1, const Vector4& v2) noexcept
+	{
+		return DirectX::XMVectorGetX(
+				   DirectX::XMVector4Length(
+					   DirectX::XMVectorSubtract(v1.vector_, v2.vector_)));
+	}
+
+	inline float Vector4::DistanceSquared(const Vector4& v1, const Vector4& v2) noexcept
+	{
+		return DirectX::XMVectorGetX(
+			DirectX::XMVector4LengthSq(
+				DirectX::XMVectorSubtract(v1.vector_, v2.vector_)));
 	}
 
 	inline float Vector4::Dot(const Vector4& v1, const Vector4& v2) noexcept
@@ -335,6 +553,97 @@ namespace wx2
 		return Vector4(DirectX::XMVector4Cross(v1.vector_, v2.vector_, v3.vector_));
 	}
 
+	inline Vector4 Vector4::Normalize(const Vector4& v) noexcept
+	{
+		return Vector4(DirectX::XMVector4Normalize(v.vector_));
+	}
+
+	inline Vector4 Vector4::Clamp(const Vector4& v, const Vector4& vmin, const Vector4& vmax) noexcept
+	{
+		return Vector4(DirectX::XMVectorClamp(v.vector_, vmin.vector_, vmax.vector_));
+	}
+
+	inline Vector4 Vector4::Min(const Vector4& v1, const Vector4& v2) noexcept
+	{
+		return Vector4(DirectX::XMVectorMin(v1.vector_, v2.vector_));
+	}
+
+	inline Vector4 Vector4::Max(const Vector4& v1, const Vector4& v2) noexcept
+	{
+		return Vector4(DirectX::XMVectorMax(v1.vector_, v2.vector_));
+	}
+
+	inline Vector4 Vector4::Lerp(const Vector4& v1, const Vector4& v2, const float t) noexcept
+	{
+		return Vector4(DirectX::XMVectorLerp(v1.vector_, v2.vector_, t));
+	}
+
+	inline Vector4 Vector4::SmoothStep(const Vector4& v1, const Vector4& v2, const float t) noexcept
+	{
+		float st = std::clamp(t, 0.0f, 1.0f);
+		st = st * st * (3.f - 2.f * st);
+		return Vector4(DirectX::XMVectorLerp(v1.vector_, v2.vector_, st));
+	}
+
+	inline Vector4 Vector4::Barycentric(
+		const Vector4& v1, 
+		const Vector4& v2, 
+		const Vector4& v3,
+		const float f,
+		const float g) noexcept
+	{
+		return Vector4(DirectX::XMVectorBaryCentric(v1.vector_, v2.vector_, v3.vector_, f, g));
+	}
+
+	inline Vector4 Vector4::CatmullRom(
+		const Vector4& v1, 
+		const Vector4& v2, 
+		const Vector4& v3, 
+		const Vector4& v4,
+		const float t) noexcept
+	{
+		return Vector4(DirectX::XMVectorCatmullRom(v1.vector_, v2.vector_, v3.vector_, v4.vector_, t));
+	}
+
+	inline Vector4 Vector4::Hermite(
+		const Vector4& v1, 
+		const Vector4& t1, 
+		const Vector4& v2, 
+		const Vector4& t2,
+		const float t) noexcept
+	{
+		return Vector4(DirectX::XMVectorHermite(v1.vector_, t1.vector_, v2.vector_, t2.vector_, t));
+	}
+
+	inline Vector4 Vector4::Reflect(const Vector4& ivec, const Vector4& nvec) noexcept
+	{
+		return Vector4(DirectX::XMVector4Reflect(ivec.vector_, nvec.vector_));
+	}
+
+	inline Vector4 Vector4::Refract(const Vector4& ivec, const Vector4& nvec, const float refractionIndex) noexcept
+	{
+		return Vector4(DirectX::XMVector4Refract(ivec.vector_, nvec.vector_, refractionIndex));
+	}
+
+	inline Vector4 Vector4::Transform(const Vector2& v, const Quaternion& quat) noexcept
+	{
+		return Vector4(DirectX::XMVectorSelect(v, DirectX::XMVector3Rotate(v, quat), DirectX::g_XMSelect1110));
+	}
+
+	inline Vector4 Vector4::Transform(const Vector3& v, const Quaternion& quat) noexcept
+	{
+		return Vector4(DirectX::XMVectorSelect(v, DirectX::XMVector3Rotate(v, quat), DirectX::g_XMSelect1110));
+	}
+
+	inline Vector4 Vector4::Transform(const Vector4& v, const Quaternion& quat) noexcept
+	{
+		return Vector4(DirectX::XMVectorSelect(v.vector_, DirectX::XMVector3Rotate(v.vector_, quat), DirectX::g_XMSelect1110));
+	}
+
+	inline Vector4 Vector4::Transform(const Vector4& v, const Matrix& m) noexcept
+	{
+		return Vector4(DirectX::XMVector4Transform(v.vector_, m));
+	}
 #pragma endregion Vector4
 
 #pragma region Matrix
@@ -472,6 +781,122 @@ namespace wx2
 			-matrix_.r[2].m128_f32[2]));
 	}
 
+	inline float Matrix::Determinant() const noexcept
+	{
+		return DirectX::XMVectorGetX(DirectX::XMMatrixDeterminant(matrix_));
+	}
+
+	inline Matrix Matrix::Billboard(
+		const Vector3& object, 
+		const Vector3& cameraPosition,
+		const Vector3& cameraUp, 
+		const Vector3* cameraForward) noexcept
+	{
+		DirectX::XMVECTOR z = DirectX::XMVectorSubtract(object, cameraPosition);
+
+		if (DirectX::XMVector3Less(DirectX::XMVector3LengthSq(z), DirectX::g_XMEpsilon))
+		{
+			if (cameraForward)
+			{
+				z = DirectX::XMVectorNegate(*cameraForward);
+			}
+			else
+			{
+				z = DirectX::g_XMNegIdentityR2;
+			}
+		}
+		else
+		{
+			z = DirectX::XMVector3Normalize(z);
+		}
+
+		const DirectX::XMVECTOR x = 
+			DirectX::XMVector3Normalize(DirectX::XMVector3Cross(cameraUp, z));
+
+		const DirectX::XMVECTOR y = DirectX::XMVector3Cross(z, x);
+
+		return { x, y, z, DirectX::XMVectorSetW(object, 1.0f) };
+	}
+
+	inline Matrix Matrix::CreateConstrainedBillboard(
+		const Vector3& object, 
+		const Vector3& cameraPosition,
+		const Vector3& rotateAxis,
+		const Vector3* cameraForward, 
+		const Vector3* objectForward) noexcept
+	{
+		// 1.0 - XMConvertToRadians( 0.1f );
+		static constexpr DirectX::XMVECTORF32 MIN_ANGLE
+			= { { { 0.99825467075f, 0.99825467075f, 0.99825467075f, 0.99825467075f } } }; 
+
+		DirectX::XMVECTOR faceDir = DirectX::XMVectorSubtract(object, cameraPosition);
+
+		if (DirectX::XMVector3Less(DirectX::XMVector3LengthSq(faceDir), DirectX::g_XMEpsilon))
+		{
+			if (cameraForward)
+			{
+				faceDir = DirectX::XMVectorNegate(*cameraForward);
+			}
+			else
+			{
+				faceDir = DirectX::g_XMNegIdentityR2;
+			}
+		}
+		else
+		{
+			faceDir = DirectX::XMVector3Normalize(faceDir);
+		}
+
+		DirectX::XMVECTOR x, z;
+		DirectX::XMVECTOR dot = DirectX::XMVectorAbs(DirectX::XMVector3Dot(rotateAxis, faceDir));
+
+		if (DirectX::XMVector3Greater(dot, MIN_ANGLE))
+		{
+			if (objectForward)
+			{
+				z = *objectForward;
+				dot = DirectX::XMVectorAbs(DirectX::XMVector3Dot(rotateAxis, z));
+				if (DirectX::XMVector3Greater(dot, MIN_ANGLE))
+				{
+					dot = DirectX::XMVectorAbs(DirectX::XMVector3Dot(rotateAxis, DirectX::g_XMNegIdentityR2));
+					z = (DirectX::XMVector3Greater(dot, MIN_ANGLE)) ? DirectX::g_XMIdentityR0 : DirectX::g_XMNegIdentityR2;
+				}
+			}
+			else
+			{
+				dot = DirectX::XMVectorAbs(DirectX::XMVector3Dot(rotateAxis, DirectX::g_XMNegIdentityR2));
+				z = (DirectX::XMVector3Greater(dot, MIN_ANGLE)) ? DirectX::g_XMIdentityR0 : DirectX::g_XMNegIdentityR2;
+			}
+
+			x = DirectX::XMVector3Cross(rotateAxis, z);
+			x = DirectX::XMVector3Normalize(x);
+
+			z = DirectX::XMVector3Cross(x, rotateAxis);
+			z = DirectX::XMVector3Normalize(z);
+		}
+		else
+		{
+			x = DirectX::XMVector3Cross(rotateAxis, faceDir);
+			x = DirectX::XMVector3Normalize(x);
+
+			z = DirectX::XMVector3Cross(x, rotateAxis);
+			z = DirectX::XMVector3Normalize(z);
+		}
+
+		return { x, rotateAxis, z, DirectX::XMVectorSetW(object, 1.0f) };
+	}
+
+
+	inline Matrix Matrix::Transpose(const Matrix& m) noexcept
+	{
+		return Matrix(DirectX::XMMatrixTranspose(m.matrix_));
+	}
+
+	inline Matrix Matrix::Inverse(const Matrix& m) noexcept
+	{
+		return Matrix(DirectX::XMMatrixInverse(nullptr, m.matrix_));
+	}
+
 	inline Matrix Matrix::Translation(const Vector3& position) noexcept
 	{
 		return Matrix(DirectX::XMMatrixTranslationFromVector(position));
@@ -512,9 +937,9 @@ namespace wx2
 		return Matrix(DirectX::XMMatrixRotationZ(radians));
 	}
 
-	inline Matrix Matrix::FromAxisAngle(const Vector3& axis, const float angle) noexcept
+	inline Matrix Matrix::FromAxisAngle(const Vector3& axis, const float radians) noexcept
 	{
-		return Matrix(DirectX::XMMatrixRotationAxis(axis, angle));
+		return Matrix(DirectX::XMMatrixRotationAxis(axis, radians));
 	}
 
 	inline Matrix Matrix::PerspectiveFieldOfView(
@@ -580,18 +1005,28 @@ namespace wx2
 			position[0], position[1], position[2], 1.0f };
 	}
 
+	inline Matrix Matrix::FromQuaternion(const Quaternion& q) noexcept
+	{
+		return Matrix(DirectX::XMMatrixRotationQuaternion(q));
+	}
+
 	inline Matrix Matrix::FromYawPitchRoll(const float yaw, const float pitch, const float roll) noexcept
 	{
 		return Matrix(DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll));
 	}
 
-	inline Matrix Matrix::Lerp(const Matrix& m1, const Matrix& m2, float t) noexcept
+	inline Matrix Matrix::Lerp(const Matrix& m1, const Matrix& m2, const float t) noexcept
 	{
 		return {
 			Vector4(DirectX::XMVectorLerp(m1[0], m2[0], t)),
 			Vector4(DirectX::XMVectorLerp(m1[1], m2[1], t)),
 			Vector4(DirectX::XMVectorLerp(m1[2], m2[2], t)),
 			Vector4(DirectX::XMVectorLerp(m1[3], m2[3], t)) };
+	}
+
+	inline Matrix Matrix::Transform(const Matrix& m, const Quaternion& rotation) noexcept
+	{
+		return Matrix(DirectX::XMMatrixMultiply(m, DirectX::XMMatrixRotationQuaternion(rotation)));
 	}
 
 	inline constexpr Matrix Matrix::Identity() noexcept
@@ -679,6 +1114,11 @@ namespace wx2
 		return DirectX::XMVectorGetX(DirectX::XMQuaternionLengthSq(quaternion_));
 	}
 
+	inline float Quaternion::Dot(const Quaternion& q1, const Quaternion& q2) noexcept
+	{
+		return DirectX::XMVectorGetX(DirectX::XMQuaternionDot(q1.quaternion_, q2.quaternion_));
+	}
+
 	inline Quaternion Quaternion::Normalize(const Quaternion& q) noexcept
 	{
 		return Quaternion(DirectX::XMQuaternionNormalize(q.quaternion_));
@@ -692,11 +1132,6 @@ namespace wx2
 	inline Quaternion Quaternion::Inverse(const Quaternion& q) noexcept
 	{
 		return Quaternion(DirectX::XMQuaternionInverse(q.quaternion_));
-	}
-
-	inline float Quaternion::Dot(const Quaternion& q1, const Quaternion& q2) noexcept
-	{
-		return DirectX::XMVectorGetX(DirectX::XMQuaternionDot(q1.quaternion_, q2.quaternion_));
 	}
 
 	inline Quaternion Quaternion::FromAxisAngle(const Vector3& axis, const float angle) noexcept
