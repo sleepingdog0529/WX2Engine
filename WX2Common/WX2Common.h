@@ -16,4 +16,5 @@
 #include "util/macro.h"
 #include "util/safe_release.h"
 #include "util/string_helper.h"
+#include "util/thread_pool.h"
 #include "util/timer.h"

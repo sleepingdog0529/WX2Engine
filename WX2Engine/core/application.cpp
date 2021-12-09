@@ -70,9 +70,9 @@ namespace wx2
 		const auto& keyboard = input_.GetKeyboard();
 
 		// ‘O‰ñ‚Ì•`‰æ‚©‚ç1/60•bŒo‰ß‚µ‚Ä‚¢‚½‚ç•`‰æ‚·‚é
-		if (const auto elapced = timer_.ElapcedTime(); elapced >= 1s / 60)
+		if (frameTimer_.ElapcedTime().count() >= 1)
 		{
-			timer_.Start();
+			frameTimer_.Start();
 			graphics_.RenderFrame();
 		}
 

@@ -100,6 +100,10 @@ namespace wx2
 			}
 			break;
 
+		case WM_SETTEXT:
+			window->OnTitleChanged(wp, lp);
+			return TRUE;
+
 		case WM_KEYDOWN:
 			window->OnKeyDown(wp, lp);
 			return 0;
@@ -203,6 +207,12 @@ namespace wx2
 		SendMessage(hwnd_, WM_SYSCOMMAND, windowProp_.maximized ? SC_MAXIMIZE : SC_RESTORE, 0);
 	}
 
+	void Window::SetTitle(const std::string& title) noexcept
+	{
+		SetWindowText(hwnd_, title.c_str());
+		windowProp_.title = title;
+	}
+
 	void Window::OnMoving([[maybe_unused]] const  WPARAM wp, const  LPARAM lp) noexcept
 	{
 		const auto rect = std::bit_cast<RECT*>(lp);
@@ -227,6 +237,11 @@ namespace wx2
 	{
 		if (wp == SC_MAXIMIZE) windowProp_.maximized = true;
 		else if (wp == SC_RESTORE)  windowProp_.maximized = false;
+	}
+
+	void Window::OnTitleChanged(const WPARAM wp, const LPARAM lp) noexcept
+	{
+		windowProp_.title = std::string(reinterpret_cast<char*>(lp));
 	}
 
 	void Window::OnKeyDown(const WPARAM wp, [[maybe_unused]] const  LPARAM lp) noexcept

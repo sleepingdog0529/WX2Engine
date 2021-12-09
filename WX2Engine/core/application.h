@@ -20,11 +20,7 @@ namespace wx2
 	{
 	private:
 		// エントリポイントでのみ実行を許可
-#if defined(NDEBUG)
-		friend INT WINAPI::WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
-#else
 		friend int ::main(int, char**);
-#endif
 
 		using WindowPtr = std::shared_ptr<Window>;
 
@@ -50,7 +46,7 @@ namespace wx2
 		bool Update() noexcept;
 		void Draw() noexcept;
 
-		Timer<> timer_;
+		Timer<Frame> frameTimer_;
 		Logger log_;
 		WindowContainer windowContainer_;
 		Input input_;

@@ -164,14 +164,14 @@ namespace wx2::graphics
 		pixelShader_.Bind();
 
 		static float rad = 0.0f;
-		rad += 0.0001f;
+		rad += 0.01f;
 
 		constantBufferWVP_.data.world = Matrix::World(
 			Vector3::Zero(),
 			Vector3::Forward(),
 			Vector3::Up());
 		constantBufferWVP_.data.projection = Matrix::PerspectiveFieldOfView(
-			DirectX::XM_PIDIV4,
+			PIDIV4,
 			static_cast<float>(windowProperty_.width) / static_cast<float>(windowProperty_.height),
 			0.01f,
 			1000.0f);

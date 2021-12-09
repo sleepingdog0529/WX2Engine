@@ -62,7 +62,7 @@ namespace wx2
 			Apostrophe = 0x28,	// '
 			Grave = 0x29,	// `
 			LShift = 0x2A,
-			Backslash = 0x2B,	// \
+			Backslash = 0x2B,	// \ ,
 			Z = 0x2C,
 			X = 0x2D,
 			C = 0x2E,

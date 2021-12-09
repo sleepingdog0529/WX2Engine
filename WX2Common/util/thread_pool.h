@@ -23,8 +23,10 @@ namespace wx2
 		struct ThreadTerminator {};
 
 	public:
-		explicit ThreadPool(int threadCount) noexcept;
+		explicit ThreadPool(int threadCount = std::thread::hardware_concurrency()) noexcept;
 		~ThreadPool() noexcept;
+
+		WX2_DISALLOW_COPY_AND_MOVE(ThreadPool);
 
 		template<typename F, typename... Args>
 		auto Enqueue(F&& function, Args&&... args) noexcept

@@ -5,7 +5,7 @@
  * @brief	デバイス入力共通クラス
 *********************************************************************/
 #pragma once
-#include "WX2Common.h"
+#include <WX2Common.h>
 #include "keyboard.h"
 #include "mouse.h"
 #include "gamepad.h"

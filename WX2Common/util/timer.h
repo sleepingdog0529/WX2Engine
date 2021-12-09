@@ -10,12 +10,14 @@
 
 namespace wx2
 {
+	using Frame = std::chrono::duration<int32_t, std::ratio<1, 60>>;
+
 	template <class Units = std::chrono::milliseconds >
 	class Timer final
 	{
 	public:
 		Timer() noexcept
-			: start_(std::chrono::steady_clock::now())
+			: start_(std::chrono::system_clock::now())
 		{
 		}
 
@@ -25,16 +27,16 @@ namespace wx2
 
 		void Start() noexcept
 		{
-			start_ = std::chrono::steady_clock::now();
+			start_ = std::chrono::system_clock::now();
 		}
 
 		Units ElapcedTime() const noexcept
 		{
 			return std::chrono::duration_cast<Units>(
-				std::chrono::steady_clock::now() - start_);
+				std::chrono::system_clock::now() - start_);
 		}
 
 	private:
-		std::chrono::time_point<std::chrono::steady_clock> start_{};
+		std::chrono::time_point<std::chrono::system_clock> start_{};
 	};
 }

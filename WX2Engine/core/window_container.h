@@ -66,17 +66,9 @@ namespace wx2
 		void Deserialize() noexcept;
 
 		//! ウィンドウポインタの連想配列
-		std::unordered_map<
-			std::string,
-			WindowPtr,
-			StringHash,
-			std::equal_to<>> windows_;
+		std::unordered_map<std::string, WindowPtr> windows_;
 
 		//! ウィンドウ設定の連想配列
-		std::unordered_map<
-			std::string,
-			WindowProperty,
-			StringHash,
-			std::equal_to<>> windowProps_;
+		std::unordered_map<std::string, WindowProperty> windowProps_;
 	};
 }

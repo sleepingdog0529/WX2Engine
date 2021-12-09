@@ -156,7 +156,7 @@ namespace wx2
 		if (FAILED(hr))
 		{
 			WX2_LOG_ERROR("マウスデバイスの軸モード設定に失敗しました。");
-			exit(EXIT_FAILURE);
+			return DIENUM_CONTINUE;
 		}
 
 		mouse->mouses_.push_back(std::move(mouseDev));

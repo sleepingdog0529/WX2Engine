@@ -75,7 +75,9 @@ namespace wx2::graphics
 		ModelLoader modelLoader_;
 		Model model_;
 
+#if !defined(NDEBUG)
 		ComPtr<ID3D11Debug> debug_{};
+#endif
 
 		ComPtr<IDXGISwapChain> swapChain_{};
 		D3D_FEATURE_LEVEL featureLevel_{};

@@ -8,11 +8,11 @@
 /**
  * @brief アプリケーション
  */
-class Game : public wx2::Application
+class Game final : public wx2::Application
 {
 public:
 	Game() = default;
-	~Game() final = default;
+	~Game() override = default;
 };
 
 /**

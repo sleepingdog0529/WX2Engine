@@ -63,6 +63,8 @@ namespace wx2
 		 */
 		void SetMaximize(const bool maximaize) noexcept;
 
+		void SetTitle(const std::string& title) noexcept;
+
 	private:
 		//! ウィンドウ移動時のコールバック
 		void OnMoving(const WPARAM wp, const  LPARAM lp) noexcept;
@@ -71,10 +73,14 @@ namespace wx2
 		void OnSizing(const WPARAM wp, const LPARAM lp) noexcept;
 
 		//! ウィンドウ表示モード変更時のコールバック
-		void OnDisplayModeChanged(const WPARAM wp, const  LPARAM lp) noexcept;
+		void OnDisplayModeChanged(const WPARAM wp, const LPARAM lp) noexcept;
+
+		//! ウィンドウ名変更時のコールバック
+		void OnTitleChanged(const WPARAM wp, const LPARAM lp) noexcept;
 
 		//! キー押下時のコールバック
 		void OnKeyDown(const WPARAM wp, const LPARAM lp) noexcept;
+
 
 		WindowContainer* container_;	//! ウィンドウコンテナ
 		HWND hwnd_;						//! ウィンドウハンドル
