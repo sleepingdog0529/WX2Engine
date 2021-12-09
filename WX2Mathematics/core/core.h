@@ -8,6 +8,7 @@
 #pragma once
 #include <DirectXMath.h>
 #include <WX2Common.h>
+#include <span>
 
 namespace wx2
 {
@@ -53,12 +54,14 @@ namespace wx2
 	public:
 		constexpr Vector2() noexcept
 			: vector_{} {}
-		explicit constexpr Vector2(const DirectX::XMVECTOR& xmv) noexcept
-			: vector_{ xmv.m128_f32[0], xmv.m128_f32[2] } {}
 		constexpr Vector2(const float x, const float y) noexcept
 			: vector_{ x, y } {}
+		explicit constexpr Vector2(_In_reads_(2) const float* array) noexcept
+			: vector_{ array[0], array[1]} {}
 		explicit constexpr Vector2(const float f) noexcept
 			: vector_{ f, f } {}
+		explicit constexpr Vector2(const DirectX::XMVECTOR& xmv) noexcept
+			: vector_{ xmv.m128_f32[0], xmv.m128_f32[2] } {}
 		~Vector2() = default;
 
 		Vector2(const Vector2&) = default;
@@ -140,12 +143,14 @@ namespace wx2
 	public:
 		constexpr Vector3() noexcept
 			: vector_{} {}
-		explicit constexpr Vector3(const DirectX::XMVECTOR& xmv) noexcept
-			: vector_{ xmv.m128_f32[0], xmv.m128_f32[1], xmv.m128_f32[2] } {}
 		constexpr Vector3(const float x, const float y, const float z) noexcept
 			: vector_{ x, y, z } {}
+		explicit constexpr Vector3(_In_reads_(3) const float* array) noexcept
+			: vector_{ array[0], array[1], array[2] } {}
 		explicit constexpr Vector3(const float f) noexcept
 			: vector_{ f, f, f } {}
+		explicit constexpr Vector3(const DirectX::XMVECTOR& xmv) noexcept
+			: vector_{ xmv.m128_f32[0], xmv.m128_f32[1], xmv.m128_f32[2] } {}
 		~Vector3() = default;
 
 		Vector3(const Vector3&) = default;
@@ -229,12 +234,14 @@ namespace wx2
 	public:
 		constexpr Vector4() noexcept
 			: vector_{} {}
-		explicit constexpr Vector4(const DirectX::XMVECTOR& xmv) noexcept
-			: vector_(xmv) {}
 		constexpr Vector4(const float x, const float y, const float z, const float w) noexcept
 			: vector_{ x, y, z, w } {}
+		explicit constexpr Vector4(_In_reads_(4) const float* array) noexcept
+			: vector_{ array[0], array[1], array[2], array[3] } {}
 		explicit constexpr Vector4(const float f) noexcept
 			: vector_{ f, f, f, f } {}
+		explicit constexpr Vector4(const DirectX::XMVECTOR& xmv) noexcept
+			: vector_(xmv) {}
 		~Vector4() = default;
 
 		Vector4(const Vector4&) = default;
@@ -325,6 +332,8 @@ namespace wx2
 			float m10, float m11, float m12, float m13,
 			float m20, float m21, float m22, float m23,
 			float m30, float m31, float m32, float m33) noexcept;
+		explicit Matrix(_In_reads_(16) const float* array) noexcept
+			: matrix_(array) {}
 		constexpr Matrix(
 			const DirectX::XMVECTOR& r0,
 			const DirectX::XMVECTOR& r1,
@@ -410,12 +419,14 @@ namespace wx2
 			: quaternion_{ 0.0f, 0.0f, 0.0f, 1.0f } {}
 		constexpr Quaternion(const float x, const float y, const float z, const float w) noexcept
 			: quaternion_{ x, y, z, w } {}
-		explicit Quaternion(const Vector4& v) noexcept
-			: quaternion_{ v[0], v[1], v[2], v[3] } {}
-		Quaternion(const Vector3& v, const float scalar) noexcept
-			: quaternion_{ v[0], v[1], v[2], scalar } {}
+		explicit constexpr Quaternion(_In_reads_(4) const float* array) noexcept
+			: quaternion_{ array[0], array[1], array[2], array[3] } {}
 		explicit constexpr Quaternion(const DirectX::XMVECTOR& v) noexcept
 			: quaternion_(v) {}
+		explicit Quaternion(const Vector4& v) noexcept
+			: quaternion_{ v[0], v[1], v[2], v[3] } {}
+		Quaternion(const Vector3& v, const float angle) noexcept
+			: quaternion_{ v[0], v[1], v[2], angle } {}
 		~Quaternion() = default;
 
 		Quaternion(const Quaternion&) = default;
@@ -458,6 +469,59 @@ namespace wx2
 
 	private:
 		DirectX::XMVECTOR quaternion_;
+	};
+
+	class Color final
+	{
+	public:
+		constexpr Color() noexcept
+			: color_{ 0.0f, 0.0f ,0.0f ,1.0f } {}
+		constexpr Color(const float r, const float g, const float b, const float a = 1.0f) noexcept
+			: color_{ r, g, b, a } {}
+		explicit constexpr Color(_In_reads_(4) const float* array) noexcept
+			: color_{ array[0], array[1], array[2], array[3] } {}
+		explicit Color(const DirectX::XMVECTOR& xmv) noexcept
+			: color_(xmv) {}
+
+		Color(const Color&) = default;
+		Color& operator=(const Color&) = default;
+		Color(Color&&) = default;
+		Color& operator=(Color&&) = default;
+
+		bool operator == (const Color& rhs) const noexcept;
+		bool operator != (const Color& rhs) const noexcept;
+
+		constexpr Color operator + () const noexcept { return *this; }
+		Color operator - () const noexcept;
+
+		Color& operator += (const Color& rhs) noexcept;
+		Color& operator -= (const Color& rhs) noexcept;
+		Color& operator *= (const Color& rhs) noexcept;
+		Color& operator *= (float rhs) noexcept;
+		Color& operator /= (float rhs) noexcept;
+
+		operator DirectX::XMVECTOR() const noexcept;
+
+		[[nodiscard]] float R() const noexcept { return DirectX::XMVectorGetX(color_); }
+		[[nodiscard]] float G() const noexcept { return DirectX::XMVectorGetY(color_); }
+		[[nodiscard]] float B() const noexcept { return DirectX::XMVectorGetZ(color_); }
+		[[nodiscard]] float A() const noexcept { return DirectX::XMVectorGetW(color_); }
+
+		void R(const float r) noexcept { color_ = DirectX::XMVectorSetX(color_, r); }
+		void G(const float g) noexcept { color_ = DirectX::XMVectorSetX(color_, g); }
+		void B(const float b) noexcept { color_ = DirectX::XMVectorSetX(color_, b); }
+		void A(const float a) noexcept { color_ = DirectX::XMVectorSetX(color_, a); }
+
+		static Color Negate(const Color& c) noexcept;
+		static Color Saturate(const Color& c) noexcept;
+		static Color Premultiply(const Color& c) noexcept;
+		static Color AdjustSaturation(const Color& c, float sat) noexcept;
+		static Color AdjustContrast(const Color& c, float contrast) noexcept;
+		static Color Modulate(const Color& c1, const Color& c2) noexcept;
+		static Color Lerp(const Color& c1, const Color& c2, float t) noexcept;
+
+	private:
+		DirectX::XMVECTOR color_;
 	};
 }
 

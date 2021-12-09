@@ -227,7 +227,7 @@ namespace wx2
 		return { std::cosf(angle), std::sinf(angle) };
 	}
 
-	std::ostream& operator<<(std::ostream& stream, const Vector2& v)
+	inline std::ostream& operator<<(std::ostream& stream, const Vector2& v)
 	{
 		stream << std::format("({}, {})", v[0], v[1]);
 		return stream;
@@ -1088,7 +1088,7 @@ namespace wx2
 		return *this;
 	}
 
-	inline Quaternion& Quaternion::operator *= (float rhs) noexcept
+	inline Quaternion& Quaternion::operator *= (const float rhs) noexcept
 	{
 		quaternion_ = DirectX::XMVectorScale(quaternion_, rhs);
 		return *this;
@@ -1175,5 +1175,90 @@ namespace wx2
 		return Quaternion(DirectX::XMQuaternionSlerp(q1.quaternion_, q2.quaternion_, t));
 	}
 
+	inline bool Color::operator == (const Color& rhs) const noexcept
+	{
+		return DirectX::XMColorEqual(color_, rhs.color_);
+	}
+
+	inline bool Color::operator != (const Color& rhs) const noexcept
+	{
+		return DirectX::XMColorNotEqual(color_, rhs.color_);
+	}
+
+	inline Color Color::operator - () const noexcept
+	{
+		return Color(DirectX::XMVectorNegate(color_));
+	}
+
+	inline Color& Color::operator+=(const Color& rhs) noexcept
+	{
+		color_ = DirectX::XMVectorAdd(color_, rhs.color_);
+		return *this;
+	}
+
+	inline Color& Color::operator-=(const Color& rhs) noexcept
+	{
+		color_ = DirectX::XMVectorSubtract(color_, rhs.color_);
+		return *this;
+	}
+
+	inline Color& Color::operator*=(const Color& rhs) noexcept
+	{
+		color_ = DirectX::XMVectorMultiply(color_, rhs.color_);
+		return *this;
+	}
+
+	inline Color& Color::operator*=(const float rhs) noexcept
+	{
+		color_ = DirectX::XMVectorScale(color_, rhs);
+		return *this;
+	}
+
+	inline Color& Color::operator/=(const float rhs) noexcept
+	{
+		color_ = DirectX::XMVectorScale(color_, 1.0f / rhs);
+		return *this;
+	}
+
+	inline Color::operator DirectX::XMVECTOR() const noexcept
+	{
+		return color_;
+	}
+
+	inline Color Color::Negate(const Color& c) noexcept
+	{
+		return Color(DirectX::XMColorNegative(c.color_));
+	}
+
+	inline Color Color::Saturate(const Color& c) noexcept
+	{
+		return Color(DirectX::XMVectorSaturate(c.color_));
+	}
+
+	inline Color Color::Premultiply(const Color& c) noexcept
+	{
+		const DirectX::XMVECTOR a = DirectX::XMVectorSetW(DirectX::XMVectorSplatW(c.color_), 1.0f);
+		return Color(DirectX::XMVectorMultiply(c.color_, a));
+	}
+
+	inline Color Color::AdjustSaturation(const Color& c, const float sat) noexcept
+	{
+		return Color(DirectX::XMColorAdjustSaturation(c.color_, sat));
+	}
+
+	inline Color Color::AdjustContrast(const Color& c, const float contrast) noexcept
+	{
+		return Color(DirectX::XMColorAdjustContrast(c.color_, contrast));
+	}
+
+	inline Color Color::Modulate(const Color& c1, const Color& c2) noexcept
+	{
+		return Color(DirectX::XMColorModulate(c1.color_, c2.color_));
+	}
+
+	inline Color Color::Lerp(const Color& c1, const Color& c2, const float t) noexcept
+	{
+		return Color(DirectX::XMVectorLerp(c1.color_, c2.color_, t));
+	}
 #pragma endregion Quaternion
 }
