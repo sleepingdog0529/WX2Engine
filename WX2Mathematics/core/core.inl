@@ -86,6 +86,13 @@ namespace wx2
 		return vector_;
 	}
 
+	inline Vector2::operator DirectX::XMFLOAT2() const noexcept
+	{
+		DirectX::XMFLOAT2 xmf;
+		DirectX::XMStoreFloat2(&xmf, vector_);
+		return xmf;
+	}
+
 	inline void Vector2::Normalized() noexcept
 	{
 		vector_ = DirectX::XMVector2Normalize(vector_);
@@ -313,6 +320,13 @@ namespace wx2
 		return vector_;
 	}
 
+	inline Vector3::operator DirectX::XMFLOAT3() const noexcept
+	{
+		DirectX::XMFLOAT3 xmf;
+		DirectX::XMStoreFloat3(&xmf, vector_);
+		return xmf;
+	}
+
 	inline void Vector3::Normalized() noexcept
 	{
 		vector_ = DirectX::XMVector3Normalize(vector_);
@@ -507,6 +521,13 @@ namespace wx2
 	inline Vector4::operator DirectX::XMVECTOR() const noexcept
 	{
 		return vector_;
+	}
+
+	inline Vector4::operator DirectX::XMFLOAT4() const noexcept
+	{
+		DirectX::XMFLOAT4 xmf;
+		DirectX::XMStoreFloat4(&xmf, vector_);
+		return xmf;
 	}
 
 	inline void Vector4::Normalized() noexcept
@@ -731,6 +752,13 @@ namespace wx2
 	inline Matrix::operator DirectX::XMMATRIX() const noexcept
 	{
 		return matrix_;
+	}
+
+	inline Matrix::operator DirectX::XMFLOAT4X4() const noexcept
+	{
+		DirectX::XMFLOAT4X4 xmf;
+		DirectX::XMStoreFloat4x4(&xmf, matrix_);
+		return xmf;
 	}
 
 	inline Vector3 Matrix::Right() const noexcept
@@ -989,12 +1017,12 @@ namespace wx2
 
 	inline Matrix Matrix::LookAt(const Vector3& position, const Vector3& target, const Vector3& up) noexcept
 	{
-		return Matrix(DirectX::XMMatrixLookAtRH(position, target, up));
+		return Matrix(DirectX::XMMatrixLookAtLH(position, target, up));
 	}
 
 	inline Matrix Matrix::World(const Vector3& position, const Vector3& forward, const Vector3& up) noexcept
 	{
-		Vector3 zaxis = Vector3::Normalize(-forward);
+		Vector3 zaxis = Vector3::Normalize(forward);
 		Vector3 xaxis = Vector3::Normalize(Vector3::Cross(Vector3::Normalize(up), zaxis));
 		Vector3 yaxis = Vector3::Cross(zaxis, xaxis);
 
@@ -1026,7 +1054,7 @@ namespace wx2
 
 	inline Matrix Matrix::Transform(const Matrix& m, const Quaternion& rotation) noexcept
 	{
-		return Matrix(DirectX::XMMatrixMultiply(m, DirectX::XMMatrixRotationQuaternion(rotation)));
+		return Matrix(DirectX::XMMatrixMultiply(m.matrix_, DirectX::XMMatrixRotationQuaternion(rotation)));
 	}
 
 	inline constexpr Matrix Matrix::Identity() noexcept
@@ -1097,6 +1125,13 @@ namespace wx2
 	inline Quaternion::operator DirectX::XMVECTOR() const noexcept
 	{
 		return quaternion_;
+	}
+
+	inline Quaternion::operator DirectX::XMFLOAT4() const noexcept
+	{
+		DirectX::XMFLOAT4 xmf;
+		DirectX::XMStoreFloat4(&xmf, quaternion_);
+		return xmf;
 	}
 
 	inline void Quaternion::Normalized() noexcept
@@ -1236,9 +1271,28 @@ namespace wx2
 		return *this;
 	}
 
+	inline const float& Color::operator[](const std::size_t index) const noexcept
+	{
+		WX2_ASSERT_MSG(index < 4, "添え字の値が範囲外です。");
+		return color_.m128_f32[index];
+	}
+
+	inline float& Color::operator[](const std::size_t index) noexcept
+	{
+		WX2_ASSERT_MSG(index < 4, "添え字の値が範囲外です。");
+		return color_.m128_f32[index];
+	}
+
 	inline Color::operator DirectX::XMVECTOR() const noexcept
 	{
 		return color_;
+	}
+
+	inline Color::operator DirectX::XMFLOAT4() const noexcept
+	{
+		DirectX::XMFLOAT4 xmf;
+		DirectX::XMStoreFloat4(&xmf, color_);
+		return xmf;
 	}
 
 	inline Color Color::Negate(const Color& c) noexcept

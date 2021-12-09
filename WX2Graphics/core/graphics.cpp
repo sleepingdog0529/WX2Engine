@@ -163,20 +163,23 @@ namespace wx2::graphics
 		vertexShader_.Bind();
 		pixelShader_.Bind();
 
-		constantBufferWVP_.data.world = DirectX::XMMatrixIdentity();
-		constantBufferWVP_.data.projection = DirectX::XMMatrixPerspectiveFovLH(
-			DirectX::XM_PIDIV4,
-			static_cast<float>(windowProperty_.width) / static_cast<float>(windowProperty_.height),
+		static float rad = 0.0f;
+		rad += 0.001f;
+
+		constantBufferWVP_.data.world = Matrix::Identity();
+		constantBufferWVP_.data.projection = Matrix(DirectX::XMMatrixPerspectiveFovLH(
+			PIDIV4,
+			windowProperty_.AspectRatio(),
 			0.01f,
-			1000.0f);
-		constantBufferWVP_.data.view = DirectX::XMMatrixLookAtLH(
-			DirectX::XMVECTORF32{ 0.0f, 0.0f, 100.0f },
-			DirectX::XMVectorZero(),
-			DirectX::XMVECTORF32{ 0.0f, 1.0f, 0.0f });
+			1000.0f));
+		constantBufferWVP_.data.view = Matrix::LookAt(
+			Vector3::Transform(Vector3(0.0f, 10.0f, -50.0f), Matrix::RotationY(rad)),
+			Vector3(0.0f, 10.0f, 0.0f),
+			Vector3::Up());
 		constantBufferWVP_.ApplyChange();
 		constantBufferWVP_.VSBind(0);
 
-		model_.Draw(DirectX::XMMatrixScaling(0.01f, 0.01f, 0.01f));
+		model_.Draw(Matrix::Scale(0.01f));
 
 		DrawEnd();
 	}

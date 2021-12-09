@@ -4,11 +4,11 @@
  * @date   2021/10/13 0:59
  * @brief  スカラー、ベクトル、マトリックス演算
  * @brief  参考: https://github.com/microsoft/DirectXTK
+ * @brief  ベクトルのサイズは全て16バイトなので注意
  ********************************************************************/
 #pragma once
 #include <DirectXMath.h>
 #include <WX2Common.h>
-#include <span>
 
 namespace wx2
 {
@@ -49,6 +49,9 @@ namespace wx2
 		return (v - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 	}
 
+	/**
+	 * @brief  Vector2(4Byte)
+	 */
 	class Vector2 final
 	{
 	public:
@@ -62,6 +65,8 @@ namespace wx2
 			: vector_{ f, f } {}
 		explicit constexpr Vector2(const DirectX::XMVECTOR& xmv) noexcept
 			: vector_{ xmv.m128_f32[0], xmv.m128_f32[2] } {}
+		explicit Vector2(const DirectX::XMFLOAT2& xmf) noexcept
+			: vector_(DirectX::XMLoadFloat2(&xmf)) {}
 		~Vector2() = default;
 
 		Vector2(const Vector2&) = default;
@@ -93,6 +98,7 @@ namespace wx2
 		float& operator [] (std::size_t index) noexcept;
 
 		operator DirectX::XMVECTOR() const noexcept;
+		operator DirectX::XMFLOAT2() const noexcept;
 
 		[[nodiscard]] float X() const noexcept { return DirectX::XMVectorGetX(vector_); }
 		[[nodiscard]] float Y() const noexcept { return DirectX::XMVectorGetY(vector_); }
@@ -125,7 +131,7 @@ namespace wx2
 		static Vector2 Transform(const Vector2& v, const Quaternion& q) noexcept;
 		static Vector2 Transform(const Vector2& v, const Matrix& m) noexcept;
 		static Vector2 TransformNormal(const Vector2& v, const Matrix& m) noexcept;
-		static Vector2 FromAngle(const float angle) noexcept;
+		static Vector2 FromAngle(float angle) noexcept;
 
 		static constexpr Vector2 Zero()		noexcept { return{  0.0f,  0.0f }; }
 		static constexpr Vector2 One()		noexcept { return{  1.0f,  1.0f }; }
@@ -138,6 +144,9 @@ namespace wx2
 		DirectX::XMVECTOR vector_;
 	};
 
+	/**
+	 * @brief  Vector3(4Byte)
+	 */
 	class Vector3 final
 	{
 	public:
@@ -151,6 +160,8 @@ namespace wx2
 			: vector_{ f, f, f } {}
 		explicit constexpr Vector3(const DirectX::XMVECTOR& xmv) noexcept
 			: vector_{ xmv.m128_f32[0], xmv.m128_f32[1], xmv.m128_f32[2] } {}
+		explicit Vector3(const DirectX::XMFLOAT3& xmf) noexcept
+			: vector_(DirectX::XMLoadFloat3(&xmf)) {}
 		~Vector3() = default;
 
 		Vector3(const Vector3&) = default;
@@ -182,6 +193,7 @@ namespace wx2
 		float& operator [] (std::size_t index) noexcept;
 
 		operator DirectX::XMVECTOR() const noexcept;
+		operator DirectX::XMFLOAT3() const noexcept;
 
 		[[nodiscard]] float X() const noexcept { return DirectX::XMVectorGetX(vector_); }
 		[[nodiscard]] float Y() const noexcept { return DirectX::XMVectorGetY(vector_); }
@@ -229,6 +241,9 @@ namespace wx2
 		DirectX::XMVECTOR vector_;
 	};
 
+	/**
+	 * @brief  Vector4(4Byte)
+	 */
 	class Vector4 final
 	{
 	public:
@@ -242,6 +257,8 @@ namespace wx2
 			: vector_{ f, f, f, f } {}
 		explicit constexpr Vector4(const DirectX::XMVECTOR& xmv) noexcept
 			: vector_(xmv) {}
+		explicit Vector4(const DirectX::XMFLOAT4& xmf) noexcept
+			: vector_(DirectX::XMLoadFloat4(&xmf)) {}
 		~Vector4() = default;
 
 		Vector4(const Vector4&) = default;
@@ -273,6 +290,7 @@ namespace wx2
 		float& operator [] (std::size_t index) noexcept;
 
 		operator DirectX::XMVECTOR() const noexcept;
+		operator DirectX::XMFLOAT4() const noexcept;
 
 		[[nodiscard]] float X() const noexcept { return DirectX::XMVectorGetX(vector_); }
 		[[nodiscard]] float Y() const noexcept { return DirectX::XMVectorGetY(vector_); }
@@ -321,12 +339,13 @@ namespace wx2
 		DirectX::XMVECTOR vector_;
 	};
 
+	/**
+	 * @brief  Matrix(16Byte)
+	 */
 	class Matrix final
 	{
 	public:
 		constexpr Matrix() noexcept;
-		explicit constexpr Matrix(const DirectX::XMMATRIX& xmm) noexcept
-			: matrix_(xmm) {}
 		constexpr Matrix(
 			float m00, float m01, float m02, float m03,
 			float m10, float m11, float m12, float m13,
@@ -334,11 +353,15 @@ namespace wx2
 			float m30, float m31, float m32, float m33) noexcept;
 		explicit Matrix(_In_reads_(16) const float* array) noexcept
 			: matrix_(array) {}
+		explicit constexpr Matrix(const DirectX::XMMATRIX& xmm) noexcept
+			: matrix_(xmm) {}
 		constexpr Matrix(
 			const DirectX::XMVECTOR& r0,
 			const DirectX::XMVECTOR& r1,
 			const DirectX::XMVECTOR& r2,
 			const DirectX::XMVECTOR& r3) noexcept;
+		explicit Matrix(const DirectX::XMFLOAT4X4& xmf)
+			: matrix_(DirectX::XMLoadFloat4x4(&xmf)) {}
 		constexpr Matrix(
 			const Vector4& r0,
 			const Vector4& r1,
@@ -362,6 +385,7 @@ namespace wx2
 		Vector4& operator [] (std::size_t index) noexcept;
 
 		operator DirectX::XMMATRIX() const noexcept;
+		operator DirectX::XMFLOAT4X4() const noexcept;
 
 		[[nodiscard]] Vector3 Right()    const noexcept;
 		[[nodiscard]] Vector3 Left()     const noexcept;
@@ -412,6 +436,9 @@ namespace wx2
 		DirectX::XMMATRIX matrix_;
 	};
 
+	/**
+	 * @brief  Quaternion(4Byte)
+	 */
 	class Quaternion final
 	{
 	public:
@@ -425,6 +452,8 @@ namespace wx2
 			: quaternion_(v) {}
 		explicit Quaternion(const Vector4& v) noexcept
 			: quaternion_{ v[0], v[1], v[2], v[3] } {}
+		explicit Quaternion(const DirectX::XMFLOAT4& xmf)
+			: quaternion_(DirectX::XMLoadFloat4(&xmf)) {}
 		Quaternion(const Vector3& v, const float angle) noexcept
 			: quaternion_{ v[0], v[1], v[2], angle } {}
 		~Quaternion() = default;
@@ -448,6 +477,7 @@ namespace wx2
 		Quaternion& operator *= (float rhs) noexcept;
 
 		operator DirectX::XMVECTOR() const noexcept;
+		operator DirectX::XMFLOAT4() const noexcept;
 
 		void Normalized() noexcept;
 
@@ -471,6 +501,9 @@ namespace wx2
 		DirectX::XMVECTOR quaternion_;
 	};
 
+	/**
+	 * @brief  Color(4Byte)
+	 */
 	class Color final
 	{
 	public:
@@ -482,6 +515,8 @@ namespace wx2
 			: color_{ array[0], array[1], array[2], array[3] } {}
 		explicit Color(const DirectX::XMVECTOR& xmv) noexcept
 			: color_(xmv) {}
+		explicit Color(const DirectX::XMFLOAT4& xmf) noexcept
+			: color_(DirectX::XMLoadFloat4(&xmf)) {}
 		~Color() = default;
 
 		Color(const Color&) = default;
@@ -505,7 +540,11 @@ namespace wx2
 		Color& operator *= (float rhs) noexcept;
 		Color& operator /= (float rhs) noexcept;
 
+		const float& operator [] (std::size_t index) const noexcept;
+		float& operator [] (std::size_t index) noexcept;
+
 		operator DirectX::XMVECTOR() const noexcept;
+		operator DirectX::XMFLOAT4() const noexcept;
 
 		[[nodiscard]] float R() const noexcept { return DirectX::XMVectorGetX(color_); }
 		[[nodiscard]] float G() const noexcept { return DirectX::XMVectorGetY(color_); }

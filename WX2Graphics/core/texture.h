@@ -6,8 +6,7 @@
  ********************************************************************/
 #pragma once
 #include <filesystem>
-#include <WX2Common.h>
-#include <DirectXMath.h>
+#include <WX2Mathematics.h>
 #include "device.h"
 
 namespace wx2::graphics
@@ -24,9 +23,9 @@ namespace wx2::graphics
 
 		void Initialize(Device* devices, const std::filesystem::path& filePath);
 		void Initialize(Device* devices, const uint8_t* data, size_t size);
-		void Initialize(Device* devices, const DirectX::XMFLOAT4& color);
+		void Initialize(Device* devices, const Color& color);
 
-		void BindPS(const UINT slot) const noexcept;
+		void BindPS(UINT slot) const noexcept;
 
 	private:
 		Device* devices_{};

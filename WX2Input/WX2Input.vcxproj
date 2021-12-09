@@ -100,7 +100,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2CommonD.lib;WX2MathematicsD.lib;xinput.lib;dinput8.lib;dxguid.lib;</AdditionalDependencies>
+      <AdditionalDependencies>WX2CommonD.lib;xinput.lib;dinput8.lib;dxguid.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -134,7 +134,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2Common.lib;WX2Mathematics.lib;xinput.lib;dinput8.lib;dxguid.lib;</AdditionalDependencies>
+      <AdditionalDependencies>WX2Common.lib;xinput.lib;dinput8.lib;dxguid.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

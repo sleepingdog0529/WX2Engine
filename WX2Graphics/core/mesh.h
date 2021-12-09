@@ -7,8 +7,8 @@
 #pragma once
 #include <vector>
 #include <span>
-#include <DirectXMath.h>
 #include <map>
+#include <WX2Mathematics.h>
 
 #include "device.h"
 #include "vertex_type.h"
@@ -30,11 +30,11 @@ namespace wx2::graphics
 			std::span<ModelVertex> vertices,
 			std::span<DWORD> indices,
 			const std::map<TextureType, Texture>& textures,
-			const DirectX::XMMATRIX& transformMatrix);
+			const Matrix& transformMatrix);
 
 		void Draw() const noexcept;
 
-		[[nodiscard]] const DirectX::XMMATRIX& GetTransformMatrix() const noexcept { return transformMatrix_; }
+		[[nodiscard]] const Matrix& GetTransformMatrix() const noexcept { return transformMatrix_; }
 
 	private:
 		void PSBindTexture(const UINT slot, const TextureType& texType) const noexcept;
@@ -45,6 +45,6 @@ namespace wx2::graphics
 		std::vector<ModelVertex> vertices_{};
 		std::vector<DWORD> indices_{};
 		std::map<TextureType, Texture> textures_{};
-		DirectX::XMMATRIX transformMatrix_{};
+		Matrix transformMatrix_{};
 	};
 }
