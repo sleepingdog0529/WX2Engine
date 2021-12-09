@@ -1,4 +1,3 @@
-#include "..\..\WX2Mathematics\core\core.h"
 //-------------------------------------------------------------------------------------
 // SimpleMath.inl -- Simplified C++ Math wrapper for DirectXMath
 //

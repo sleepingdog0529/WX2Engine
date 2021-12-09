@@ -104,7 +104,7 @@
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Mathematics;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -136,7 +136,7 @@
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Mathematics;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>

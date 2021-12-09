@@ -9,6 +9,7 @@
 #include <span>
 #include <DirectXMath.h>
 #include <map>
+#include <WX2Mathematics.h>
 
 #include "device.h"
 #include "vertex_type.h"
@@ -30,7 +31,7 @@ namespace wx2::graphics
 			std::span<ModelVertex> vertices,
 			std::span<DWORD> indices,
 			const std::map<TextureType, Texture>& textures,
-			const DirectX::XMMATRIX& transformMatrix);
+			const Matrix& transformMatrix);
 
 		void Draw() const noexcept;
 

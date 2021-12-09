@@ -989,7 +989,7 @@ namespace wx2
 
 	inline Matrix Matrix::LookAt(const Vector3& position, const Vector3& target, const Vector3& up) noexcept
 	{
-		return Matrix(DirectX::XMMatrixLookAtRH(position, target, up));
+		return Matrix(DirectX::XMMatrixLookAtLH(position, target, up));
 	}
 
 	inline Matrix Matrix::World(const Vector3& position, const Vector3& forward, const Vector3& up) noexcept

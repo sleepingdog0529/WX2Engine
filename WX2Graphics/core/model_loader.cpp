@@ -34,14 +34,14 @@ namespace wx2::graphics
 		WX2_RUNTIME_ERROR_IF_FAILED(scene, "モデルファイルの読み込みに失敗しました。パス: {}", filePath.string());
 
 		std::vector<Mesh> meshes;
-		return ProcessNode(meshes, scene->mRootNode, scene, directory, DirectX::XMMatrixIdentity());
+		return ProcessNode(meshes, scene->mRootNode, scene, directory, Matrix::Identity());
 	}
 
 	Mesh ModelLoader::ProcessMesh(
 		const aiMesh* aiMesh,
 		const aiScene* aiScene,
 		const std::filesystem::path& directory,
-		const DirectX::XMMATRIX transformMatrix) const noexcept
+		const Matrix& transformMatrix) const noexcept
 	{
 		std::vector<ModelVertex> vertices;
 		std::vector<DWORD> indices;
@@ -104,10 +104,10 @@ namespace wx2::graphics
 		const aiNode* aiNode,
 		const aiScene* aiScene,
 		const std::filesystem::path& directory,
-		const DirectX::XMMATRIX parentTransformMatrix) noexcept
+		const Matrix& parentTransformMatrix) noexcept
 	{
-		const DirectX::XMMATRIX nodeTransformMatrix =
-			XMMatrixTranspose(DirectX::XMMATRIX(&aiNode->mTransformation.a1)) * parentTransformMatrix;
+		const Matrix nodeTransformMatrix =
+			Matrix::Transpose(Matrix(&aiNode->mTransformation.a1)) * parentTransformMatrix;
 
 		for (UINT i = 0; i < aiNode->mNumMeshes; i++)
 		{

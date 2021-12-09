@@ -7,7 +7,7 @@ namespace wx2::graphics
 		std::span<ModelVertex> vertices,
 		std::span<DWORD> indices,
 		const std::map<TextureType, Texture>& textures,
-		const DirectX::XMMATRIX& transformMatrix)
+		const Matrix& transformMatrix)
 	{
 		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
 

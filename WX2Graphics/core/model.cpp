@@ -20,7 +20,7 @@ namespace wx2::graphics
 	{
 		for (const auto& m : meshes_)
 		{
-			constantBufferWVP_->data.world = worldMatrix * m.GetTransformMatrix();
+			constantBufferWVP_->data.world = Matrix(worldMatrix * m.GetTransformMatrix());
 			constantBufferWVP_->ApplyChange();
 
 			m.Draw();

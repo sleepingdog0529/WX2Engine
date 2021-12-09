@@ -528,6 +528,7 @@ namespace wx2
 	private:
 		DirectX::XMVECTOR color_;
 	};
+
 }
 
 #include "core.inl"
