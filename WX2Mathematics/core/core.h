@@ -482,6 +482,7 @@ namespace wx2
 			: color_{ array[0], array[1], array[2], array[3] } {}
 		explicit Color(const DirectX::XMVECTOR& xmv) noexcept
 			: color_(xmv) {}
+		~Color() = default;
 
 		Color(const Color&) = default;
 		Color& operator=(const Color&) = default;
