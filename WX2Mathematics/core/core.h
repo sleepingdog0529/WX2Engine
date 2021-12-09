@@ -495,9 +495,13 @@ namespace wx2
 		constexpr Color operator + () const noexcept { return *this; }
 		Color operator - () const noexcept;
 
+		Color operator + (const Color& rhs) const noexcept;
+		Color operator - (const Color& rhs) const noexcept;
+		Color operator * (float rhs) const noexcept;
+		Color operator / (float rhs) const noexcept;
+
 		Color& operator += (const Color& rhs) noexcept;
 		Color& operator -= (const Color& rhs) noexcept;
-		Color& operator *= (const Color& rhs) noexcept;
 		Color& operator *= (float rhs) noexcept;
 		Color& operator /= (float rhs) noexcept;
 

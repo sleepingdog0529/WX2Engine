@@ -1190,32 +1190,48 @@ namespace wx2
 		return Color(DirectX::XMVectorNegate(color_));
 	}
 
-	inline Color& Color::operator+=(const Color& rhs) noexcept
+	inline Color Color::operator + (const Color& rhs) const noexcept
+	{
+		return Color(DirectX::XMVectorAdd(color_, rhs.color_));
+	}
+
+	inline Color Color::operator - (const Color& rhs) const noexcept
+	{
+		return Color(DirectX::XMVectorSubtract(color_, rhs.color_));
+	}
+
+	inline Color Color::operator * (const float rhs) const noexcept
+	{
+		return Color(DirectX::XMVectorScale(color_, rhs));
+	}
+
+	inline Color Color::operator / (const float rhs) const noexcept
+	{
+		WX2_ASSERT_MSG(rhs != 0.0f, "0èúéZÇ™î≠ê∂ÇµÇ‹ÇµÇΩÅB");
+		return Color(DirectX::XMVectorScale(color_, 1.0f / rhs));
+	}
+
+	inline Color& Color::operator += (const Color& rhs) noexcept
 	{
 		color_ = DirectX::XMVectorAdd(color_, rhs.color_);
 		return *this;
 	}
 
-	inline Color& Color::operator-=(const Color& rhs) noexcept
+	inline Color& Color::operator -= (const Color& rhs) noexcept
 	{
 		color_ = DirectX::XMVectorSubtract(color_, rhs.color_);
 		return *this;
 	}
 
-	inline Color& Color::operator*=(const Color& rhs) noexcept
-	{
-		color_ = DirectX::XMVectorMultiply(color_, rhs.color_);
-		return *this;
-	}
-
-	inline Color& Color::operator*=(const float rhs) noexcept
+	inline Color& Color::operator *= (const float rhs) noexcept
 	{
 		color_ = DirectX::XMVectorScale(color_, rhs);
 		return *this;
 	}
 
-	inline Color& Color::operator/=(const float rhs) noexcept
+	inline Color& Color::operator /= (const float rhs) noexcept
 	{
+		WX2_ASSERT_MSG(rhs != 0.0f, "0èúéZÇ™î≠ê∂ÇµÇ‹ÇµÇΩÅB");
 		color_ = DirectX::XMVectorScale(color_, 1.0f / rhs);
 		return *this;
 	}
