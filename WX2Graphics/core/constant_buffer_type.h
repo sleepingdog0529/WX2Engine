@@ -5,14 +5,14 @@
  * @brief  定数バッファの型定義
  ********************************************************************/
 #pragma once
-#include <WX2Mathematics.h>
+#include <DirectXMath.h>
 
 namespace wx2::graphics
 {
 	struct WVPMatrix
 	{
-		Matrix world;
-		Matrix view;
-		Matrix projection;
+		DirectX::XMMATRIX world;
+		DirectX::XMMATRIX view;
+		DirectX::XMMATRIX projection;
 	};
 }

@@ -104,7 +104,7 @@
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Mathematics;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -119,7 +119,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
       <AdditionalDependencies>WX2CommonD.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;assimp-vc143-mtd.lib;zlibstaticd.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
@@ -136,7 +136,7 @@
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Mathematics</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -153,7 +153,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
       <AdditionalDependencies>WX2Common.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;assimp-vc143-mt.lib;zlibstatic.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>

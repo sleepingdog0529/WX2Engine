@@ -22,7 +22,7 @@ namespace wx2::graphics
 			ConstantBuffer<WVPMatrix>* constantBufferWVP,
 			std::span<Mesh> meshes);
 
-		void Draw(const Matrix& worldMatrix) const noexcept;
+		void Draw(const DirectX::XMMATRIX& worldMatrix) const noexcept;
 
 	private:
 		Device* devices_;

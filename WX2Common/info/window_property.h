@@ -8,6 +8,7 @@
 #pragma warning(push, 0)
 #include <cereal/cereal.hpp>
 #include <cereal/archives/json.hpp>
+#include <cereal/types/string.hpp>
 #pragma warning(pop)
 
 namespace wx2 
@@ -22,14 +23,10 @@ namespace wx2
 		int x, y;
 		int width, height;
 		unsigned long style;
-		unsigned long exStyle;
+		unsigned long ex_style;
 		bool maximized;
 		bool fullscreen;
 
-		[[nodiscard]] float AspectRatio() const noexcept
-		{
-			return 	static_cast<float>(width) / static_cast<float>(height);
-		}
 	private:
 		friend cereal::access;
 
@@ -43,7 +40,7 @@ namespace wx2
 				CEREAL_NVP(width),
 				CEREAL_NVP(height),
 				CEREAL_NVP(style),
-				CEREAL_NVP(exStyle),
+				CEREAL_NVP(ex_style),
 				CEREAL_NVP(maximized),
 				CEREAL_NVP(fullscreen));
 		}

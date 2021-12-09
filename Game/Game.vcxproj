@@ -67,7 +67,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>$(ProjectDir)pch\pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Mathematics</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Physics</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -96,6 +96,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>$(ProjectDir)pch\pch.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Physics</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -104,7 +105,6 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <DisableSpecificWarnings>26812</DisableSpecificWarnings>
       <OpenMPSupport>true</OpenMPSupport>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Mathematics</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

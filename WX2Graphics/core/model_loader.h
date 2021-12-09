@@ -57,14 +57,14 @@ namespace wx2::graphics
 			const aiMesh* aiMesh,
 			const aiScene* aiScene,
 			const std::filesystem::path& directory,
-			const Matrix& transformMatrix) const noexcept;
+			const DirectX::XMMATRIX transformMatrix) const noexcept;
 
 		Model ProcessNode(
 			std::vector<Mesh>& meshes,
 			const aiNode* aiNode,
 			const aiScene* aiScene,
 			const std::filesystem::path& directory,
-			const Matrix& parentTransformMatrix) noexcept;
+			const DirectX::XMMATRIX parentTransformMatrix) noexcept;
 
 		TextureStorageType DetermineTextureStorageType(const aiScene* aiScene, const aiMaterial* aiMaterial, UINT index, aiTextureType aiTextureType) const;
 

@@ -34,14 +34,14 @@ namespace wx2::graphics
 		WX2_RUNTIME_ERROR_IF_FAILED(scene, "モデルファイルの読み込みに失敗しました。パス: {}", filePath.string());
 
 		std::vector<Mesh> meshes;
-		return ProcessNode(meshes, scene->mRootNode, scene, directory, Matrix::Identity());
+		return ProcessNode(meshes, scene->mRootNode, scene, directory, DirectX::XMMatrixIdentity());
 	}
 
 	Mesh ModelLoader::ProcessMesh(
 		const aiMesh* aiMesh,
 		const aiScene* aiScene,
 		const std::filesystem::path& directory,
-		const Matrix& transformMatrix) const noexcept
+		const DirectX::XMMATRIX transformMatrix) const noexcept
 	{
 		std::vector<ModelVertex> vertices;
 		std::vector<DWORD> indices;
@@ -104,10 +104,10 @@ namespace wx2::graphics
 		const aiNode* aiNode,
 		const aiScene* aiScene,
 		const std::filesystem::path& directory,
-		const Matrix& parentTransformMatrix) noexcept
+		const DirectX::XMMATRIX parentTransformMatrix) noexcept
 	{
-		const Matrix nodeTransformMatrix =
-			Matrix::Transpose(Matrix(&aiNode->mTransformation.a1)) * parentTransformMatrix;
+		const DirectX::XMMATRIX nodeTransformMatrix =
+			XMMatrixTranspose(DirectX::XMMATRIX(&aiNode->mTransformation.a1)) * parentTransformMatrix;
 
 		for (UINT i = 0; i < aiNode->mNumMeshes; i++)
 		{
@@ -259,7 +259,7 @@ namespace wx2::graphics
 					Texture diffuseTexture;
 					diffuseTexture.Initialize(
 						devices_,
-						Color(&aiColor.r));
+						{ aiColor.r, aiColor.g, aiColor.b, 1.0f });
 
 					textures.emplace(texType, std::move(diffuseTexture));
 					break;
@@ -269,7 +269,7 @@ namespace wx2::graphics
 					Texture normalTexture;
 					normalTexture.Initialize(
 						devices_,
-						Color(0.5f, 0.5f, 1.0f));
+						{ 0.5f, 0.5f, 1.0f, 1.0f });
 
 					textures.emplace(texType, std::move(normalTexture));
 					break;

@@ -86,7 +86,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Input\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vld.lib;WX2CommonD.lib;WX2InputD.lib;WX2GraphicsD.lib;</AdditionalDependencies>
+      <AdditionalDependencies>vld.lib;WX2CommonD.lib;WX2InputD.lib;WX2GraphicsD.lib;WX2MathematicsD.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -119,7 +119,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Input\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2Common.lib;WX2Input.lib;WX2Graphics.lib;</AdditionalDependencies>
+      <AdditionalDependencies>WX2Common.lib;WX2Input.lib;WX2Graphics.lib;WX2Mathematics.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

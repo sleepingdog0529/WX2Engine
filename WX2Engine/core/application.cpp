@@ -34,7 +34,7 @@ namespace wx2
 		wndProp.x = (screenWidth - wndProp.width) / 2;
 		wndProp.y = (screenHeight - wndProp.height) / 2;
 		wndProp.style = WS_OVERLAPPEDWINDOW;
-		wndProp.exStyle = WS_EX_WINDOWEDGE;
+		wndProp.ex_style = WS_EX_WINDOWEDGE;
 		wndProp.maximized = false;
 		wndProp.fullscreen = false;
 
@@ -43,7 +43,7 @@ namespace wx2
 
 		input_.Initialize(mainWindow_->GetHandle());
 
-		const bool res = graphics_.Initialize(
+		bool res = graphics_.Initialize(
 			mainWindow_->GetHandle(),
 			mainWindow_->GetWindowProperty(),
 			true);
@@ -82,6 +82,30 @@ namespace wx2
 
 	void Application::Draw() noexcept
 	{
+		namespace DX = DirectX;
 
+		constexpr auto pi = static_cast<float>(std::numbers::pi);
+
+		const auto& devices = graphics_.GetDevice();
+		const auto& dev = devices.GetDevice();
+		const auto& devCon = devices.GetDeviceContext();
+
+		graphics_.GetVertexShader().Bind();
+		graphics_.GetPixelShader().Bind();
+
+		//auto& constantBuffer = graphics_.GetConstantBufferWVP();
+		//constantBuffer.data.world = DX::XMMatrixIdentity();
+		//constantBuffer.data.view = DX::XMMatrixLookAtLH(
+		//	DX::XMVECTORF32{ 0.0f, 0.0f, -1.0f },
+		//	DX::XMVectorZero(),
+		//	DX::XMVECTORF32{ 0.0f, 100.0f, 0.0f });
+		//constantBuffer.ApplyChange();
+		//constantBuffer.VSBind(0);
+
+		graphics_.GetVertexBuffer().Bind();
+		const auto& indexBuffer = graphics_.GetIndexBuffer();
+		indexBuffer.Bind();
+
+		devCon->DrawIndexed(indexBuffer.NumIndices(), 0, 0);
 	}
 }

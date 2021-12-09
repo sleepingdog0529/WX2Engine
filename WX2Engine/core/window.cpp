@@ -34,7 +34,7 @@ namespace wx2
 
 			// ウィンドウを作成
 			hwnd_ = CreateWindowEx(
-				windowProp_.exStyle,
+				windowProp_.ex_style,
 				className_.c_str(),
 				windowProp_.title.c_str(),
 				windowProp_.style,
@@ -158,7 +158,7 @@ namespace wx2
 			SetWindowLong(
 				hwnd_,
 				GWL_EXSTYLE,
-				~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE) & windowProp_.exStyle);
+				~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE) & windowProp_.ex_style);
 
 			// ウィンドウサイズをモニターサイズと同じにする
 			MONITORINFO mi{};
@@ -177,7 +177,7 @@ namespace wx2
 		{
 			// ウィンドウスタイルを再設定
 			SetWindowLong(hwnd_, GWL_STYLE, static_cast<LONG>(windowProp_.style));
-			SetWindowLong(hwnd_, GWL_EXSTYLE, static_cast<LONG>(windowProp_.exStyle));
+			SetWindowLong(hwnd_, GWL_EXSTYLE, static_cast<LONG>(windowProp_.ex_style));
 
 			// ウィンドウサイズを復元
 			SetWindowPos(

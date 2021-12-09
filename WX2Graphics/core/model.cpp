@@ -16,7 +16,7 @@ namespace wx2::graphics
 		std::ranges::copy(meshes, std::back_inserter(meshes_));
 	}
 
-	void Model::Draw(const Matrix& worldMatrix) const noexcept
+	void Model::Draw(const DirectX::XMMATRIX& worldMatrix) const noexcept
 	{
 		for (const auto& m : meshes_)
 		{

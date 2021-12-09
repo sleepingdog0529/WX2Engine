@@ -64,7 +64,7 @@ namespace wx2::graphics
 		}
 	}
 
-	void Texture::Initialize(Device* devices, const Color& color)
+	void Texture::Initialize(Device* devices, const DirectX::XMFLOAT4& color)
 	{
 		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
 		devices_ = devices;
@@ -74,10 +74,10 @@ namespace wx2::graphics
 		ID3D11Texture2D* tex = nullptr;
 
 		std::array<BYTE, 4> colorData;
-		colorData[0] = static_cast<BYTE>(color[0] * 255.0f);
-		colorData[1] = static_cast<BYTE>(color[1] * 255.0f);
-		colorData[2] = static_cast<BYTE>(color[2] * 255.0f);
-		colorData[3] = static_cast<BYTE>(color[3] * 255.0f);
+		colorData[0] = static_cast<BYTE>(color.x * 255.0f);
+		colorData[1] = static_cast<BYTE>(color.y * 255.0f);
+		colorData[2] = static_cast<BYTE>(color.z * 255.0f);
+		colorData[3] = static_cast<BYTE>(color.w * 255.0f);
 
 		D3D11_SUBRESOURCE_DATA srd{};
 		srd.pSysMem = colorData.data();
