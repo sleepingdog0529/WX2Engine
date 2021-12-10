@@ -108,7 +108,8 @@ namespace wx2
 
 	inline bool Vector2::InBounds(const Vector2& v, const Vector2& bounds) noexcept
 	{
-		return DirectX::XMVector2InBounds(v.vector_, bounds.vector_);
+		const auto abs = DirectX::XMVectorAbs(bounds.vector_);
+		return DirectX::XMVector2InBounds(v.vector_, abs);
 	}
 
 	inline float Vector2::Distance(const Vector2& v1, const Vector2& v2) noexcept
@@ -167,7 +168,7 @@ namespace wx2
 		return Vector2(DirectX::XMVectorLerp(v1.vector_, v2.vector_, st));
 	}
 
-	inline Vector2 Vector2::Barycentric(
+	inline Vector2 Vector2::BaryCentric(
 		const Vector2& v1,
 		const Vector2& v2, 
 		const Vector2& v3,
@@ -330,7 +331,8 @@ namespace wx2
 
 	inline bool Vector3::InBounds(const Vector3& v, const Vector3& bounds) noexcept
 	{
-		return DirectX::XMVector3InBounds(v.vector_, bounds.vector_);
+		const auto abs = DirectX::XMVectorAbs(bounds.vector_);
+		return DirectX::XMVector3InBounds(v.vector_, abs);
 	}
 
 	inline float Vector3::Distance(const Vector3& v1, const Vector3& v2) noexcept
@@ -389,7 +391,7 @@ namespace wx2
 		return Vector3(DirectX::XMVectorLerp(v1.vector_, v2.vector_, st));
 	}
 
-	inline Vector3 Vector3::Barycentric(const Vector3& v1, const Vector3& v2, const Vector3& v3, const float f, const float g) noexcept
+	inline Vector3 Vector3::BaryCentric(const Vector3& v1, const Vector3& v2, const Vector3& v3, const float f, const float g) noexcept
 	{
 		return Vector3(DirectX::XMVectorBaryCentric(v1.vector_, v2.vector_, v3.vector_, f, g));
 	}
@@ -526,7 +528,8 @@ namespace wx2
 
 	inline bool Vector4::InBounds(const Vector4& v, const Vector4& bounds) noexcept
 	{
-		return DirectX::XMVector4InBounds(v.vector_, bounds.vector_);
+		const auto abs = DirectX::XMVectorAbs(bounds.vector_);
+		return DirectX::XMVector4InBounds(v.vector_, abs);
 	}
 
 	inline float Vector4::Distance(const Vector4& v1, const Vector4& v2) noexcept
@@ -585,7 +588,7 @@ namespace wx2
 		return Vector4(DirectX::XMVectorLerp(v1.vector_, v2.vector_, st));
 	}
 
-	inline Vector4 Vector4::Barycentric(
+	inline Vector4 Vector4::BaryCentric(
 		const Vector4& v1, 
 		const Vector4& v2, 
 		const Vector4& v3,

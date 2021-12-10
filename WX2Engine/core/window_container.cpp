@@ -34,22 +34,22 @@ namespace wx2
 		return wndItr->second;
 	}
 
-	void WindowContainer::ProcessMessages(const std::function<bool()>& process) noexcept
+	bool WindowContainer::ProcessMessages() noexcept
 	{
 		MSG msg = {};
 
-		while (msg.message != WM_QUIT)
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) != 0)
 		{
-			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+
+			if(msg.message == WM_QUIT)
 			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-			else
-			{
-				if (!process()) break;
+				return false;
 			}
 		}
+
+		return true;
 	}
 
 	LRESULT WindowContainer::WindowProcedure(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp) noexcept

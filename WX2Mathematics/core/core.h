@@ -4,11 +4,11 @@
  * @date   2021/10/13 0:59
  * @brief  スカラー、ベクトル、マトリックス演算
  * @brief  参考: https://github.com/microsoft/DirectXTK
- ********************************************************************/
+ * @brief  ベクトルのサイズは全て4バイトなので注意
+********************************************************************/
 #pragma once
 #include <DirectXMath.h>
 #include <WX2Common.h>
-#include <span>
 
 namespace wx2
 {
@@ -49,6 +49,9 @@ namespace wx2
 		return (v - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 	}
 
+	/**
+	 * @brief  二次元ベクトルクラス(4Byte)
+	 */
 	class Vector2 final
 	{
 	public:
@@ -62,6 +65,8 @@ namespace wx2
 			: vector_{ f, f } {}
 		explicit constexpr Vector2(const DirectX::XMVECTOR& xmv) noexcept
 			: vector_{ xmv.m128_f32[0], xmv.m128_f32[2] } {}
+		explicit Vector2(const DirectX::XMFLOAT2& xmf) noexcept
+			: vector_(DirectX::XMLoadFloat2(&xmf)) {}
 		~Vector2() = default;
 
 		Vector2(const Vector2&) = default;
@@ -89,36 +94,171 @@ namespace wx2
 		Vector2& operator *= (float rhs) noexcept;
 		Vector2& operator /= (float rhs) noexcept;
 
+		// 添字演算子
 		const float& operator [] (std::size_t index) const noexcept;
 		float& operator [] (std::size_t index) noexcept;
 
+		// キャスト演算子
 		operator DirectX::XMVECTOR() const noexcept;
+		operator DirectX::XMFLOAT2() const noexcept;
 
+
+		/**
+		 * @brief  2次元ベクトルのX成分を取得する
+		 * @return X成分の値
+		 */
 		[[nodiscard]] float X() const noexcept { return DirectX::XMVectorGetX(vector_); }
+		/**
+		 * @brief  2次元ベクトルのY成分を取得する
+		 * @return Y成分の値
+		 */
 		[[nodiscard]] float Y() const noexcept { return DirectX::XMVectorGetY(vector_); }
 
+		/**
+		 * @brief  2次元ベクトルのX成分を設定する
+		 * @param  x 書き換えるX成分の値
+		 */
 		void X(const float x) noexcept { vector_ = DirectX::XMVectorSetX(vector_, x); }
+		/**
+		 * @brief  2次元ベクトルのY成分を設定する
+		 * @param  y 書き換えるY成分の値
+		 */
 		void Y(const float y) noexcept { vector_ = DirectX::XMVectorSetY(vector_, y); }
 
+		/**
+		 * @brief  2次元ベクトルを正規化する
+		 */
 		void Normalized() noexcept;
 
+		/**
+		 * @brief  2次元ベクトルの長さを求める
+		 * @return 2次元ベクトルの長さ
+		 */
 		[[nodiscard]] float Length() const noexcept;
+		/**
+ 		 * @brief  2次元ベクトルの長さの平方を求める
+		 * @return 2次元ベクトルの長さの平方
+		 */
 		[[nodiscard]] float LengthSquared() const noexcept;
+		
+		/**
+		 * @brief  2次元ベクトルのラジアン角度を求める
+		 * @return 2次元ベクトルのラジアン角度
+		 */
 		[[nodiscard]] float Angle() const noexcept;
 
+		/**
+		 * @param   v テストする2次元ベクトル
+		 * @param   bounds 境界を決める2次元ベクトル
+		 * @return  2次元ベクトルの成分が設定した範囲内にあるか
+		 * @note https://docs.microsoft.com/en-us/windows/win32/api/directxmath/nf-directxmath-xmvector2inbounds
+		 */
 		static bool InBounds(const Vector2& v, const Vector2& bounds) noexcept;
+
+		/**
+		 * @brief  2次元ベクトル間の距離を求める
+		 * @param  v1 2次元ベクトル
+		 * @param  v2 2次元ベクトル
+		 * @return 2次元ベクトル間の距離
+		 */
 		static float Distance(const Vector2& v1, const Vector2& v2) noexcept;
+
+		/**
+		 * @brief  2次元ベクトル間の距離の平方を求める
+		 * @param  v1 2次元ベクトル
+		 * @param  v2 2次元ベクトル
+		 * @return 2次元座標間の距離の平方
+		 */
 		static float DistanceSquared(const Vector2& v1, const Vector2& v2) noexcept;
+		
+		/**
+		 * @brief  2次元ベクトルの内積を求める
+		 * @param  v1 2次元ベクトル
+		 * @param  v2 2次元ベクトル
+		 * @return 2次元ベクトルの内積
+		 */
 		static float Dot(const Vector2& v1, const Vector2& v2) noexcept;
+		/**
+		 * @brief  2次元ベクトルの外積を求める
+		 * @param  v1 2次元ベクトル
+		 * @param  v2 2次元ベクトル
+		 * @return 2次元ベクトルの外積
+		 */
 		static Vector2 Cross(const Vector2& v1, const Vector2& v2) noexcept;
+		/**
+		 * @brief  2次元ベクトルを正規化する
+		 * @param  v 2次元ベクトル
+		 * @return 正規化された2次元ベクトル
+		 */
 		static Vector2 Normalize(const Vector2& v) noexcept;
+		/**
+		 * @brief  2次元ベクトルの成分を指定した最小値と最大値の範囲にクランプする
+		 * @param  v クランプされる成分を持つ2次元ベクトル
+		 * @param  vmin 最小範囲の成分を持つ2次元ベクトル
+		 * @param  vmax 最大範囲の成分を持つ2次元ベクトル
+		 * @return クランプされた2次元ベクトル
+		 */
 		static Vector2 Clamp(const Vector2& v, const Vector2& vmin, const Vector2& vmax) noexcept;
+		/**
+		 * @brief  2つの2次元ベクトルの成分ごとの比較を行い、最小の成分を含む2次元ベクトルを返す
+		 * @param  v1 2次元ベクトル
+		 * @param  v2 2次元ベクトル
+		 * @return 最小の成分を持った2次元ベクトル
+		 */
 		static Vector2 Min(const Vector2& v1, const Vector2& v2) noexcept;
+		/**
+		 * @brief  2つの2次元ベクトルの成分ごとの比較を行い、最大の成分を含む2次元ベクトルを返す
+		 * @param  v1 2次元ベクトル
+		 * @param  v2 2次元ベクトル
+		 * @return 最大の成分を持った2次元ベクトル
+		 */
 		static Vector2 Max(const Vector2& v1, const Vector2& v2) noexcept;
+		/**
+		 * @brief  2次元ベクトル間の線形補間を行う
+		 * @param  v1 始点2次元ベクトル
+		 * @param  v2 終点2次元ベクトル
+		 * @param  t 補間制御係数
+		 * @return 補完結果を表す2次元ベクトル
+		 */
 		static Vector2 Lerp(const Vector2& v1, const Vector2& v2, float t) noexcept;
+		/**
+		 * @brief  2次元ベクトル間をエルミート多項式を用いて線形補間を行う
+		 * @param  v1 始点2次元ベクトル
+		 * @param  v2 終点2次元ベクトル
+		 * @param  t 補間制御係数
+		 * @return 補完結果を表す2次元ベクトル
+		 */
 		static Vector2 SmoothStep(const Vector2& v1, const Vector2& v2, float t) noexcept;
-		static Vector2 Barycentric(const Vector2& v1, const Vector2& v2, const Vector2& v3, float f, float g) noexcept;
+		/**
+		 * @brief  3つの2次元位置ベクトルを用いて点を偏心座標で返す
+		 * @param  v1 1番目の重心位置を表す2次元ベクトル
+		 * @param  v2 2番目の重心位置を表す2次元ベクトル
+		 * @param  v3 3番目の重心位置を表す2次元ベクトル
+		 * @param  f 重み付け係数
+		 * @param  g 重み付け係数
+		 * @return 偏差重心座標2次元ベクトル
+		 * @note   https://docs.microsoft.com/en-us/windows/win32/api/directxmath/nf-directxmath-xmvectorbarycentric
+		 */
+		static Vector2 BaryCentric(const Vector2& v1, const Vector2& v2, const Vector2& v3, float f, float g) noexcept;
+		/**
+		 * @brief  指定された位置ベクトルを用いてカットムルロムスプライン補間を行う．
+		 * @param  v1 1つ目の制御点を表す2次元ベクトル
+		 * @param  v2 2つ目の制御点を表す2次元ベクトル
+		 * @param  v3 3つ目の制御点を表す2次元ベクトル
+		 * @param  v4 4つ目の制御点を表す2次元ベクトル
+		 * @param  t 補間制御係数
+		 * @return 補完結果を表す2次元ベクトル
+		 */
 		static Vector2 CatmullRom(const Vector2& v1, const Vector2& v2, const Vector2& v3, const Vector2& v4, float t) noexcept;
+		/**
+		 * @brief  指定された位置ベクトルを用いてエルミート曲線補間を行う．
+		 * @param  v1 1つ目の制御点を表す2次元ベクトル
+		 * @param  t1 1つ目の制御点を表す2次元ベクトル
+		 * @param  v2 2つ目の制御点を表す2次元ベクトル
+		 * @param  t2 2つ目の制御点を表す2次元ベクトル
+		 * @param  t 補間制御係数
+		 * @return 補完結果を表す2次元ベクトル
+		 */
 		static Vector2 Hermite(const Vector2& v1, const Vector2& t1, const Vector2& v2, const Vector2& t2, float t) noexcept;
 		static Vector2 Reflect(const Vector2& ivec, const Vector2& nvec) noexcept;
 		static Vector2 Refract(const Vector2& ivec, const Vector2& nvec, float refractionIndex) noexcept;
@@ -207,7 +347,7 @@ namespace wx2
 		static Vector3 Max(const Vector3& v1, const Vector3& v2) noexcept;
 		static Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t) noexcept;
 		static Vector3 SmoothStep(const Vector3& v1, const Vector3& v2, float t) noexcept;
-		static Vector3 Barycentric(const Vector3& v1, const Vector3& v2, const Vector3& v3, float f, float g) noexcept;
+		static Vector3 BaryCentric(const Vector3& v1, const Vector3& v2, const Vector3& v3, float f, float g) noexcept;
 		static Vector3 CatmullRom(const Vector3& v1, const Vector3& v2, const Vector3& v3, const Vector3& v4, float t) noexcept;
 		static Vector3 Hermite(const Vector3& v1, const Vector3& t1, const Vector3& v2, const Vector3& t2, float t) noexcept;
 		static Vector3 Reflect(const Vector3& ivec, const Vector3& nvec) noexcept;
@@ -300,7 +440,7 @@ namespace wx2
 		static Vector4 Max(const Vector4& v1, const Vector4& v2) noexcept;
 		static Vector4 Lerp(const Vector4& v1, const Vector4& v2, float t) noexcept;
 		static Vector4 SmoothStep(const Vector4& v1, const Vector4& v2, float t) noexcept;
-		static Vector4 Barycentric(const Vector4& v1, const Vector4& v2, const Vector4& v3, float f, float g) noexcept;
+		static Vector4 BaryCentric(const Vector4& v1, const Vector4& v2, const Vector4& v3, float f, float g) noexcept;
 		static Vector4 CatmullRom(const Vector4& v1, const Vector4& v2, const Vector4& v3, const Vector4& v4, float t) noexcept;
 		static Vector4 Hermite(const Vector4& v1, const Vector4& t1, const Vector4& v2, const Vector4& t2, float t) noexcept;
 		static Vector4 Reflect(const Vector4& ivec, const Vector4& nvec) noexcept;

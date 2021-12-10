@@ -56,7 +56,18 @@ namespace wx2
 		WX2_LOG_TRACE("アプリケーション実行開始");
 
 		// メインループ
-		WindowContainer::ProcessMessages([this]() { return Update(); });
+		bool terminate = false;
+		while (!terminate)
+		{
+			if (frameTimer_.ElapcedTime() < Frame(1))
+			{
+				terminate = !windowContainer_.ProcessMessages();
+			}
+			else 
+			{
+				terminate = !Update();
+			}
+		}
 
 		return EXIT_SUCCESS;
 	}
@@ -66,15 +77,10 @@ namespace wx2
 		using namespace std::chrono_literals;
 
 		input_.Update();
-
 		const auto& keyboard = input_.GetKeyboard();
 
-		// 前回の描画から1/60秒経過していたら描画する
-		if (frameTimer_.ElapcedTime().count() >= 1)
-		{
-			frameTimer_.Start();
-			graphics_.RenderFrame();
-		}
+		// 描画
+		graphics_.RenderFrame();
 
 		// ESCキーが押されていたらアプリケーション終了
 		return !keyboard.IsPressed(Keyboard::Escape);

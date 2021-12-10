@@ -44,10 +44,10 @@ namespace wx2
 		WindowPtr Create(const std::string& name, const WindowProperty& defaultProp) noexcept;
 
 		/**
-		 * @brief     メッセージを処理しつつ合間に更新処理を呼び出す
-		 * @param[in] process アプリケーションの更新関数
+		 * @brief  全てのウィンドウのメッセージを処理する
+		 * @return WM_QUITが投げられていなければtrue
 		 */
-		static void ProcessMessages(const std::function<bool()>& process) noexcept;
+		static bool ProcessMessages() noexcept;
 
 		/**
 		 * @brief アプリケーションの全てのウィンドウ共通のウィンドウプロシージャ
