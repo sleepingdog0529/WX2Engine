@@ -86,6 +86,13 @@ namespace wx2
 		return vector_;
 	}
 
+	inline Vector2::operator DirectX::XMFLOAT2() const noexcept
+	{
+		DirectX::XMFLOAT2 xmf;
+		DirectX::XMStoreFloat2(&xmf, vector_);
+		return xmf;
+	}
+
 	inline void Vector2::Normalized() noexcept
 	{
 		vector_ = DirectX::XMVector2Normalize(vector_);
