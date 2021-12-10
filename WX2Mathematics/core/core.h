@@ -241,7 +241,7 @@ namespace wx2
 		 */
 		static Vector2 BaryCentric(const Vector2& v1, const Vector2& v2, const Vector2& v3, float f, float g) noexcept;
 		/**
-		 * @brief  指定された位置ベクトルを用いてカットムルロムスプライン補間を行う．
+		 * @brief  指定された位置ベクトルを用いてカットムルロムスプライン曲線補間を行う
 		 * @param  v1 1つ目の制御点を表す2次元ベクトル
 		 * @param  v2 2つ目の制御点を表す2次元ベクトル
 		 * @param  v3 3つ目の制御点を表す2次元ベクトル
@@ -251,15 +251,21 @@ namespace wx2
 		 */
 		static Vector2 CatmullRom(const Vector2& v1, const Vector2& v2, const Vector2& v3, const Vector2& v4, float t) noexcept;
 		/**
-		 * @brief  指定された位置ベクトルを用いてエルミート曲線補間を行う．
-		 * @param  v1 1つ目の制御点を表す2次元ベクトル
-		 * @param  t1 1つ目の制御点を表す2次元ベクトル
-		 * @param  v2 2つ目の制御点を表す2次元ベクトル
-		 * @param  t2 2つ目の制御点を表す2次元ベクトル
+		 * @brief  指定された位置ベクトルを用いてエルミート曲線補間を行う
+		 * @param  v1 1つ目の制御点の位置を表す2次元ベクトル
+		 * @param  t1 1つ目の制御点の速度を表す2次元ベクトル
+		 * @param  v2 2つ目の制御点の位置を表す2次元ベクトル
+		 * @param  t2 2つ目の制御点の速度を表す2次元ベクトル
 		 * @param  t 補間制御係数
 		 * @return 補完結果を表す2次元ベクトル
 		 */
 		static Vector2 Hermite(const Vector2& v1, const Vector2& t1, const Vector2& v2, const Vector2& t2, float t) noexcept;
+		/**
+		 * @brief  2次元入射ベクトルを2次元法線ベクトルで反射させたベクトルを求める
+		 * @param  ivec 入射2次元ベクトル
+		 * @param  nvec 
+		 * @return 
+		 */
 		static Vector2 Reflect(const Vector2& ivec, const Vector2& nvec) noexcept;
 		static Vector2 Refract(const Vector2& ivec, const Vector2& nvec, float refractionIndex) noexcept;
 		static Vector2 Transform(const Vector2& v, const Quaternion& q) noexcept;
