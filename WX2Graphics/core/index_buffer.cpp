@@ -1,6 +1,6 @@
 #include "index_buffer.h"
 
-namespace wx2::graphics
+namespace wx2
 {
 	void IndexBuffer::Initialize(
 		Device* devices,

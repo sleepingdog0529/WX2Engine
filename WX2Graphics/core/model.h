@@ -10,7 +10,7 @@
 #include "constant_buffer_type.h"
 #include <WX2Mathematics.h>
 
-namespace wx2::graphics
+namespace wx2
 {
 	class Model final
 	{
@@ -23,11 +23,11 @@ namespace wx2::graphics
 			ConstantBuffer<WVPMatrix>* constantBufferWVP,
 			std::span<Mesh> meshes);
 
-		void Draw(const DirectX::XMMATRIX& worldMatrix) const noexcept;
+		void Draw(const Matrix& worldMatrix) const noexcept;
 
 	private:
 		Device* devices_;
-		ConstantBuffer<WVPMatrix>* constantBufferWVP_;
+		ConstantBuffer<WVPMatrix>* constantBufferWVP_{};
 		std::vector<Mesh> meshes_{};
 	};
 }

@@ -1,5 +1,3 @@
-#include <sol/sol.hpp>
-
 namespace wx2
 {
 	class Game final : public wx2::Application
@@ -7,25 +5,83 @@ namespace wx2
 	private:
 		void Start() noexcept override
 		{
-			sol::state lua;
-			lua.open_libraries(sol::lib::base, sol::lib::package);
-			lua["intval"] = 80;
-			auto res = lua.script_file(".\\asset\\script\\hello.lua");
+			auto& devices = graphics_.GetDevice();
+			auto& constantBufferWVP = graphics_.GetConstantBufferWVP();
+
+			D3D11_INPUT_ELEMENT_DESC layoutDescs[] =
+			{
+				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT   , 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "NORMAL"  , 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "TANGENT" , 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			};
+			vertexShader_.Initialize(&devices, ".\\asset\\shader\\simple.hlsl", layoutDescs);
+
+			pixelShader_.Initialize(&devices, ".\\asset\\shader\\simple.hlsl");
+
+			modelLoader_.Initialize(&devices, &constantBufferWVP);
+			model_ = modelLoader_.Load(".\\asset\\model\\WG.fbx");
 		}
 
-		bool Update() noexcept override
+		bool Update(const float deltaTime) noexcept override
 		{
-			using namespace std::chrono_literals;
-
 			input_.Update();
 			const auto& keyboard = input_.GetKeyboard();
 
-			// 描画
-			graphics_.RenderFrame();
+			Vector3 move;
+			if (keyboard.IsDown(Keyboard::D)) ++move[0];
+			if (keyboard.IsDown(Keyboard::A)) --move[0];
+			if (keyboard.IsDown(Keyboard::Space)) ++move[1];
+			if (keyboard.IsDown(Keyboard::LShift)) --move[1];
+			if (keyboard.IsDown(Keyboard::W)) ++move[2];
+			if (keyboard.IsDown(Keyboard::S)) --move[2];
+
+			pos_ += Vector3::Normalize(move) * deltaTime * 3.0f;
+			scale_ = Vector3(0.01f);
 
 			// ESCキーが押されていたらアプリケーション終了
 			return !keyboard.IsPressed(Keyboard::Escape);
 		}
+
+		void Draw(const float deltaTime) noexcept override
+		{
+			vertexShader_.Bind();
+			pixelShader_.Bind();
+
+			auto& constantBufferWVP = graphics_.GetConstantBufferWVP();
+			const auto& windowProp = mainWindow_->GetWindowProperty();
+
+			constantBufferWVP.data.world = Matrix::Identity();
+			constantBufferWVP.data.projection = Matrix::PerspectiveFieldOfView(
+				PIDIV4,
+				windowProp.AspectRatio(),
+				0.01f,
+				1000.0f);
+			constantBufferWVP.data.view = Matrix::LookAt(
+				Vector3::Backward() * 50,
+				Vector3::Zero(),
+				Vector3::Up());
+			constantBufferWVP.ApplyChange();
+			constantBufferWVP.VSBind(0);
+
+			WX2_LOG_INFO(pos_.ToString());
+
+			Matrix world;
+			world *= Matrix::Translation(pos_);
+			world *= Matrix::Scale(scale_);
+			world *= Matrix::RotationFromQuaternion(rot_);
+			model_.Draw(world);
+		}
+
+		Vector3 pos_{};
+		Vector3 scale_{};
+		Quaternion rot_{};
+
+		VertexShader vertexShader_{};
+		PixelShader pixelShader_{};
+		ModelLoader modelLoader_{};
+		Model model_{};
 	};
 }
 

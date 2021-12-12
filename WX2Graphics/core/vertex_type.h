@@ -7,7 +7,7 @@
 #pragma once
 #include <DirectXMath.h>
 
-namespace wx2::graphics
+namespace wx2
 {
 	struct Vertex3D
 	{

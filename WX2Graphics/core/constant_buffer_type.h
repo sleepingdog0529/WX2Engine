@@ -7,7 +7,7 @@
 #pragma once
 #include <WX2Mathematics.h>
 
-namespace wx2::graphics
+namespace wx2
 {
 	struct WVPMatrix
 	{

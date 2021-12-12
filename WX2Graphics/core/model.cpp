@@ -1,6 +1,6 @@
 #include "model.h"
 
-namespace wx2::graphics
+namespace wx2
 {
 	void Model::Initialize(
 		Device* devices,
@@ -16,11 +16,11 @@ namespace wx2::graphics
 		std::ranges::copy(meshes, std::back_inserter(meshes_));
 	}
 
-	void Model::Draw(const DirectX::XMMATRIX& worldMatrix) const noexcept
+	void Model::Draw(const Matrix& worldMatrix) const noexcept
 	{
 		for (const auto& m : meshes_)
 		{
-			constantBufferWVP_->data.world = Matrix(worldMatrix * m.GetTransformMatrix());
+			constantBufferWVP_->data.world = worldMatrix * m.GetTransformMatrix();
 			constantBufferWVP_->ApplyChange();
 
 			m.Draw();

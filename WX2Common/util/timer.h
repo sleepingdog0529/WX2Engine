@@ -28,10 +28,10 @@ namespace wx2
 			start_ = std::chrono::system_clock::now();
 		}
 
-		Units ElapcedTime() const noexcept
+		[[nodiscard]] long long ElapcedTime() const noexcept
 		{
 			return std::chrono::duration_cast<Units>(
-				std::chrono::system_clock::now() - start_);
+				std::chrono::system_clock::now() - start_).count();
 		}
 
 	private:

@@ -968,9 +968,19 @@ namespace wx2
 		return Matrix(DirectX::XMMatrixRotationZ(rotation));
 	}
 
-	inline Matrix Matrix::FromAxisAngle(const Vector3& axis, const float radians) noexcept
+	inline Matrix Matrix::RotationAxisAngle(const Vector3& axis, const float radians) noexcept
 	{
 		return Matrix(DirectX::XMMatrixRotationAxis(axis, radians));
+	}
+
+	inline Matrix Matrix::RotationFromQuaternion(const Quaternion& q) noexcept
+	{
+		return Matrix(DirectX::XMMatrixRotationQuaternion(q));
+	}
+
+	inline Matrix Matrix::RotationYawPitchRoll(const float yaw, const float pitch, const float roll) noexcept
+	{
+		return Matrix(DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll));
 	}
 
 	inline Matrix Matrix::PerspectiveFieldOfView(
@@ -1034,16 +1044,6 @@ namespace wx2
 			yaxis[0], yaxis[1], yaxis[2], 0.0f,
 			zaxis[0], zaxis[1], zaxis[2], 0.0f,
 			position[0], position[1], position[2], 1.0f };
-	}
-
-	inline Matrix Matrix::FromQuaternion(const Quaternion& q) noexcept
-	{
-		return Matrix(DirectX::XMMatrixRotationQuaternion(q));
-	}
-
-	inline Matrix Matrix::FromYawPitchRoll(const float yaw, const float pitch, const float roll) noexcept
-	{
-		return Matrix(DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll));
 	}
 
 	inline Matrix Matrix::Lerp(const Matrix& m1, const Matrix& m2, const float t) noexcept

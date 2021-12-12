@@ -1,6 +1,6 @@
 #include "blend_state.h"
 
-namespace wx2::graphics
+namespace wx2
 {
 	void BlendState::Initialize(Device* devices)
 	{

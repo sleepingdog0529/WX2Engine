@@ -59,60 +59,55 @@ namespace wx2
 
 		// ÉÅÉCÉìÉãÅ[Év
 		bool terminate = false;
+		UINT frame = 0;
+		UINT fps = 0;
+		UINT avg = 0;
+		std::deque<int> fpsRecords{};
+		Timer<> fpsTimer{};
+
 		while (!terminate)
 		{
-			using namespace std::chrono_literals;
+			const auto elapced = frameTimer_.ElapcedTime();
 
-			if (frameTimer_.ElapcedTime().count() < 1000 / 120.0f)
+			if (elapced < 1000 / 120.0f)
 			{
-				terminate = !windowContainer_.ProcessMessages();
+				terminate = !windowContainer_.ProcessMessage();
 			}
 			else 
 			{
-				static int frame = 0;
+				frameTimer_.Start();
 				++frame;
 
-				if (static Timer<> fpsTimer; fpsTimer.ElapcedTime().count() >= 1000)
+				if (fpsTimer.ElapcedTime() >= 1000)
 				{
 					fpsTimer.Start();
-					mainWindow_->SetTitle(std::format("FPS: {}", frame));
+
+					fpsRecords.push_back(frame);
+					if (fpsRecords.size() > 60)
+					{
+						fpsRecords.pop_front();
+					}
+
+					fps = frame;
+
+					avg = std::reduce(fpsRecords.begin(), fpsRecords.end(), 0);
+					avg /= static_cast<UINT>(fpsRecords.size());
+
+					mainWindow_->SetTitle(std::format("FPS: {} AVG: {}", fps, avg));
+
 					frame = 0;
 				}
 
-				frameTimer_.Start();
-				terminate = !Update();
+				const float deltaTime = static_cast<float>(elapced) / 120.0f;
+
+				graphics_.DrawBegin();
+				Draw(deltaTime);
+				graphics_.DrawEnd();
+
+				terminate = !Update(deltaTime);
 			}
 		}
 
 		return EXIT_SUCCESS;
-	}
-
-	void Application::Draw() noexcept
-	{
-		namespace DX = DirectX;
-
-		constexpr auto pi = static_cast<float>(std::numbers::pi);
-
-		const auto& devices = graphics_.GetDevice();
-		const auto& dev = devices.GetDevice();
-		const auto& devCon = devices.GetDeviceContext();
-
-		graphics_.GetVertexShader().Bind();
-		graphics_.GetPixelShader().Bind();
-
-		//auto& constantBuffer = graphics_.GetConstantBufferWVP();
-		//constantBuffer.data.world = DX::XMMatrixIdentity();
-		//constantBuffer.data.view = DX::XMMatrixLookAtLH(
-		//	DX::XMVECTORF32{ 0.0f, 0.0f, -1.0f },
-		//	DX::XMVectorZero(),
-		//	DX::XMVECTORF32{ 0.0f, 100.0f, 0.0f });
-		//constantBuffer.ApplyChange();
-		//constantBuffer.VSBind(0);
-
-		graphics_.GetVertexBuffer().Bind();
-		const auto& indexBuffer = graphics_.GetIndexBuffer();
-		indexBuffer.Bind();
-
-		devCon->DrawIndexed(indexBuffer.NumIndices(), 0, 0);
 	}
 }

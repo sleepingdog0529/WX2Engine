@@ -34,7 +34,7 @@ namespace wx2
 		return wndItr->second;
 	}
 
-	bool WindowContainer::ProcessMessages() noexcept
+	bool WindowContainer::ProcessMessage() noexcept
 	{
 		MSG msg = {};
 

@@ -42,15 +42,15 @@ namespace wx2
 
 	protected:
 		virtual void Start() noexcept = 0;
-		virtual bool Update() noexcept = 0;
-		void Draw() noexcept;
+		virtual bool Update(const float deltaTime) noexcept = 0;
+		virtual void Draw(const float deltaTime) noexcept = 0;
 
 		Timer<> frameTimer_;
 		Logger log_;
 		WindowContainer windowContainer_;
 		Input input_;
 		WindowPtr mainWindow_;
-		graphics::Graphics graphics_;
+		Graphics graphics_;
 
 	private:
 		/**

@@ -9,7 +9,7 @@
 #include <span>
 #include <WX2Common.h>
 
-namespace wx2::graphics
+namespace wx2
 {
 	class IndexBuffer final
 	{

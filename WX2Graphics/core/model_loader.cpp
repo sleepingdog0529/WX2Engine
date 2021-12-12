@@ -3,7 +3,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
-namespace wx2::graphics
+namespace wx2
 {
 	void ModelLoader::Initialize(
 		Device* devices,
@@ -63,8 +63,8 @@ namespace wx2::graphics
 			if (aiMesh->HasNormals())
 			{
 				vertex.normal.x = aiMesh->mNormals[i].x;
-				vertex.normal.x = aiMesh->mNormals[i].y;
-				vertex.normal.x = aiMesh->mNormals[i].z;
+				vertex.normal.y = aiMesh->mNormals[i].y;
+				vertex.normal.z = aiMesh->mNormals[i].z;
 
 				if (aiMesh->HasTangentsAndBitangents())
 				{

@@ -9,7 +9,7 @@
 #include <span>
 #include "device.h"
 
-namespace wx2::graphics
+namespace wx2
 {
 	class VertexShader final
 	{

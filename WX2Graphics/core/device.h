@@ -9,7 +9,7 @@
 #include <wrl/client.h>
 #include <WX2Common.h>
 
-namespace wx2::graphics
+namespace wx2
 {
 	class Device final
 	{

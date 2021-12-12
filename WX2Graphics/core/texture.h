@@ -9,7 +9,7 @@
 #include <WX2Mathematics.h>
 #include "device.h"
 
-namespace wx2::graphics
+namespace wx2
 {
 	class Texture final
 	{

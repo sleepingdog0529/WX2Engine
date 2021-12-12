@@ -10,7 +10,7 @@
 #include <WX2Common.h>
 #include "device.h"
 
-namespace wx2::graphics
+namespace wx2
 {
 	class BlendState final
 	{

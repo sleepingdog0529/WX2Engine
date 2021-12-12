@@ -131,6 +131,13 @@ namespace wx2
 		operator DirectX::XMVECTOR() const noexcept;
 		operator DirectX::XMFLOAT2() const noexcept;
 
+		[[nodiscard]] std::string ToString() const noexcept
+		{
+			return std::format("({:6f}, {:6f})",
+				DirectX::XMVectorGetX(vector_),
+				DirectX::XMVectorGetY(vector_));
+		}
+
 		/**
 		 * @brief  2DベクトルのX成分を取得する
 		 * @return X成分の値
@@ -443,6 +450,14 @@ namespace wx2
 		// キャスト演算子
 		operator DirectX::XMVECTOR() const noexcept;
 		operator DirectX::XMFLOAT3() const noexcept;
+
+		[[nodiscard]] std::string ToString() const noexcept
+		{
+			return std::format("({:6f}, {:6f}, {:6f})",
+				DirectX::XMVectorGetX(vector_),
+				DirectX::XMVectorGetY(vector_),
+				DirectX::XMVectorGetZ(vector_));
+		}
 
 		/**
 		 * @brief  3DベクトルのX成分を取得する
@@ -764,6 +779,15 @@ namespace wx2
 		// キャスト演算子
 		operator DirectX::XMVECTOR() const noexcept;
 		operator DirectX::XMFLOAT4() const noexcept;
+
+		[[nodiscard]] std::string ToString() const noexcept
+		{
+			return std::format("({:6f}, {:6f}, {:6f}, {:6f})",
+				DirectX::XMVectorGetX(vector_),
+				DirectX::XMVectorGetY(vector_),
+				DirectX::XMVectorGetZ(vector_),
+				DirectX::XMVectorGetW(vector_));
+		}
 
 		/**
 		 * @brief  4DベクトルのX成分を取得する
@@ -1248,7 +1272,9 @@ namespace wx2
 		 * @param  radians 軸のラジアン角度
 		 * @return 回転行列
 		 */
-		static Matrix FromAxisAngle(const Vector3& axis, float radians) noexcept;
+		static Matrix RotationAxisAngle(const Vector3& axis, float radians) noexcept;
+		static Matrix RotationFromQuaternion(const Quaternion& q) noexcept;
+		static Matrix RotationYawPitchRoll(float yaw, float pitch, float roll) noexcept;
 		/**
 		 * @brief  視野角と縦横比、ニアおよびファービュー平面距離に基づき透視投影行列を作成する
 		 * @param  fov 視野角
@@ -1272,8 +1298,6 @@ namespace wx2
 		static Matrix OrthographicOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane) noexcept;
 		static Matrix LookAt(const Vector3& position, const Vector3& target, const Vector3& up) noexcept;
 		static Matrix World(const Vector3& position, const Vector3& forward, const Vector3& up) noexcept;
-		static Matrix FromQuaternion(const Quaternion& q) noexcept;
-		static Matrix FromYawPitchRoll(float yaw, float pitch, float roll) noexcept;
 		static Matrix Lerp(const Matrix& m1, const Matrix& m2, float t) noexcept;
 		static Matrix Transform(const Matrix& m, const Quaternion& rotation) noexcept;
 
@@ -1405,7 +1429,6 @@ namespace wx2
 	private:
 		DirectX::XMVECTOR color_;
 	};
-
 }
 
 #include "core.inl"

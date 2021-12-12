@@ -1,6 +1,6 @@
 #include "device.h"
 
-namespace wx2::graphics
+namespace wx2
 {
 	void Device::Initialize()
 	{

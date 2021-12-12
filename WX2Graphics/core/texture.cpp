@@ -3,7 +3,7 @@
 #include <DirectXTK/DDSTextureLoader.h>
 #include <boost/algorithm/string.hpp>
 
-namespace wx2::graphics
+namespace wx2
 {
 	void Texture::Initialize(Device* devices, const std::filesystem::path& filePath)
 	{

@@ -1,6 +1,6 @@
 #include "mesh.h"
 
-namespace wx2::graphics
+namespace wx2
 {
 	void Mesh::Initialize(
 		Device* devices,

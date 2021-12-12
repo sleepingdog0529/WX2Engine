@@ -1,6 +1,6 @@
 ﻿#include "graphics.h"
 
-namespace wx2::graphics
+namespace wx2
 {
 	bool Graphics::Initialize(HWND hwnd, WindowProperty* windowProp, bool vsync) noexcept
 	{
@@ -116,11 +116,7 @@ namespace wx2::graphics
 			blendState_.Initialize(&devices_);
 
 			constantBufferWVP_.Initialize(&devices_);
-
-			DWORD indices[] = { 0,1,2,0,2,3 };
-			indexBuffer_.Initialize(&devices_, indices);
-
-			InitializePipeline();
+			
 			InitializeGraphics();
 		}
 		catch (const COMException& exception)
@@ -159,61 +155,6 @@ namespace wx2::graphics
 		swapChain_->Present(0, 0);
 	}
 
-	void Graphics::RenderFrame() noexcept
-	{
-		DrawBegin();
-
-		vertexShader_.Bind();
-		pixelShader_.Bind();
-
-		static float rad = 0.0f;
-		rad += 0.01f;
-
-		constantBufferWVP_.data.world = Matrix::World(
-			Vector3::Zero(),
-			Vector3::Forward(),
-			Vector3::Up());
-		constantBufferWVP_.data.projection = Matrix::PerspectiveFieldOfView(
-			PIDIV4,
-			windowProperty_->AspectRatio(),
-			0.01f,
-			1000.0f);
-		constantBufferWVP_.data.view = Matrix::LookAt(
-			Vector3::Transform(Vector3(0.0f, 10.0f, 50.0f), Matrix::RotationY(rad)),
-			Vector3(0.0f, 10.0f, 0.0f),
-			Vector3::Up());
-		constantBufferWVP_.ApplyChange();
-		constantBufferWVP_.VSBind(0);
-
-		model_.Draw(Matrix::Scale(0.01f));
-
-		DrawEnd();
-	}
-
-	void Graphics::InitializePipeline()
-	{
-		DirectX::XMFLOAT3 vertices[] =
-		{
-			{ DirectX::XMFLOAT3(-0.5f,-0.5f,0) },
-			{ DirectX::XMFLOAT3(0.5f,-0.5f,0)  },
-			{ DirectX::XMFLOAT3(0.5f, 0.5f,0)  },
-			{ DirectX::XMFLOAT3(-0.5f, 0.5f,0) }
-		};
-		vertexBuffer_.Initialize(&devices_, vertices);
-
-		D3D11_INPUT_ELEMENT_DESC layoutDescs[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT   , 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "NORMAL"  , 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TANGENT" , 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		};
-		vertexShader_.Initialize(&devices_, ".\\asset\\shader\\simple.hlsl", layoutDescs);
-
-		pixelShader_.Initialize(&devices_, ".\\asset\\shader\\simple.hlsl");
-	}
-
 	void Graphics::InitializeGraphics()
 	{
 		auto* dev = devices_.GetDevice();
@@ -228,9 +169,6 @@ namespace wx2::graphics
 
 		HRESULT hr = dev->CreateSamplerState(&sd, samplerState_.GetAddressOf());
 		WX2_COM_ERROR_IF_FAILED(hr, "サンプラーステートの作成に失敗しました。");
-
-		modelLoader_.Initialize(&devices_, &constantBufferWVP_);
-		model_ = modelLoader_.Load(".\\asset\\model\\WG.fbx");
 	}
 
 	//Graphics::ComPtr<IDXGIAdapter> Graphics::GetAdapterByGpuMemory(IDXGIFactory* factory)

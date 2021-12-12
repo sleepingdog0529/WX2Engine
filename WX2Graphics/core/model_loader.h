@@ -12,7 +12,7 @@
 #include "model_loader.h"
 #include "texture_type.h"
 
-namespace wx2::graphics
+namespace wx2
 {
 	enum class TextureStorageType
 	{
@@ -87,6 +87,6 @@ namespace wx2::graphics
 		};
 
 		Device* devices_{};
-		ConstantBuffer<WVPMatrix>* constantBufferWVP_;
+		ConstantBuffer<WVPMatrix>* constantBufferWVP_{};
 	};
 }

@@ -6,7 +6,7 @@
  ********************************************************************/
 #pragma once
 
-namespace wx2::graphics
+namespace wx2
 {
 	enum class TextureType
 	{

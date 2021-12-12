@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace wx2::graphics
+namespace wx2
 {
 	class SamplerState
 	{

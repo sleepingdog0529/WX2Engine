@@ -3,11 +3,11 @@
         {
             "key": "Main",
             "value": {
-                "title": "FPS: 103",
-                "x": 320,
-                "y": 212,
-                "width": 752,
-                "height": 534,
+                "title": "FPS: 105 AVG: 104",
+                "x": 442,
+                "y": 270,
+                "width": 528,
+                "height": 471,
                 "style": 282001408,
                 "exStyle": 256,
                 "maximized": false,

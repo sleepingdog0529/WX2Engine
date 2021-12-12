@@ -2,7 +2,7 @@
 #include <d3dcompiler.h>
 #include <stierr.h>
 
-namespace wx2::graphics
+namespace wx2
 {
 	void VertexShader::Initialize(
 		Device* devices,

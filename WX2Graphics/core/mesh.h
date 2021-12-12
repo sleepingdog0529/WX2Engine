@@ -17,7 +17,7 @@
 #include "texture.h"
 #include "texture_type.h"
 
-namespace wx2::graphics
+namespace wx2
 {
 	class Mesh final
 	{
@@ -34,7 +34,7 @@ namespace wx2::graphics
 
 		void Draw() const noexcept;
 
-		[[nodiscard]] const DirectX::XMMATRIX& GetTransformMatrix() const noexcept { return transformMatrix_; }
+		[[nodiscard]] const Matrix& GetTransformMatrix() const noexcept { return transformMatrix_; }
 
 	private:
 		void PSBindTexture(const UINT slot, const TextureType& texType) const noexcept;
@@ -45,6 +45,6 @@ namespace wx2::graphics
 		std::vector<ModelVertex> vertices_{};
 		std::vector<DWORD> indices_{};
 		std::map<TextureType, Texture> textures_{};
-		DirectX::XMMATRIX transformMatrix_{};
+		Matrix transformMatrix_{};
 	};
 }
