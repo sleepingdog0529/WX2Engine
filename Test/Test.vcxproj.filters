@@ -26,5 +26,15 @@
     <ClInclude Include="pch\pch.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="component\transform.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="asset\shader\header\normal.hlsli" />
+    <None Include="asset\script\hello.lua" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="asset\shader\simple.hlsl" />
   </ItemGroup>
 </Project>

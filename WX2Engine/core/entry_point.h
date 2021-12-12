@@ -13,7 +13,7 @@ extern std::unique_ptr<wx2::Application> wx2::CreateApp() noexcept;
  * @brief エントリポイント
  */
 #if defined(NDEBUG)
-INT WINAPI WinMain(
+int WINAPI WinMain(
 	_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPSTR lpCmdLine,

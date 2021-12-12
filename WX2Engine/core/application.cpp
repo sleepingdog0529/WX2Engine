@@ -55,6 +55,8 @@ namespace wx2
 
 		WX2_LOG_TRACE("アプリケーション実行開始");
 
+		Start();
+
 		// メインループ
 		bool terminate = false;
 		while (!terminate)
@@ -83,20 +85,6 @@ namespace wx2
 		}
 
 		return EXIT_SUCCESS;
-	}
-
-	bool Application::Update() noexcept
-	{
-		using namespace std::chrono_literals;
-
-		input_.Update();
-		const auto& keyboard = input_.GetKeyboard();
-
-		// 描画
-		graphics_.RenderFrame();
-
-		// ESCキーが押されていたらアプリケーション終了
-		return !keyboard.IsPressed(Keyboard::Escape);
 	}
 
 	void Application::Draw() noexcept
