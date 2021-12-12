@@ -1,5 +1,5 @@
 #include "application.h"
-
+#include <DirectXTK/GeometricPrimitive.h>
 namespace wx2
 {
 	Application::Application() noexcept
@@ -34,7 +34,7 @@ namespace wx2
 		wndProp.x = (screenWidth - wndProp.width) / 2;
 		wndProp.y = (screenHeight - wndProp.height) / 2;
 		wndProp.style = WS_OVERLAPPEDWINDOW;
-		wndProp.ex_style = WS_EX_WINDOWEDGE;
+		wndProp.exStyle = WS_EX_WINDOWEDGE;
 		wndProp.maximized = false;
 		wndProp.fullscreen = false;
 
@@ -45,7 +45,7 @@ namespace wx2
 
 		bool res = graphics_.Initialize(
 			mainWindow_->GetHandle(),
-			mainWindow_->GetWindowProperty(),
+			mainWindow_->GetWindowPropertyPtr(),
 			true);
 		if (!res)
 		{
@@ -59,12 +59,25 @@ namespace wx2
 		bool terminate = false;
 		while (!terminate)
 		{
-			if (frameTimer_.ElapcedTime() < Frame(1))
+			using namespace std::chrono_literals;
+
+			if (frameTimer_.ElapcedTime().count() < 1000 / 120.0f)
 			{
 				terminate = !windowContainer_.ProcessMessages();
 			}
 			else 
 			{
+				static int frame = 0;
+				++frame;
+
+				if (static Timer<> fpsTimer; fpsTimer.ElapcedTime().count() >= 1000)
+				{
+					fpsTimer.Start();
+					mainWindow_->SetTitle(std::format("FPS: {}", frame));
+					frame = 0;
+				}
+
+				frameTimer_.Start();
 				terminate = !Update();
 			}
 		}

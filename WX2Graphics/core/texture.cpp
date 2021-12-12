@@ -38,7 +38,7 @@ namespace wx2::graphics
 		{
 			WX2_LOG_WARN("ファイルからのテクスチャの読み込みに失敗しました。パス: {}", filePath.string());
 
-			Initialize(devices, { 1.0f, 0.0f, 1.0f, 1.0f });
+			Initialize(devices, { 1.0f, 0.0f, 1.0f });
 		}
 	}
 
@@ -60,11 +60,11 @@ namespace wx2::graphics
 		{
 			WX2_LOG_WARN("メモリからのテクスチャの読み込みに失敗しました。");
 
-			Initialize(devices, { 1.0f, 0.0f, 1.0f, 1.0f });
+			Initialize(devices, { 1.0f, 0.0f, 1.0f });
 		}
 	}
 
-	void Texture::Initialize(Device* devices, const DirectX::XMFLOAT4& color)
+	void Texture::Initialize(Device* devices, const Color& color)
 	{
 		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
 		devices_ = devices;
@@ -74,10 +74,10 @@ namespace wx2::graphics
 		ID3D11Texture2D* tex = nullptr;
 
 		std::array<BYTE, 4> colorData;
-		colorData[0] = static_cast<BYTE>(color.x * 255.0f);
-		colorData[1] = static_cast<BYTE>(color.y * 255.0f);
-		colorData[2] = static_cast<BYTE>(color.z * 255.0f);
-		colorData[3] = static_cast<BYTE>(color.w * 255.0f);
+		colorData[0] = static_cast<BYTE>(color[0] * 255.0f);
+		colorData[1] = static_cast<BYTE>(color[1] * 255.0f);
+		colorData[2] = static_cast<BYTE>(color[2] * 255.0f);
+		colorData[3] = static_cast<BYTE>(color[3] * 255.0f);
 
 		D3D11_SUBRESOURCE_DATA srd{};
 		srd.pSysMem = colorData.data();

@@ -22,5 +22,6 @@
     <ClInclude Include="util\safe_release.h" />
     <ClInclude Include="util\file_dialog.h" />
     <ClInclude Include="util\thread_pool.h" />
+    <ClInclude Include="util\observer.h" />
   </ItemGroup>
 </Project>

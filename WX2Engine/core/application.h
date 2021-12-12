@@ -46,7 +46,7 @@ namespace wx2
 		bool Update() noexcept;
 		void Draw() noexcept;
 
-		Timer<Frame> frameTimer_;
+		Timer<> frameTimer_;
 		Logger log_;
 		WindowContainer windowContainer_;
 		Input input_;

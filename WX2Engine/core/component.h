@@ -20,6 +20,8 @@ private:													\
 
 namespace wx2
 {
+	using ComponentType = std::uint8_t;
+
 	class IComponent
 	{
 	public:

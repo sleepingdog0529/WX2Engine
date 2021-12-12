@@ -3,13 +3,13 @@
         {
             "key": "Main",
             "value": {
-                "title": "WX2EG",
-                "x": 20,
-                "y": 67,
-                "width": 749,
-                "height": 473,
+                "title": "FPS: 112",
+                "x": 633,
+                "y": 327,
+                "width": 752,
+                "height": 534,
                 "style": 282001408,
-                "ex_style": 256,
+                "exStyle": 256,
                 "maximized": false,
                 "fullscreen": false
             }

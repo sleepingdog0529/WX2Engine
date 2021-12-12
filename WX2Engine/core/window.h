@@ -52,6 +52,15 @@ namespace wx2
 		}
 
 		/**
+		 * @brief  ウィンドウ情報ポインタを取得する
+		 * @return ウィンドウ情報ポインタ
+		 */
+		[[nodiscard]] WindowProperty* GetWindowPropertyPtr() noexcept
+		{
+			return &windowProp_;
+		}
+
+		/**
 		 * @brief ウィンドウのフルスクリーン状態を設定する
 		 * @param fullscreen フルスクリーンにするか
 		 */
@@ -86,5 +95,11 @@ namespace wx2
 		HWND hwnd_;						//! ウィンドウハンドル
 		std::string className_;			//! ウィンドウクラス名
 		WindowProperty windowProp_;		//! ウィンドウ情報
+
+		// フルスクリーンを解除するときに必要な情報を記憶しておくための変数
+		int recordWindowX_;			//! 通常時ウィンドウのX座標の記録
+		int recordWindowY_;			//! 通常時ウィンドウのY座標の記録
+		int recordWindowWidth_;		//! 通常時ウィンドウの幅の記録
+		int recordWindowHeight_;	//! 通常時ウィンドウの高さの記録
 	};
 }

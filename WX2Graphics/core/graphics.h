@@ -38,7 +38,7 @@ namespace wx2::graphics
 		 * @param  windowProp ウィンドウ情報
 		 * @param  vsync 垂直同期の使用
 		 */
-		[[nodiscard]] bool Initialize(HWND hwnd, const WindowProperty& windowProp, bool vsync) noexcept;
+		[[nodiscard]] bool Initialize(HWND hwnd, WindowProperty* windowProp, bool vsync) noexcept;
 
 		void DrawBegin() noexcept;
 		void DrawEnd() const noexcept;
@@ -62,7 +62,9 @@ namespace wx2::graphics
 		void InitializePipeline();
 		void InitializeGraphics();
 
-		WindowProperty windowProperty_;
+		//ComPtr<IDXGIAdapter> GetAdapterByGpuMemory(IDXGIFactory* factory);
+
+		WindowProperty* windowProperty_;
 
 		Device devices_;
 		BlendState blendState_;

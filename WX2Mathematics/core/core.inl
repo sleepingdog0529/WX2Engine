@@ -321,6 +321,13 @@ namespace wx2
 		return vector_;
 	}
 
+	inline Vector3::operator DirectX::XMFLOAT3() const noexcept
+	{
+		DirectX::XMFLOAT3 xmf;
+		DirectX::XMStoreFloat3(&xmf, vector_);
+		return xmf;
+	}
+
 	inline void Vector3::Normalized() noexcept
 	{
 		vector_ = DirectX::XMVector3Normalize(vector_);
@@ -516,6 +523,13 @@ namespace wx2
 	inline Vector4::operator DirectX::XMVECTOR() const noexcept
 	{
 		return vector_;
+	}
+
+	inline Vector4::operator DirectX::XMFLOAT4() const noexcept
+	{
+		DirectX::XMFLOAT4 xmf;
+		DirectX::XMStoreFloat4(&xmf, vector_);
+		return xmf;
 	}
 
 	inline void Vector4::Normalized() noexcept
@@ -741,6 +755,13 @@ namespace wx2
 	inline Matrix::operator DirectX::XMMATRIX() const noexcept
 	{
 		return matrix_;
+	}
+
+	inline Matrix::operator DirectX::XMFLOAT4X4() const noexcept
+	{
+		DirectX::XMFLOAT4X4 xmf;
+		DirectX::XMStoreFloat4x4(&xmf, matrix_);
+		return xmf;
 	}
 
 	inline Vector3 Matrix::Right() const noexcept
@@ -1185,6 +1206,11 @@ namespace wx2
 		return Quaternion(DirectX::XMQuaternionSlerp(q1.quaternion_, q2.quaternion_, t));
 	}
 
+	inline Quaternion Quaternion::Concatenate(const Quaternion& q1, const Quaternion& q2) noexcept
+	{
+		return Quaternion(DirectX::XMQuaternionMultiply(q1.quaternion_, q2.quaternion_));
+	}
+
 	inline bool Color::operator == (const Color& rhs) const noexcept
 	{
 		return DirectX::XMColorEqual(color_, rhs.color_);
@@ -1246,9 +1272,28 @@ namespace wx2
 		return *this;
 	}
 
+	inline const float& Color::operator[](const std::size_t index) const noexcept
+	{
+		WX2_ASSERT_MSG(index < 4, "添え字の値が範囲外です。");
+		return color_.m128_f32[index];
+	}
+
+	inline float& Color::operator[](const std::size_t index) noexcept
+	{
+		WX2_ASSERT_MSG(index < 4, "添え字の値が範囲外です。");
+		return color_.m128_f32[index];
+	}
+
 	inline Color::operator DirectX::XMVECTOR() const noexcept
 	{
 		return color_;
+	}
+
+	inline Color::operator DirectX::XMFLOAT4() const noexcept
+	{
+		DirectX::XMFLOAT4 xmf;
+		DirectX::XMStoreFloat4(&xmf, color_);
+		return xmf;
 	}
 
 	inline Color Color::Negate(const Color& c) noexcept

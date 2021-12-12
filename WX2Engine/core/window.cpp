@@ -34,7 +34,7 @@ namespace wx2
 
 			// ウィンドウを作成
 			hwnd_ = CreateWindowEx(
-				windowProp_.ex_style,
+				windowProp_.exStyle,
 				className_.c_str(),
 				windowProp_.title.c_str(),
 				windowProp_.style,
@@ -53,10 +53,13 @@ namespace wx2
 			exit(EXIT_FAILURE);
 		}
 
-			// ウィンドウを可視化、更新
+		// ウィンドウを可視化、更新
 		UpdateWindow(hwnd_);
 
-		SetFullscreen(windowProp_.fullscreen);
+		if (windowProp_.fullscreen)
+		{
+			SetFullscreen(true);
+		}
 	}
 
 	Window::~Window() noexcept
@@ -102,7 +105,7 @@ namespace wx2
 
 		case WM_SETTEXT:
 			window->OnTitleChanged(wp, lp);
-			return TRUE;
+			break;
 
 		case WM_KEYDOWN:
 			window->OnKeyDown(wp, lp);
@@ -162,7 +165,7 @@ namespace wx2
 			SetWindowLong(
 				hwnd_,
 				GWL_EXSTYLE,
-				~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE) & windowProp_.ex_style);
+				~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE) & windowProp_.exStyle);
 
 			// ウィンドウサイズをモニターサイズと同じにする
 			MONITORINFO mi{};
@@ -176,22 +179,37 @@ namespace wx2
 				mi.rcMonitor.right - mi.rcMonitor.left,
 				mi.rcMonitor.bottom - mi.rcMonitor.top,
 				SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+
+			recordWindowX_ = windowProp_.x;
+			recordWindowY_ = windowProp_.y;
+			recordWindowWidth_ = windowProp_.width;
+			recordWindowHeight_ = windowProp_.height;
+
+			windowProp_.x = mi.rcMonitor.left;
+			windowProp_.y = mi.rcMonitor.top;
+			windowProp_.width = mi.rcMonitor.right - mi.rcMonitor.left;
+			windowProp_.height = mi.rcMonitor.bottom - mi.rcMonitor.top;
 		}
 		else
 		{
 			// ウィンドウスタイルを再設定
 			SetWindowLong(hwnd_, GWL_STYLE, static_cast<LONG>(windowProp_.style));
-			SetWindowLong(hwnd_, GWL_EXSTYLE, static_cast<LONG>(windowProp_.ex_style));
+			SetWindowLong(hwnd_, GWL_EXSTYLE, static_cast<LONG>(windowProp_.exStyle));
 
 			// ウィンドウサイズを復元
 			SetWindowPos(
 				hwnd_,
 				nullptr,
-				windowProp_.x,
-				windowProp_.y,
-				windowProp_.width,
-				windowProp_.height,
+				recordWindowX_,
+				recordWindowY_,
+				recordWindowWidth_,
+				recordWindowHeight_,
 				SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+
+			windowProp_.x = recordWindowX_;
+			windowProp_.y = recordWindowY_;
+			windowProp_.width = recordWindowWidth_;
+			windowProp_.height = recordWindowHeight_;
 
 			// フルスクリーン前に最大化されていたら再度最大化
 			if (windowProp_.maximized)

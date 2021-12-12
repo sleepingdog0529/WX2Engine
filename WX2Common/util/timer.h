@@ -10,9 +10,7 @@
 
 namespace wx2
 {
-	using Frame = std::chrono::duration<int32_t, std::ratio<1, 120>>;
-
-	template <class Units = std::chrono::milliseconds >
+	template <class Units = std::chrono::milliseconds>
 	class Timer final
 	{
 	public:

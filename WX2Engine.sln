@@ -29,9 +29,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Graphics", "WX2Graphics\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WX2Mathematics", "WX2Mathematics\WX2Mathematics.vcxproj", "{6FAD5A02-71F3-46BD-9CD5-230569B24F91}"
-	ProjectSection(ProjectDependencies) = postProject
-		{15E3903F-D8AD-4B65-88A8-C27A79974449} = {15E3903F-D8AD-4B65-88A8-C27A79974449}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

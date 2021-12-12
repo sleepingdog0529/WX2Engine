@@ -1,8 +1,8 @@
-#include "graphics.h"
+ï»¿#include "graphics.h"
 
 namespace wx2::graphics
 {
-	bool Graphics::Initialize(HWND hwnd, const WindowProperty& windowProp, bool vsync) noexcept
+	bool Graphics::Initialize(HWND hwnd, WindowProperty* windowProp, bool vsync) noexcept
 	{
 		try
 		{
@@ -17,25 +17,25 @@ namespace wx2::graphics
 
 #if !defined(NDEBUG)
 			hr = dev->QueryInterface(IID_PPV_ARGS(debug_.GetAddressOf()));
-			WX2_COM_ERROR_IF_FAILED(hr, "ID3DƒfƒoƒbƒO‚Ì“o˜^‚É¸”s‚µ‚Ü‚µ‚½B");
+			WX2_COM_ERROR_IF_FAILED(hr, "ID3Dãƒ‡ãƒãƒƒã‚°ã®ç™»éŒ²ã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 #endif
 
-			// ƒCƒ“ƒ^[ƒtƒF[ƒXæ“¾
+			// ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å–å¾—
 			ComPtr<IDXGIDevice> dxgiDevice;
 			hr = dev->QueryInterface(IID_PPV_ARGS(dxgiDevice.GetAddressOf()));
-			WX2_COM_ERROR_IF_FAILED(hr, "DXGIƒfƒoƒCƒX‚Ì–â‚¢‡‚í‚¹‚É¸”s‚µ‚Ü‚µ‚½B");
+			WX2_COM_ERROR_IF_FAILED(hr, "DXGIãƒ‡ãƒã‚¤ã‚¹ã®å•ã„åˆã‚ã›ã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 
-			// ƒAƒ_ƒvƒ^[æ“¾
+			// ã‚¢ãƒ€ãƒ—ã‚¿ãƒ¼å–å¾—
 			ComPtr<IDXGIAdapter> adapter;
 			hr = dxgiDevice->GetAdapter(adapter.GetAddressOf());
-			WX2_COM_ERROR_IF_FAILED(hr, "DXGIƒAƒ_ƒvƒ^‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½B");
+			WX2_COM_ERROR_IF_FAILED(hr, "DXGIã‚¢ãƒ€ãƒ—ã‚¿ã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 
-			// ƒtƒ@ƒNƒgƒŠ[æ“¾
+			// ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¼å–å¾—
 			ComPtr<IDXGIFactory> factory;
 			hr = adapter->GetParent(IID_PPV_ARGS(factory.GetAddressOf()));
-			WX2_COM_ERROR_IF_FAILED(hr, "DXGIƒtƒ@ƒNƒgƒŠ[‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½B");
+			WX2_COM_ERROR_IF_FAILED(hr, "DXGIãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¼ã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 
-			// —˜—p‰Â”\‚ÈMSAA‚ğæ“¾
+			// åˆ©ç”¨å¯èƒ½ãªMSAAã‚’å–å¾—
 			DXGI_SAMPLE_DESC msaa = {};
 			for (int i = 0; i <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; i++)
 			{
@@ -50,12 +50,15 @@ namespace wx2::graphics
 				}
 			}
 
-			// ƒXƒƒbƒvƒ`ƒFƒCƒ“İ’è
+			const UINT displayWidth = GetSystemMetrics(SM_CXSCREEN);
+			const UINT displayHeight = GetSystemMetrics(SM_CYSCREEN);
+
+			// ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ã‚¤ãƒ³è¨­å®š
 			DXGI_SWAP_CHAIN_DESC scd{};
 			scd.OutputWindow = hwnd;
-			scd.BufferDesc.Width = windowProperty_.width;
-			scd.BufferDesc.Height = windowProperty_.height;
-			scd.Windowed = !windowProperty_.fullscreen;
+			scd.BufferDesc.Width = displayWidth;
+			scd.BufferDesc.Height = displayHeight;
+			scd.Windowed = !windowProperty_->fullscreen;
 			scd.BufferDesc.RefreshRate.Numerator = 60;
 			scd.BufferDesc.RefreshRate.Denominator = 1;
 			scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -68,45 +71,45 @@ namespace wx2::graphics
 			scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 			hr = factory->CreateSwapChain(dev, &scd, swapChain_.GetAddressOf());
-			WX2_COM_ERROR_IF_FAILED(hr, "ƒXƒƒbƒvƒ`ƒFƒCƒ“‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½B");
+			WX2_COM_ERROR_IF_FAILED(hr, "ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ã‚¤ãƒ³ã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 
-			// ƒXƒƒbƒvƒ`ƒFƒCƒ“‚Ìƒoƒbƒtƒ@æ“¾
+			// ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ã‚¤ãƒ³ã®ãƒãƒƒãƒ•ã‚¡å–å¾—
 			hr = swapChain_->GetBuffer(0, IID_PPV_ARGS(backBuffer_.GetAddressOf()));
-			WX2_COM_ERROR_IF_FAILED(hr, "ƒoƒbƒNƒoƒbƒtƒ@‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½B");
+			WX2_COM_ERROR_IF_FAILED(hr, "ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 
-			// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[ì¬
+			// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ“ãƒ¥ãƒ¼ä½œæˆ
 			hr = dev->CreateRenderTargetView(backBuffer_.Get(), nullptr, renderTargetView_.GetAddressOf());
-			WX2_COM_ERROR_IF_FAILED(hr, "ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½B");
+			WX2_COM_ERROR_IF_FAILED(hr, "ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ“ãƒ¥ãƒ¼ã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 
-			// ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒoƒbƒtƒ@ì¬
-			CD3D11_TEXTURE2D_DESC dsbd(DXGI_FORMAT_D24_UNORM_S8_UINT, windowProperty_.width, windowProperty_.height);
+			// ãƒ‡ãƒ—ã‚¹ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒãƒƒãƒ•ã‚¡ä½œæˆ
+			CD3D11_TEXTURE2D_DESC dsbd(DXGI_FORMAT_D24_UNORM_S8_UINT, displayWidth, displayHeight);
 			dsbd.MipLevels = 1;
 			dsbd.SampleDesc = msaa;
 			dsbd.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 			hr = dev->CreateTexture2D(&dsbd, nullptr, depthStencilBuffer_.GetAddressOf());
-			WX2_COM_ERROR_IF_FAILED(hr, "ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒoƒbƒtƒ@‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½B");
+			WX2_COM_ERROR_IF_FAILED(hr, "ãƒ‡ãƒ—ã‚¹ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 
-			// ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒrƒ…[ì¬
+			// ãƒ‡ãƒ—ã‚¹ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒ“ãƒ¥ãƒ¼ä½œæˆ
 			hr = dev->CreateDepthStencilView(depthStencilBuffer_.Get(), nullptr, depthStencilView_.GetAddressOf());
-			WX2_COM_ERROR_IF_FAILED(hr, "ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒrƒ…[‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½B");
+			WX2_COM_ERROR_IF_FAILED(hr, "ãƒ‡ãƒ—ã‚¹ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒ“ãƒ¥ãƒ¼ã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 
-			// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[İ’è
+			// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ“ãƒ¥ãƒ¼è¨­å®š
 			devCon->OMSetRenderTargets(1, renderTargetView_.GetAddressOf(), depthStencilView_.Get());
 
-			// ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒXƒe[ƒgì¬
+			// ãƒ‡ãƒ—ã‚¹ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ã‚¹ãƒ†ãƒ¼ãƒˆä½œæˆ
 			CD3D11_DEPTH_STENCIL_DESC dsd(D3D11_DEFAULT);
 			hr = dev->CreateDepthStencilState(&dsd, depthStencilState_.GetAddressOf());
-			WX2_COM_ERROR_IF_FAILED(hr, "ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒXƒe[ƒg‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½B");
+			WX2_COM_ERROR_IF_FAILED(hr, "ãƒ‡ãƒ—ã‚¹ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ã‚¹ãƒ†ãƒ¼ãƒˆã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 
-			// ƒrƒ…[ƒ|[ƒgİ’è
+			// ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¨­å®š
 			viewport_.TopLeftX = 0.0f;
 			viewport_.TopLeftY = 0.0f;
-			viewport_.Width = static_cast<float>(windowProperty_.width);
-			viewport_.Height = static_cast<float>(windowProperty_.height);
+			viewport_.Width = displayWidth;
+			viewport_.Height = displayHeight;
 			viewport_.MinDepth = 0.0f;
 			viewport_.MaxDepth = 1.0f;
 
-			// ƒ‰ƒXƒ^ƒ‰ƒCƒUƒXƒe[ƒg‚Ìì¬
+			// ãƒ©ã‚¹ã‚¿ãƒ©ã‚¤ã‚¶ã‚¹ãƒ†ãƒ¼ãƒˆã®ä½œæˆ
 			CD3D11_RASTERIZER_DESC rd(D3D11_DEFAULT);
 			dev->CreateRasterizerState(&rd, rasterizerState_.GetAddressOf());
 
@@ -172,7 +175,7 @@ namespace wx2::graphics
 			Vector3::Up());
 		constantBufferWVP_.data.projection = Matrix::PerspectiveFieldOfView(
 			PIDIV4,
-			static_cast<float>(windowProperty_.width) / static_cast<float>(windowProperty_.height),
+			windowProperty_->AspectRatio(),
 			0.01f,
 			1000.0f);
 		constantBufferWVP_.data.view = Matrix::LookAt(
@@ -224,9 +227,81 @@ namespace wx2::graphics
 		sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
 		HRESULT hr = dev->CreateSamplerState(&sd, samplerState_.GetAddressOf());
-		WX2_COM_ERROR_IF_FAILED(hr, "ƒTƒ“ƒvƒ‰[ƒXƒe[ƒg‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½B");
+		WX2_COM_ERROR_IF_FAILED(hr, "ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 
 		modelLoader_.Initialize(&devices_, &constantBufferWVP_);
 		model_ = modelLoader_.Load(".\\asset\\model\\WG.fbx");
 	}
+
+	//Graphics::ComPtr<IDXGIAdapter> Graphics::GetAdapterByGpuMemory(IDXGIFactory* factory)
+	//{
+	//	HRESULT hr;
+
+	//	ComPtr<IDXGIAdapter> adapter;
+	//	int maxMemory = 0;
+	//	int adapterIdx = 0;
+	//	for (int i = 0; factory->EnumAdapters(i, adapter.GetAddressOf()) != DXGI_ERROR_NOT_FOUND; ++i)
+	//	{
+	//		DXGI_ADAPTER_DESC ad = {};
+	//		adapter->GetDesc(&ad);
+	//		std::string description = ToString(ad.Description);
+
+	//		int videoCardMem = static_cast<int>(ad.DedicatedVideoMemory) / 1024 / 1024;
+	//		WX2_LOG_INFO("==================================================");
+	//		WX2_LOG_INFO("adapter[{}]: {}", i, description);
+	//		WX2_LOG_INFO(" - revision: {}", ad.Revision);
+	//		WX2_LOG_INFO(" - video memory: {}", ad.DedicatedVideoMemory / 1024 / 1024);
+	//		WX2_LOG_INFO(" - system memory: {}", ad.DedicatedSystemMemory / 1024 / 1024);
+	//		WX2_LOG_INFO(" - shared system memory: {}", ad.SharedSystemMemory / 1024 / 1024);
+
+	//		// ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½jï¿½^ï¿½[ï¿½ï¿½ï¿½
+	//		ComPtr<IDXGIOutput> output;
+	//		for (int j = 0; adapter->EnumOutputs(j, output.GetAddressOf()) != DXGI_ERROR_NOT_FOUND; ++j)
+	//		{
+	//			UINT numModes = 0;
+	//			const DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+	//			// ï¿½fï¿½Bï¿½Xï¿½vï¿½ï¿½ï¿½Cï¿½Ì•\ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
+	//			hr = output->GetDisplayModeList(format, 0, &numModes, nullptr);
+	//			if (FAILED(hr))
+	//			{
+	//				WX2_LOG_ERROR("ï¿½fï¿½Bï¿½Xï¿½vï¿½ï¿½ï¿½Cï¿½Ì•\ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½Ìæ“¾ï¿½Éï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B");
+	//				continue;
+	//			}
+	//			std::vector<DXGI_MODE_DESC> modes;
+	//			modes.resize(numModes);
+
+	//			// ï¿½fï¿½Bï¿½Xï¿½vï¿½ï¿½ï¿½Cï¿½Ì•\ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ñƒŠƒXï¿½gï¿½ï¿½ï¿½æ“¾
+	//			hr = output->GetDisplayModeList(format, 0, &numModes, modes.data());
+	//			if (FAILED(hr))
+	//			{
+	//				WX2_LOG_ERROR("ï¿½fï¿½Bï¿½Xï¿½vï¿½ï¿½ï¿½Cï¿½Ì•\ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ñƒŠƒXï¿½gï¿½Ìæ“¾ï¿½Éï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B");
+	//				continue;
+	//			}
+	//			WX2_LOG_INFO(" - output[{}] num display mode: {}\n", j, numModes);
+	//			for (int k = 0; k < numModes; ++k)
+	//			{
+	//				WX2_LOG_INFO(" - - mode[{}]: {} * {}, refresh rate: {}",
+	//					k, modes[k].Width, modes[k].Height, modes[k].RefreshRate.Denominator);
+	//			}
+	//			output.Reset();
+	//		}
+	//		if (videoCardMem > maxMemory)
+	//		{
+	//			maxMemory = videoCardMem;
+	//			adapterIdx = i;
+	//		}
+
+	//		adapter.Reset();
+	//	}
+	//	WX2_LOG_INFO("==================================================");
+	//	factory->EnumAdapters(adapterIdx, adapter.GetAddressOf());
+	//	if (FAILED(hr))
+	//	{
+	//		WX2_LOG_ERROR("ï¿½Aï¿½_ï¿½vï¿½^ï¿½Ìæ“¾ï¿½Éï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B");
+	//		exit(EXIT_FAILURE);
+	//	}
+
+	//	return adapter;
+	//}
 }

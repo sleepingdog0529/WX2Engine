@@ -7,7 +7,6 @@
 #pragma once
 #include <vector>
 #include <span>
-#include <DirectXMath.h>
 #include <map>
 #include <WX2Mathematics.h>
 

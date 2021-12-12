@@ -8,6 +8,7 @@
 #include "mesh.h"
 #include "constant_buffer.h"
 #include "constant_buffer_type.h"
+#include <WX2Mathematics.h>
 
 namespace wx2::graphics
 {
