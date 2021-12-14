@@ -131,6 +131,10 @@ namespace wx2
 		operator DirectX::XMVECTOR() const noexcept;
 		operator DirectX::XMFLOAT2() const noexcept;
 
+		/**
+		 * @brief  2Dベクトルを文字列に変換する
+		 * @return 文字列化された2Dベクトル
+		 */
 		[[nodiscard]] std::string ToString() const noexcept
 		{
 			return std::format("({:6f}, {:6f})",
@@ -451,6 +455,10 @@ namespace wx2
 		operator DirectX::XMVECTOR() const noexcept;
 		operator DirectX::XMFLOAT3() const noexcept;
 
+		/**
+		 * @brief  3Dベクトルを文字列に変換する
+		 * @return 文字列化された3Dベクトル
+		 */
 		[[nodiscard]] std::string ToString() const noexcept
 		{
 			return std::format("({:6f}, {:6f}, {:6f})",
@@ -780,6 +788,10 @@ namespace wx2
 		operator DirectX::XMVECTOR() const noexcept;
 		operator DirectX::XMFLOAT4() const noexcept;
 
+		/**
+		 * @brief  4Dベクトルを文字列に変換する
+		 * @return 文字列化された4Dベクトル
+		 */
 		[[nodiscard]] std::string ToString() const noexcept
 		{
 			return std::format("({:6f}, {:6f}, {:6f}, {:6f})",

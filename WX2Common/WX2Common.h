@@ -14,7 +14,7 @@
 #include "debug/debugging.h"
 #include "util/hash.h"
 #include "util/macro.h"
-#include "util/observer.h"
+#include "util/event_dispatcher.h"
 #include "util/safe_release.h"
 #include "util/string_helper.h"
 #include "util/thread_pool.h"
