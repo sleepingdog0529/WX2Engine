@@ -44,6 +44,7 @@ namespace wx2
 		virtual void Start() noexcept = 0;
 		virtual bool Update(const float deltaTime) noexcept = 0;
 		virtual void Draw(const float deltaTime) noexcept = 0;
+		virtual void DrawImGui() noexcept = 0;
 
 		Timer<> frameTimer_;
 		Logger log_;

@@ -104,8 +104,8 @@ namespace wx2
 			// ビューポート設定
 			viewport_.TopLeftX = 0.0f;
 			viewport_.TopLeftY = 0.0f;
-			viewport_.Width = displayWidth;
-			viewport_.Height = displayHeight;
+			viewport_.Width = static_cast<float>(displayWidth);
+			viewport_.Height = static_cast<float>(displayHeight);
 			viewport_.MinDepth = 0.0f;
 			viewport_.MaxDepth = 1.0f;
 
@@ -167,7 +167,7 @@ namespace wx2
 		sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 		sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
-		HRESULT hr = dev->CreateSamplerState(&sd, samplerState_.GetAddressOf());
+		const HRESULT hr = dev->CreateSamplerState(&sd, samplerState_.GetAddressOf());
 		WX2_COM_ERROR_IF_FAILED(hr, "サンプラーステートの作成に失敗しました。");
 	}
 

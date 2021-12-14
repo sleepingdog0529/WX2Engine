@@ -1,3 +1,5 @@
+//#include <imgui/imgui.h>
+
 namespace wx2
 {
 	class Game final : public wx2::Application
@@ -72,6 +74,13 @@ namespace wx2
 			world *= Matrix::Scale(scale_);
 			world *= Matrix::RotationFromQuaternion(rot_);
 			model_.Draw(world);
+		}
+
+		void DrawImGui() noexcept override
+		{
+			//ImGui::Begin("Transform");
+			//ImGui::DragFloat3("Position", &pos_[0], 0.1f);
+			//ImGui::End();
 		}
 
 		Vector3 pos_{};
