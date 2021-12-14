@@ -100,14 +100,14 @@ namespace wx2
 	 * @tparam Args コールバックに渡される引数の型
 	 */
 	template <typename EventType, typename... Args>
-	class EventDispatcher final
+	class EventDispatcher
 	{
 		//! イベントリスナーの型
 		using EventListenerType = EventListener<EventType, Args...>;
 
 	public:
 		EventDispatcher() = default;
-		~EventDispatcher() = default;
+		virtual ~EventDispatcher() = default;
 
 		// ムーブとコピーを許可
 		EventDispatcher(const EventDispatcher& other) = default;

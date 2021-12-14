@@ -20,14 +20,12 @@ namespace wx2
 
 		void Initialize(
 			Device* devices,
-			ConstantBuffer<WVPMatrix>* constantBufferWVP,
 			std::span<Mesh> meshes);
 
-		void Draw(const Matrix& worldMatrix) const noexcept;
+		void Draw() const noexcept;
 
 	private:
 		Device* devices_;
-		ConstantBuffer<WVPMatrix>* constantBufferWVP_{};
 		std::vector<Mesh> meshes_{};
 	};
 }

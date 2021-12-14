@@ -46,9 +46,7 @@ namespace wx2
 
 		WX2_DISALLOW_COPY_AND_MOVE(ModelLoader);
 
-		void Initialize(
-			Device* devices,
-			ConstantBuffer<WVPMatrix>* constantBufferWVP);
+		void Initialize(Device* devices);
 
 		Model Load(const std::filesystem::path& filePath);
 
@@ -56,17 +54,19 @@ namespace wx2
 		Mesh ProcessMesh(
 			const aiMesh* aiMesh,
 			const aiScene* aiScene,
-			const std::filesystem::path& directory,
-			const Matrix& transformMatrix) const noexcept;
+			const std::filesystem::path& directory) const noexcept;
 
 		Model ProcessNode(
 			std::vector<Mesh>& meshes,
 			const aiNode* aiNode,
 			const aiScene* aiScene,
-			const std::filesystem::path& directory,
-			const Matrix& parentTransformMatrix) noexcept;
+			const std::filesystem::path& directory) noexcept;
 
-		TextureStorageType DetermineTextureStorageType(const aiScene* aiScene, const aiMaterial* aiMaterial, UINT index, aiTextureType aiTextureType) const;
+		TextureStorageType DetermineTextureStorageType(
+			const aiScene* aiScene,
+			const aiMaterial* aiMaterial, 
+			UINT index, 
+			aiTextureType aiTextureType) const;
 
 		std::map<TextureType, Texture> LoadMaterialTextures(
 			const aiMaterial* aiMat,
@@ -87,6 +87,5 @@ namespace wx2
 		};
 
 		Device* devices_{};
-		ConstantBuffer<WVPMatrix>* constantBufferWVP_{};
 	};
 }

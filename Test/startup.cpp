@@ -8,7 +8,6 @@ namespace wx2
 		void Start() noexcept override
 		{
 			auto& devices = graphics_.GetDevice();
-			auto& constantBufferWVP = graphics_.GetConstantBufferWVP();
 
 			D3D11_INPUT_ELEMENT_DESC layoutDescs[] =
 			{
@@ -22,25 +21,29 @@ namespace wx2
 
 			pixelShader_.Initialize(&devices, ".\\asset\\shader\\simple.hlsl");
 
-			modelLoader_.Initialize(&devices, &constantBufferWVP);
-			model_ = modelLoader_.Load(".\\asset\\model\\WG.fbx");
+			modelLoader_.Initialize(&devices);
+			model_ = modelLoader_.Load(".\\asset\\model\\VAWS-012\\VAWS-012_TypeA.fbx");
 		}
 
 		bool Update(const float deltaTime) noexcept override
 		{
 			input_.Update();
 			const auto& keyboard = input_.GetKeyboard();
+			const auto& mouse = input_.GetMouse();
+
+			rot_ *= Quaternion::FromAxisAngle(Vector3::Up(), mouse.GetAxisVelocity(Mouse::CursorX) * 0.01f);
+			rot_ *= Quaternion::FromAxisAngle(Vector3::Right(), mouse.GetAxisVelocity(Mouse::CursorY) * 0.01f);
 
 			Vector3 move;
-			if (keyboard.IsDown(Keyboard::D)) ++move[0];
-			if (keyboard.IsDown(Keyboard::A)) --move[0];
-			if (keyboard.IsDown(Keyboard::Space)) ++move[1];
-			if (keyboard.IsDown(Keyboard::LShift)) --move[1];
-			if (keyboard.IsDown(Keyboard::W)) ++move[2];
-			if (keyboard.IsDown(Keyboard::S)) --move[2];
+			if (keyboard.IsDown(Keyboard::D))		++move[0];
+			if (keyboard.IsDown(Keyboard::A))		--move[0];
+			if (keyboard.IsDown(Keyboard::Space))	++move[1];
+			if (keyboard.IsDown(Keyboard::LShift))	--move[1];
+			if (keyboard.IsDown(Keyboard::W))		++move[2];
+			if (keyboard.IsDown(Keyboard::S))		--move[2];
 
-			pos_ += Vector3::Normalize(move) * deltaTime * 3.0f;
-			scale_ = Vector3(0.01f);
+			pos_ += Vector3::Transform(Vector3::Normalize(move), rot_) * deltaTime * 3.0f;
+			scale_ = Vector3(1.0f);
 
 			// ESCキーが押されていたらアプリケーション終了
 			return !keyboard.IsPressed(Keyboard::Escape);
@@ -54,7 +57,12 @@ namespace wx2
 			auto& constantBufferWVP = graphics_.GetConstantBufferWVP();
 			const auto& windowProp = mainWindow_->GetWindowProperty();
 
-			constantBufferWVP.data.world = Matrix::Identity();
+			Matrix world;
+			world *= Matrix::Scale(scale_);
+			world *= Matrix::RotationFromQuaternion(rot_);
+			world *= Matrix::Translation(pos_);
+
+			constantBufferWVP.data.world = world;
 			constantBufferWVP.data.projection = Matrix::PerspectiveFieldOfView(
 				PIDIV4,
 				windowProp.AspectRatio(),
@@ -67,13 +75,7 @@ namespace wx2
 			constantBufferWVP.ApplyChange();
 			constantBufferWVP.VSBind(0);
 
-			WX2_LOG_INFO(pos_.ToString());
-
-			Matrix world;
-			world *= Matrix::Translation(pos_);
-			world *= Matrix::Scale(scale_);
-			world *= Matrix::RotationFromQuaternion(rot_);
-			model_.Draw(world);
+			model_.Draw();
 		}
 
 		void DrawImGui() noexcept override

@@ -29,12 +29,9 @@ namespace wx2
 			Device* devices,
 			std::span<ModelVertex> vertices,
 			std::span<DWORD> indices,
-			const std::map<TextureType, Texture>& textures,
-			const Matrix& transformMatrix);
+			const std::map<TextureType, Texture>& textures);
 
 		void Draw() const noexcept;
-
-		[[nodiscard]] const Matrix& GetTransformMatrix() const noexcept { return transformMatrix_; }
 
 	private:
 		void PSBindTexture(const UINT slot, const TextureType& texType) const noexcept;
@@ -45,6 +42,5 @@ namespace wx2
 		std::vector<ModelVertex> vertices_{};
 		std::vector<DWORD> indices_{};
 		std::map<TextureType, Texture> textures_{};
-		Matrix transformMatrix_{};
 	};
 }

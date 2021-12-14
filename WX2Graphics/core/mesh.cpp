@@ -6,13 +6,11 @@ namespace wx2
 		Device* devices,
 		std::span<ModelVertex> vertices,
 		std::span<DWORD> indices,
-		const std::map<TextureType, Texture>& textures,
-		const Matrix& transformMatrix)
+		const std::map<TextureType, Texture>& textures)
 	{
 		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
 
 		devices_ = devices;
-		transformMatrix_ = transformMatrix;
 
 		vertices_.resize(vertices.size());
 		std::ranges::move(vertices, vertices_.begin());

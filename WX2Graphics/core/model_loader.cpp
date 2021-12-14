@@ -5,15 +5,11 @@
 
 namespace wx2
 {
-	void ModelLoader::Initialize(
-		Device* devices,
-		ConstantBuffer<WVPMatrix>* constantBufferWVP)
+	void ModelLoader::Initialize(Device* devices)
 	{
 		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
-		WX2_ASSERT_MSG(constantBufferWVP, "定数バッファがnullptrでした。");
 
 		devices_ = devices;
-		constantBufferWVP_ = constantBufferWVP;
 	}
 
 	Model ModelLoader::Load(const std::filesystem::path& filePath)
@@ -34,14 +30,13 @@ namespace wx2
 		WX2_RUNTIME_ERROR_IF_FAILED(scene, "モデルファイルの読み込みに失敗しました。パス: {}", filePath.string());
 
 		std::vector<Mesh> meshes;
-		return ProcessNode(meshes, scene->mRootNode, scene, directory, Matrix::Identity());
+		return ProcessNode(meshes, scene->mRootNode, scene, directory);
 	}
 
 	Mesh ModelLoader::ProcessMesh(
 		const aiMesh* aiMesh,
 		const aiScene* aiScene,
-		const std::filesystem::path& directory,
-		const Matrix& transformMatrix) const noexcept
+		const std::filesystem::path& directory) const noexcept
 	{
 		std::vector<ModelVertex> vertices;
 		std::vector<DWORD> indices;
@@ -95,7 +90,7 @@ namespace wx2
 		const auto textures = LoadMaterialTextures(aiMat, aiScene, directory);
 
 		Mesh mesh;
-		mesh.Initialize(devices_, vertices, indices, textures, transformMatrix);
+		mesh.Initialize(devices_, vertices, indices, textures);
 		return mesh;
 	}
 
@@ -103,26 +98,22 @@ namespace wx2
 		std::vector<Mesh>& meshes,
 		const aiNode* aiNode,
 		const aiScene* aiScene,
-		const std::filesystem::path& directory,
-		const Matrix& parentTransformMatrix) noexcept
+		const std::filesystem::path& directory) noexcept
 	{
-		const Matrix nodeTransformMatrix =
-			Matrix::Transpose(Matrix(&aiNode->mTransformation.a1)) * parentTransformMatrix;
-
 		for (UINT i = 0; i < aiNode->mNumMeshes; i++)
 		{
 			const aiMesh* mesh = aiScene->mMeshes[aiNode->mMeshes[i]];
 
-			meshes.push_back(ProcessMesh(mesh, aiScene, directory, nodeTransformMatrix));
+			meshes.push_back(ProcessMesh(mesh, aiScene, directory));
 		}
 
 		for (UINT i = 0; i < aiNode->mNumChildren; i++)
 		{
-			ProcessNode(meshes, aiNode->mChildren[i], aiScene, directory, nodeTransformMatrix);
+			ProcessNode(meshes, aiNode->mChildren[i], aiScene, directory);
 		}
 
 		Model model;
-		model.Initialize(devices_, constantBufferWVP_, meshes);
+		model.Initialize(devices_, meshes);
 		return model;
 	}
 
