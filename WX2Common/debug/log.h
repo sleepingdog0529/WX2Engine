@@ -11,13 +11,29 @@
 #pragma warning(pop)
 
 /**
- * @brief	  ログを出力する
- * @param[in] フォーマット書式文字列、引数
+ * @brief 追跡ログを出力する
+ * @param フォーマット書式メッセージ、引数
  */
 #define WX2_LOG_TRACE(...)    spdlog::trace(__VA_ARGS__)
+/**
+ * @brief 詳細ログを出力する
+ * @param フォーマット書式メッセージ、引数
+ */
 #define WX2_LOG_INFO(...)     spdlog::info(__VA_ARGS__)
+/**
+ * @brief 警告ログを出力する
+ * @param フォーマット書式メッセージ、引数
+ */
 #define WX2_LOG_WARN(...)     spdlog::warn(__VA_ARGS__)
+/**
+ * @brief エラーログを出力する
+ * @param フォーマット書式メッセージ、引数
+ */
 #define WX2_LOG_ERROR(...)    spdlog::error(__VA_ARGS__)
+/**
+ * @brief 重大なエラーのログを出力する
+ * @param フォーマット書式メッセージ、引数
+ */
 #define WX2_LOG_CRITICAL(...) spdlog::critical(__VA_ARGS__)
 
 namespace wx2
@@ -29,23 +45,20 @@ namespace wx2
 	{
 	private:
 		//! ログファイルの最大数
-		static constexpr std::size_t MAX_FILE_ = 3; 
+		static constexpr std::size_t MAX_FILE = 3; 
 		//! ログファイルを置くディレクトリ
-		static constexpr const char* FILE_DIR_ = ".\\log";	
-		//! ログファイル名のフォーマット
-		static constexpr const char* FILE_NAME_ = "{:%Y-%m-%d-%H-%M-%S}.log";	
+		static constexpr const char* FILE_DIR = ".\\log";	
+		//! ログファイルの命名フォーマット
+		static constexpr const char* FILE_NAME = "{:%Y-%m-%d-%H-%M-%S}.log";	
 
 	public:
-		/**
-		 * @brief ロガーの初期化、ファイルの数制御を行う
-		 */
+		//! @brief ロガーの初期化、ログファイルの管理を行う
 		Logger() noexcept;
 
-		/**
-		 * @brief ロガーの終了処理
-		 */
+		//! @brief ロガーの終了処理
 		~Logger() noexcept;
 
+		// コピーとムーブ禁止
 		WX2_DISALLOW_COPY_AND_MOVE(Logger);
 
 	private:

@@ -27,6 +27,9 @@
 
 namespace wx2
 {
+	/**
+	 * @brief COMインターフェイスの例外クラス
+	 */
 	class COMException
 	{
 	public:
@@ -41,8 +44,10 @@ namespace wx2
 			const std::string& msg,
 			const std::source_location& location = std::source_location::current()) noexcept
 		{
+			// COMエラーのメッセージを取得
 			const _com_error error(hr);
 
+			// 出力用メッセージ
 			what_ = std::format(
 				"\n"
 				"==============< Exception thrown ! >==============\n"
@@ -52,15 +57,16 @@ namespace wx2
 				"Function: {}\n"
 				"Line: {}\n"
 				"==================================================\n",
-				msg,
-				error.ErrorMessage(),
-				location.file_name(),
-				location.function_name(),
-				location.line());
+				msg,						// 指定したエラーメッセージ
+				error.ErrorMessage(),		// COMエラーメッセージ
+				location.file_name(),		// エラーが発生したファイル名
+				location.function_name(),	// エラーが発生した関数名
+				location.line());			// エラーが発生した行
 		}
 
 		/**
-		 * @return 例外の詳細情報の文字列
+		 * @brief  例外のエラーメッセージを取得
+		 * @return エラーメッセージ
 		 */
 		[[nodiscard]] const std::string& what() const noexcept
 		{

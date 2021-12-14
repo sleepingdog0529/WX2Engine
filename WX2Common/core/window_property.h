@@ -18,22 +18,28 @@ namespace wx2
 	struct WindowProperty
 	{
 	public:
-		std::string title;
-		int x, y;
-		int width, height;
-		unsigned long style;
-		unsigned long exStyle;
-		bool maximized;
-		bool fullscreen;
+		std::string title;		//! ウィンドウのタイトル
+		int x, y;				//! ウィンドウ左上の座標
+		int width, height;		//! ウィンドウの幅
+		unsigned long style;	//! ウィンドウスタイルのフラグ
+		unsigned long exStyle;	//! 拡張ウィンドウスタイルのフラグ
+		bool maximized;			//! 最大化されているか
+		bool fullscreen;		//! 全画面化されているか
 
+		/**
+		 * @brief  ウィンドウのアスペクト比を返す
+		 * @return アスペクト比
+		 */
 		[[nodiscard]] float AspectRatio() const noexcept
 		{
 			return static_cast<float>(width) / static_cast<float>(height);
 		}
 
 	private:
+		// シリアル化ライブラリのアクセスを許可
 		friend cereal::access;
 
+		//! @brief シリアライズ用メソッド
 		template <class Archive>
 		void serialize(Archive& archive) noexcept
 		{

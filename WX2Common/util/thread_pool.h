@@ -8,6 +8,7 @@
 #include <deque>
 #include <future>
 #include <thread>
+#include <optional>
 #include "macro.h"
 
 namespace wx2
@@ -20,10 +21,8 @@ namespace wx2
 			Standby, Working, Joining,
 		};
 
-		struct ThreadTerminator {};
-
 	public:
-		explicit ThreadPool(int threadCount = std::thread::hardware_concurrency()) noexcept;
+		explicit ThreadPool(std::size_t threadCount = std::thread::hardware_concurrency()) noexcept;
 		~ThreadPool() noexcept;
 
 		WX2_DISALLOW_COPY_AND_MOVE(ThreadPool);
@@ -51,7 +50,7 @@ namespace wx2
 	private:
 		void Join() noexcept;
 
-		std::function<void()> Dequeue();
+		[[nodiscard]] std::optional<std::function<void()>> Dequeue();
 
 		Status status_;
 		std::size_t threadCount_;

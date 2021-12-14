@@ -2,6 +2,7 @@
 #include <format>
 #include "log.h"
 
+// デバッグ時のみ定義
 #if !defined(NDEBUG)
 
 // BOOST_ASSERT時の動作を定義
@@ -13,6 +14,7 @@ namespace boost
 		const char* file,
 		const long line)
 	{
+		// 出力用メッセージ
 		auto out = std::format(
 			"\n"
 			"==============< Assertion failed ! >==============\n"
@@ -23,8 +25,13 @@ namespace boost
 			"==================================================\n",
 			expr, file, function, line);
 
+		// VisualStudio上に出力
 		OutputDebugString(out.c_str());
+
+		// エラーログに出力
 		WX2_LOG_ERROR("\n{}", out);
+
+		// ブレークポイントを発生させる
 		__debugbreak();
 	}
 
@@ -35,6 +42,7 @@ namespace boost
 		char const* file,
 		const long line)
 	{
+		// 出力用メッセージ
 		auto out = std::format(
 			"\n"
 			"==============< Assertion failed ! >==============\n"
@@ -46,8 +54,13 @@ namespace boost
 			"==================================================\n",
 			expr, msg, file, function, line);
 
+		// VisualStudio上に出力
 		OutputDebugString(out.c_str());
+
+		// エラーログに出力
 		WX2_LOG_ERROR("\n{}", out);
+
+		// ブレークポイントを発生させる
 		__debugbreak();
 	}
 }

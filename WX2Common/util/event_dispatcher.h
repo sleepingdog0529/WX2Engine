@@ -2,7 +2,7 @@
  * @file   event_dispatcher.h
  * @author Tomomi Murakami
  * @date   2021/12/12 15:10
- * @brief  イベント発行機
+ * @brief  イベント発行機とイベントリスナー
  ********************************************************************/
 #pragma once
 #include <functional>
@@ -11,100 +11,146 @@
 
 namespace wx2
 {
-	template <typename Key, typename... Args>
+	// 前方宣言
+	template <typename EventType, typename... Args>
 	class EventDispatcher;
 
-	template <typename Key, typename... Args>
-	class Event final
+	/**
+	 * @brief  イベントリスナー
+	 * @tparam EventType イベントの種類を判別するためのキーの型
+	 * @tparam Args コールバックに渡される引数の型
+	 */
+	template <typename EventType, typename... Args>
+	class EventListener final
 	{
-		using EventDispatcherType = EventDispatcher<Key, Args...>;
+		//! 対応したイベント発行クラスの型
+		using EventDispatcherType = EventDispatcher<EventType, Args...>;
+		//! コールバック関数型
 		using CallbackFunc = std::function<void(Args...)>;
 
+		//! イベント発行クラスのアクセスを許可
 		friend class EventDispatcherType;
 
 	public:
-		// コンストラクタ＆デストラクタ
-		Event() = default;
-		Event(std::initializer_list<CallbackFunc> callbacks)
+		EventListener() = default;
+		/**
+		 * @brief コールバック関数をセットする
+		 * @param callback コールバック関数 
+		 */
+		EventListener(CallbackFunc callback)
+			: callback_(callback) {}
+		~EventListener() = default;
+
+		// ムーブとコピーを許可
+		EventListener(const EventListener& other) = default;
+		EventListener& operator=(const EventListener& other) = default;
+		EventListener(EventListener&& other) = default;
+		EventListener& operator=(EventListener&& other) = default;
+
+		/**
+		 * @brief コールバック関数をセットする
+		 * @param event イベントの種類
+		 * @param callback コールバック関数
+		 */
+		void SetCallback(const EventType& event, const CallbackFunc& callback) noexcept
 		{
-			callbacks_.insert(callbacks.begin(), callbacks.end());
+			callback_ = callback;
 		}
-		~Event() = default;
 
-		// ムーブ＆コピー
-		Event(const Event& other) = default;
-		Event& operator=(const Event& other) = default;
-		Event(Event&& other) = default;
-		Event& operator=(Event&& other) = default;
-
-		void AddCallback(const Key& key, CallbackFunc function)
+		/**
+		 * @brief コールバックの登録を解除する
+		 */
+		void Clear() noexcept
 		{
-			callbacks_.emplace(key, std::move(function));
-		}
-
-		void Clear()
-		{
-			for (auto& subject : eventDispatchers_)
+			// 自身が登録されている全てのイベント発行クラスから自身を登録解除する
+			for (auto& dispatcher : eventDispatchers_)
 			{
-				if (subject)
+				if (dispatcher)
 				{
-					subject->RemoveCallback(*this);
+					dispatcher->RemoveEventListener(*this);
 				}
 			}
 		}
 
+		/**
+		 * @brief  コールバック関数を呼び出し可能か調べる
+		 * @return 呼び出し可能か
+		 */
+		[[nodiscard]] bool HasCallback() const noexcept { return !!callback_; }
+
 	private:
-		void OnDispatch(const Key& key, Args&&... args)
+		/**
+		 * @brief 呼び出されたときのコールバック
+		 * @param args 
+		 */
+		void OnDispatch(Args&&... args)
 		{
-			auto [itr, end] = callbacks_.equal_range(key);
-			for (;itr != end; ++itr)
-			{
-				itr->second(std::forward<Args>(args)...);
-			}
+			callback_(args);
 		}
 
-		std::unordered_multimap<Key, CallbackFunc> callbacks_{};
+		//! コールバック関数
+		CallbackFunc callback_{};
+		//! 自身が登録されている全てのイベント発行クラス
 		std::unordered_set<EventDispatcherType*> eventDispatchers_{};
 	};
 
-	template <typename Key, typename... Args>
+	/**
+	 * @brief  イベント発行機
+	 * @tparam EventType イベントの種類を判定するためのキーの型
+	 * @tparam Args コールバックに渡される引数の型
+	 */
+	template <typename EventType, typename... Args>
 	class EventDispatcher final
 	{
-		using EventType = Event<Key, Args...>;
+		//! イベントリスナーの型
+		using EventListenerType = EventListener<EventType, Args...>;
 
 	public:
 		EventDispatcher() = default;
 		~EventDispatcher() = default;
 
-		// ムーブ＆コピー
+		// ムーブとコピーを許可
 		EventDispatcher(const EventDispatcher& other) = default;
 		EventDispatcher& operator=(const EventDispatcher& other) = default;
 		EventDispatcher(EventDispatcher&& other) = default;
 		EventDispatcher& operator=(EventDispatcher&& other) = default;
 
-		void Dispatch(const Key& key, Args&&... args)
+		/**
+		 * @brief イベントを発行する
+		 * @param event イベントの種類
+		 * @param args コールバックに渡す引数
+		 */
+		void Dispatch(const EventType& event, Args&&... args)
 		{
 			for (auto& observer : events_)
 			{
-				observer->OnDispatch(key, std::forward<Args>(args)...);
+				observer->OnDispatch(event, std::forward<Args>(args)...);
 			}
 		}
 
-		void AddCallback(const EventType& event)
+		/**
+		 * @brief イベントリスナーを登録する
+		 * @param eventListener 登録するイベントリスナー
+		 */
+		void AddEventListener(const EventListenerType& eventListener)
 		{
-			event.eventDispatchers_.insert(this);
-			events_.emplace_back(&event);
+			eventListener.eventDispatchers_.insert(this);
+			events_.emplace_back(&eventListener);
 		}
 
-		void RemoveCallback(const EventType& event)
+		/**
+		 * @brief  
+		 * @param  eventListener 
+		 */
+		void RemoveEventListener(const EventListenerType& eventListener)
 		{
 			std::erase_if(
 				events_, 
-				[&event](const EventType* cb) { return cb == &event; });
-			event.eventDispatchers_.erase(this);
+				[&eventListener](const EventListenerType* cb) { return cb == &eventListener; });
+			eventListener.eventDispatchers_.erase(this);
 		}
 
 	private:
-		std::vector<EventType*> events_{};
+		std::unordered_multimap<EventType, EventListenerType*> events_{};
 	};
 }

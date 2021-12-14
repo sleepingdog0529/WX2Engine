@@ -1,10 +1,9 @@
 #include "thread_pool.h"
-#include "thread_pool.h"
 
 namespace wx2
 {
 
-	ThreadPool::ThreadPool(const int threadCount) noexcept
+	ThreadPool::ThreadPool(const std::size_t threadCount) noexcept
 		: status_(Status::Standby)
 		, threadCount_(threadCount)
 		, taskQueue_(false)
@@ -35,30 +34,27 @@ namespace wx2
 
 	void ThreadPool::Join() noexcept
 	{
-		try
+		while (true)
 		{
-			while (true)
+			auto work = Dequeue();
+
+			if (work.has_value())
 			{
-				if (std::function<void()> work = Dequeue())
-				{
-					work();
-				}
+				work.value()();
 			}
-		}
-		catch (const ThreadTerminator&)
-		{
-			return;
+			else
+				return;
 		}
 	}
 
-	std::function<void()> ThreadPool::Dequeue()
+	std::optional<std::function<void()>> ThreadPool::Dequeue()
 	{
 		std::unique_lock<std::mutex> lock(mutex_);
 		while (taskQueue_.empty())
 		{
 			if (status_ == Status::Joining)
 			{
-				throw ThreadTerminator();
+				return std::nullopt;
 			}
 			condition_.wait(lock);
 		}

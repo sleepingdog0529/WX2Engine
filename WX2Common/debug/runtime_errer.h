@@ -2,7 +2,7 @@
  * @file   com_exception.h
  * @author Tomomi Murakami
  * @date   2021/11/23 02:01
- * @brief  ランタイムエラーの例外
+ * @brief  実行時の例外
  ********************************************************************/
 #pragma once
 #include <format>
@@ -40,6 +40,7 @@ namespace wx2
 			const std::string& msg,
 			const std::source_location& location = std::source_location::current()) noexcept
 		{
+			// エラーメッセージ
 			what_ = std::format(
 				"\n"
 				"==============< Exception thrown ! >==============\n"
@@ -49,15 +50,16 @@ namespace wx2
 				"Function: {}\n"
 				"Line: {}\n"
 				"==================================================\n",
-				msg,
-				expr,
-				location.file_name(),
-				location.function_name(),
-				location.line());
+				msg,						// 指定したメッセージ
+				expr,						// エラーの判定式
+				location.file_name(),		// エラーが発生したファイル名
+				location.function_name(),	// エラーが発生した関数名
+				location.line());			// エラーが発生した行
 		}
 
 		/**
-		 * @return 例外の詳細情報の文字列
+		 * @brief  例外のエラーメッセージを取得
+		 * @return エラーメッセージ
 		 */
 		[[nodiscard]] const std::string& what() const noexcept
 		{

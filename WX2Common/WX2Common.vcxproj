@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="core\layer_stack.cpp" />
     <ClCompile Include="debug\assert.cpp" />
     <ClCompile Include="debug\debugging.h" />
     <ClCompile Include="debug\log.cpp" />
@@ -18,12 +19,14 @@
     <ClCompile Include="util\thread_pool.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\layer.h" />
+    <ClInclude Include="core\layer_stack.h" />
     <ClInclude Include="debug\assert.h" />
     <ClInclude Include="debug\leak_detector.h" />
     <ClInclude Include="debug\log.h" />
     <ClInclude Include="debug\com_exception.h" />
     <ClInclude Include="debug\runtime_errer.h" />
-    <ClInclude Include="info\window_property.h" />
+    <ClInclude Include="core\window_property.h" />
     <ClInclude Include="util\file_dialog.h" />
     <ClInclude Include="util\hash.h" />
     <ClInclude Include="util\event_dispatcher.h" />
