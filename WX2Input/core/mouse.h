@@ -14,9 +14,6 @@
 
 namespace wx2
 {
-	/// <summary>
-	/// マウス入力を扱うクラス
-	/// </summary>
 	class Mouse final
 	{
 	public:

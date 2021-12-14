@@ -31,8 +31,14 @@ namespace wx2
 			const auto& keyboard = input_.GetKeyboard();
 			const auto& mouse = input_.GetMouse();
 
-			rot_ *= Quaternion::FromAxisAngle(Vector3::Up(), mouse.GetAxisVelocity(Mouse::CursorX) * 0.01f);
-			rot_ *= Quaternion::FromAxisAngle(Vector3::Right(), mouse.GetAxisVelocity(Mouse::CursorY) * 0.01f);
+			if (keyboard.IsDown(Keyboard::R))
+			{
+				rot_ = Quaternion::Identity();
+			}
+			const float cursorX = mouse.GetAxisVelocity(Mouse::CursorX);
+			const float cursorY = mouse.GetAxisVelocity(Mouse::CursorY);
+			rot_ *= Quaternion::FromAxisAngle(Vector3::Up(), cursorX * 0.01f);
+			rot_ *= Quaternion::FromAxisAngle(Vector3::Right(), cursorY * 0.01f);
 
 			Vector3 move;
 			if (keyboard.IsDown(Keyboard::D))		++move[0];
@@ -64,7 +70,7 @@ namespace wx2
 
 			constantBufferWVP.data.world = world;
 			constantBufferWVP.data.projection = Matrix::PerspectiveFieldOfView(
-				PIDIV4,
+				PIDIV2,
 				windowProp.AspectRatio(),
 				0.01f,
 				1000.0f);
