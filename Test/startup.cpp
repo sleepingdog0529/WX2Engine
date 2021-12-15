@@ -68,8 +68,9 @@ namespace wx2
 			// 移動方向に回転を適応して進行方向にそわせる
 			pos_ += Vector3::Transform(Vector3::Normalize(move), rot_) * deltaTime * 3.0f;
 
-			// スケール固定
-			scale_ = Vector3(1.0f);
+			// スケール
+			const float wheel = mouse.GetAxisVelocity(Mouse::WheellScroll);
+			scale_ += Vector3(wheel);
 
 			// ESCキーが押されていたらアプリケーション終了
 			return !keyboard.IsPressed(Keyboard::Escape);
@@ -125,7 +126,7 @@ namespace wx2
 		}
 
 		Vector3 pos_{};		//! モデル位置
-		Vector3 scale_{};	//! モデル拡縮
+		Vector3 scale_ = Vector3::One();	//! モデル拡縮
 		Quaternion rot_{};	//! モデル回転
 
 		VertexShader vertexShader_{};	//! 頂点シェーダー

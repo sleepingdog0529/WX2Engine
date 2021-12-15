@@ -35,13 +35,15 @@ namespace wx2
 		ofn.lStructSize = sizeof(OPENFILENAME);
 		ofn.lpstrInitialDir = currentDir[0] ? currentDir.data() : nullptr;	// 最初に開くディレクトリパス
 		ofn.lpstrFile = fileDir.data();
-		ofn.nMaxFile = sizeof(char) * fileDir.size();
+		ofn.nMaxFile = static_cast<DWORD>(sizeof(char) * fileDir.size());
 		ofn.lpstrFilter = filter.c_str();	// フィルター文字列のポインタ
 		ofn.nFilterIndex = 1;				// 初期状態で選択するフィルタの番号(1からカウント)
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
-		WX2_RUNTIME_ERROR_IF_FAILED(
-			GetOpenFileName(&ofn), "ファイルを開くダイアログからのファイルパスの取得に失敗しました。");
+		if (!GetOpenFileName(&ofn))
+		{
+			return "";
+		}
 
 		return ofn.lpstrFile;
 	}
@@ -64,8 +66,10 @@ namespace wx2
 		ofn.nFilterIndex = 1;				// 初期状態で選択するフィルタの番号(1からカウント)
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
 
-		WX2_RUNTIME_ERROR_IF_FAILED(
-			GetOpenFileName(&ofn), "ファイルを開くダイアログからのファイルパスの取得に失敗しました。");
+		if (!GetOpenFileName(&ofn))
+		{
+			return "";
+		}
 
 		return ofn.lpstrFile;
 	}

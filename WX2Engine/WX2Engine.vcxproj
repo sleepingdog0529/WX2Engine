@@ -46,9 +46,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Platform)-$(Configuration)\$(ProjectName)</OutDir>
-    <IntDir>$(SolutionDir)bin-int\$(Platform)-$(Configuration)\$(ProjectName)</IntDir>
-    <IncludePath>$(SolutionDir)include;C:\boost_1_77_0\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)bin\$(Platform)-$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)bin-int\$(Platform)-$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(SolutionDir)include;C:\boost_1_77_0\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\$(Platform)-$(Configuration);C:\boost_1_77_0\lib\$(Platform)-$(Configuration);$(LibraryPath)</LibraryPath>
     <TargetName>$(TargetName)D</TargetName>
   </PropertyGroup>
@@ -56,7 +56,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)-$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)bin-int\$(Platform)-$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(SolutionDir)include;C:\boost_1_77_0\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include;C:\boost_1_77_0\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\$(Platform)-$(Configuration);C:\boost_1_77_0\lib\$(Platform)-$(Configuration);$(LibraryPath)</LibraryPath>
     <TargetName>$(TargetName)</TargetName>
   </PropertyGroup>
