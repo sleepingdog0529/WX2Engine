@@ -10,12 +10,14 @@ namespace wx2
 {
 	namespace detail
 	{
+		//! アッパーケースのRelease関数を持っているか判定する
 		template <class T>
 		concept HasReleaseUpperCase = requires (T x)
 		{
 			x.Release();
 		};
 
+		//! ローワーケースのrelease関数を持っているか判定する
 		template <class T>
 		concept HasReleaseLowerCase = requires (T x)
 		{
@@ -23,6 +25,11 @@ namespace wx2
 		};
 	}
 
+	/**
+	 * @brief  nullチェックを行ったうえでアッパーケースのRelease関数を呼び出し解放する
+	 * @tparam T 解放対象の型
+	 * @param  x 解放対象
+	 */
 	template <detail::HasReleaseUpperCase T>
 	inline void SafeRelease(T*& x) noexcept
 	{
@@ -33,6 +40,11 @@ namespace wx2
 		}
 	}
 
+	/**
+	 * @brief  nullチェックを行ったうえでローワーケースのrelease関数を呼び出し解放する
+	 * @tparam T 解放対象の型
+	 * @param  x 解放対象
+	 */
 	template <detail::HasReleaseLowerCase T>
 	inline void SafeRelease(T*& x) noexcept
 	{

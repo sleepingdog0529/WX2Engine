@@ -13,18 +13,28 @@
 
 namespace wx2
 {
+	/**
+	 * @brief  スレッドプールクラス
+	 */
 	class ThreadPool final
 	{
 	private:
+		// 稼働状態
 		enum class Status
 		{
 			Standby, Working, Joining,
 		};
 
 	public:
+		/**
+		 * @brief  割り当てるスレッド数を指定してスレッドを初期化する
+		 * @param  threadCount 割り当てるスレッド数
+		 */
 		explicit ThreadPool(std::size_t threadCount = std::thread::hardware_concurrency()) noexcept;
+		//! @brief  スレッドをJoinする 
 		~ThreadPool() noexcept;
 
+		// コピーとムーブ禁止
 		WX2_DISALLOW_COPY_AND_MOVE(ThreadPool);
 
 		template<typename F, typename... Args>

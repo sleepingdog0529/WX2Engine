@@ -4,7 +4,6 @@
     <ClCompile Include="debug\assert.cpp" />
     <ClCompile Include="debug\log.cpp" />
     <ClCompile Include="debug\debugging.h" />
-    <ClCompile Include="util\file_dialog.cpp" />
     <ClCompile Include="util\thread_pool.cpp" />
     <ClCompile Include="core\layer_stack.cpp" />
   </ItemGroup>

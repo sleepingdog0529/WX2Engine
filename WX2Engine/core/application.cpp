@@ -104,6 +104,7 @@ namespace wx2
 				Draw(deltaTime);
 				graphics_.DrawEnd();
 
+				input_.Update();
 				terminate = !Update(deltaTime);
 			}
 		}

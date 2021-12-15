@@ -37,7 +37,7 @@ namespace wx2
 			return "";
 		}
 
-		std::string conv_str(conv.begin(), conv.end());
-		return conv_str;
+		std::string convStr(conv.begin(), conv.end());
+		return convStr;
 	}
 }

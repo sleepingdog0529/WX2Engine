@@ -15,7 +15,6 @@
     <ClCompile Include="debug\assert.cpp" />
     <ClCompile Include="debug\debugging.h" />
     <ClCompile Include="debug\log.cpp" />
-    <ClCompile Include="util\file_dialog.cpp" />
     <ClCompile Include="util\thread_pool.cpp" />
   </ItemGroup>
   <ItemGroup>

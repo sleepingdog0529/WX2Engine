@@ -151,6 +151,7 @@ namespace wx2
 		}
 
 	private:
+		//! イベントリスナーの連想配列
 		std::unordered_multimap<EventType, EventListenerType*> events_{};
 	};
 }
