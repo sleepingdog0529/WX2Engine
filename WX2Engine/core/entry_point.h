@@ -9,9 +9,7 @@
 
 extern std::unique_ptr<wx2::Application> wx2::CreateApp() noexcept;
 
-/**
- * @brief エントリポイント
- */
+//! @brief エントリポイント 
 #if defined(NDEBUG)
 int WINAPI WinMain(
 	_In_ HINSTANCE hInstance,
@@ -27,7 +25,9 @@ int WINAPI WinMain(
 int main(int argc, char** argv)
 {
 #endif
+	// アプリケーション作成
 	const auto app = wx2::CreateApp();
 
+	// アプリケーション起動
 	return app->Run();
 }

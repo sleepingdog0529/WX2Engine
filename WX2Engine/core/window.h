@@ -9,8 +9,12 @@
 
 namespace wx2
 {
+	// 前方宣言
 	class WindowContainer;
 
+	/**
+	 * @brief  ウィンドウ
+	 */
 	class Window final
 	{
 	public:
@@ -19,19 +23,18 @@ namespace wx2
 		 * @param[in] container 格納先コンテナ
 		 * @param[in] windowProp ウィンドウ設定
 		 */
-		Window(WindowContainer* container, WindowProperty windowProp) noexcept;
+		Window(WindowContainer* container, WindowProperty windowProp);
 
-		/**
-		 * @brief ウィンドウを閉じる
-		 */
+		//! @brief ウィンドウを閉じる
 		~Window() noexcept;
 
+		// コピーとムーブ禁止
 		WX2_DISALLOW_COPY_AND_MOVE(Window);
 
 		//! ウィンドウのウィンドウプロシージャ
-		static LRESULT CALLBACK HandleMessageRedirect(const HWND hwnd, const UINT msg, const  WPARAM wp, const  LPARAM lp) noexcept;
+		static LRESULT CALLBACK HandleMessageRedirect(const HWND hwnd, const UINT msg, const  WPARAM wp, const  LPARAM lp);
 		//! ウィンドウのウィンドウプロシージャ
-		static LRESULT CALLBACK HandleMessageSetup(const HWND hwnd, const  UINT msg, const WPARAM wp, const LPARAM lp) noexcept;
+		static LRESULT CALLBACK HandleMessageSetup(const HWND hwnd, const  UINT msg, const WPARAM wp, const LPARAM lp);
 
 		/**
 		 * @brief  ウィンドウハンドルを取得する
@@ -72,6 +75,10 @@ namespace wx2
 		 */
 		void SetMaximize(const bool maximaize) noexcept;
 
+		/**
+		 * @brief  ウィンドウのタイトルを設定する
+		 * @param  title 設定するタイトル名
+		 */
 		void SetTitle(const std::string& title) noexcept;
 
 	private:
@@ -89,7 +96,6 @@ namespace wx2
 
 		//! キー押下時のコールバック
 		void OnKeyDown(const WPARAM wp, const LPARAM lp) noexcept;
-
 
 		WindowContainer* container_;	//! ウィンドウコンテナ
 		HWND hwnd_;						//! ウィンドウハンドル

@@ -125,7 +125,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="core\window.cpp" />
-    <ClCompile Include="core\scene.cpp" />
     <ClCompile Include="core\application.cpp" />
     <ClCompile Include="core\window_container.cpp" />
     <ClCompile Include="pch\pch.cpp">
@@ -134,12 +133,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\component.h" />
     <ClInclude Include="core\constant.h" />
-    <ClInclude Include="core\game_object.h" />
     <ClInclude Include="core\scene_parameter.h" />
     <ClInclude Include="core\window.h" />
-    <ClInclude Include="core\scene.h" />
     <ClInclude Include="core\window_container.h" />
     <ClInclude Include="core\entry_point.h" />
     <ClInclude Include="core\application.h" />

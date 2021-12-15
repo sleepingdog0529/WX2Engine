@@ -1,8 +1,12 @@
 namespace wx2
 {
+	/**
+	 * @brief アプリケーション
+	 */
 	class Game final : public wx2::Application
 	{
 	private:
+		//! @brief アプリケーション開始時に呼び出される  
 		void Start() noexcept override
 		{
 			// デバイスとデバイスコンテキストを取得
@@ -29,6 +33,11 @@ namespace wx2
 			model_ = modelLoader_.Load(OpenFileDialog("*.fbx\0\0"));
 		}
 
+		/**
+		 * @brief  アプリケーションの更新時に呼び出される
+		 * @param  deltaTime 前回の更新からの経過時間
+		 * @return falseでアプリケーションを終了
+		 */
 		bool Update(const float deltaTime) noexcept override
 		{
 			// キーボードとマウスの入力を取得
@@ -66,6 +75,10 @@ namespace wx2
 			return !keyboard.IsPressed(Keyboard::Escape);
 		}
 
+		/**
+		 * @brief  アプリケーションの描画時に呼び出される
+		 * @param  deltaTime 前回の描画からの経過時間
+		 */
 		void Draw(const float deltaTime) noexcept override
 		{
 			// シェーダーをバインド

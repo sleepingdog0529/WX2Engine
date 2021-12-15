@@ -8,5 +8,6 @@
 
 namespace wx2
 {
+	//! コンフィグファイルの格納先ディレクトリ
 	static constexpr const char* CONFIG_DIR = ".\\asset\\config";
 }

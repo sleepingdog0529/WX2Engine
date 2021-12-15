@@ -15,9 +15,9 @@
 
 namespace wx2
 {
-	/// <summary>
-	/// デバイス入力の共通の処理を行うクラス
-	/// </summary>
+	/**
+	 * @brief 全ての入力管理
+	 */
 	class Input final
 	{
 	private:
@@ -29,7 +29,14 @@ namespace wx2
 
 		WX2_DISALLOW_COPY_AND_MOVE(Input);
 
-		bool Initialize(const HWND hwnd) noexcept;
+		/**
+		 * @brief  各入力デバイスの初期化
+		 * @param  hwnd 入力を受け付けるウィンドウのハンドル
+		 * @return 正常に初期化できたか
+		 */
+		bool Initialize(HWND hwnd) noexcept;
+
+
 		void Update() noexcept;
 
 		[[nodiscard]] const Keyboard& GetKeyboard() const noexcept { return keyboard_; }
@@ -37,6 +44,7 @@ namespace wx2
 		[[nodiscard]] const Gamepad& GetGamepad()   const noexcept { return gamepad_; }
 
 	private:
+		//! DirectInputの
 		DInputPtr directInput_;
 		Keyboard keyboard_;
 		Mouse mouse_;

@@ -5,16 +5,13 @@ namespace wx2
 {
 	bool Input::Initialize(const HWND hwnd) noexcept
 	{
-		if (FAILED(DirectInput8Create(
+		const HRESULT hr = DirectInput8Create(
 			GetModuleHandle(nullptr),
 			DIRECTINPUT_VERSION,
 			IID_IDirectInput8,
 			&directInput_,
-			nullptr)))
-		{
-			WX2_LOG_ERROR("DirectInput8ÇÃçÏê¨Ç…é∏îsÇµÇ‹ÇµÇΩÅB");
-			return false;
-		}
+			nullptr);
+		WX2_COM_ERROR_IF_FAILED(hr, "DirectInput8ÇÃçÏê¨Ç…é∏îsÇµÇ‹ÇµÇΩÅB");
 
 		keyboard_.Initialize(directInput_, hwnd);
 		mouse_.Initialize(directInput_, hwnd);

@@ -130,7 +130,6 @@
     <ClCompile Include="startup.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="component\transform.h" />
     <ClInclude Include="pch\pch.h" />
   </ItemGroup>
   <ItemGroup>

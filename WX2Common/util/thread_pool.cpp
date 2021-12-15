@@ -43,7 +43,9 @@ namespace wx2
 				work.value()();
 			}
 			else
+			{
 				return;
+			}
 		}
 	}
 
