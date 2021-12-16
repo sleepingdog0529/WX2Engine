@@ -1331,5 +1331,15 @@ namespace wx2
 	{
 		return Color(DirectX::XMVectorLerp(c1.color_, c2.color_, t));
 	}
+
+	inline Color Color::FromHSL(const float h, const float s, const float l, const float a) noexcept
+	{
+		return Color(DirectX::XMColorHSLToRGB(DirectX::XMVectorSet(h, s, l, a)));
+	}
+
+	inline Color Color::FromHSV(const float h, const float s, const float v, const float a) noexcept
+	{
+		return Color(DirectX::XMColorHSVToRGB(DirectX::XMVectorSet(h, s, v, a)));
+	}
 #pragma endregion Quaternion
 }

@@ -9,7 +9,7 @@ namespace wx2
 		WX2_ASSERT(windowProp_.width > 0);
 		WX2_ASSERT(windowProp_.height > 0);
 
-		// ランダムにユニークIDを生成し、ウィンドウクラス名にする
+		// ランダムにユニークUUIDを生成し、ウィンドウクラス名にする
 		const boost::uuids::uuid uuid = boost::uuids::random_generator()();
 		std::stringstream uuidStream;
 		uuidStream << uuid;

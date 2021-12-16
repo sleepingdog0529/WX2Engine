@@ -81,12 +81,12 @@ namespace wx2::physics
 				PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES | 
 				PxPvdSceneFlag::eTRANSMIT_CONTACTS);
 #endif
+			return true;
 		}
 		catch (const RuntimeError& runtimeError)
 		{
 			WX2_LOG_ERROR(runtimeError.what());
 			return false;
 		}
-		return true;
 	}
 }

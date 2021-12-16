@@ -1437,6 +1437,8 @@ namespace wx2
 		static Color AdjustContrast(const Color& c, float contrast) noexcept;
 		static Color Modulate(const Color& c1, const Color& c2) noexcept;
 		static Color Lerp(const Color& c1, const Color& c2, float t) noexcept;
+		static Color FromHSL(const float h, const float s, const float l, const float a = 1.0f) noexcept;
+		static Color FromHSV(const float h, const float s, const float v, const float a = 1.0f) noexcept;
 
 	private:
 		DirectX::XMVECTOR color_;

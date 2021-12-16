@@ -24,7 +24,7 @@ namespace wx2
 			nullptr,
 			frags,
 			featureLevels.data(),
-			featureLevels.size(),
+			static_cast<UINT>(featureLevels.size()),
 			D3D11_SDK_VERSION,
 			device_.GetAddressOf(),
 			&supportedFeatureLevel,

@@ -124,6 +124,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="core\scene.cpp" />
     <ClCompile Include="core\window.cpp" />
     <ClCompile Include="core\application.cpp" />
     <ClCompile Include="core\window_container.cpp" />
@@ -134,6 +135,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\constant.h" />
+    <ClInclude Include="core\scene.h" />
+    <ClInclude Include="core\scene_manager.h" />
     <ClInclude Include="core\scene_parameter.h" />
     <ClInclude Include="core\window.h" />
     <ClInclude Include="core\window_container.h" />

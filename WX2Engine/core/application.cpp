@@ -1,5 +1,7 @@
 #include "application.h"
 #include <DirectXTK/GeometricPrimitive.h>
+#include <sol/sol.hpp>
+
 namespace wx2
 {
 	Application::Application() noexcept
@@ -14,6 +16,8 @@ namespace wx2
 		const std::locale ctypeDefault(std::locale::classic(), defaultLoc, std::locale::ctype);
 		std::wcout.imbue(ctypeDefault);
 		std::wcin.imbue(ctypeDefault);
+
+		//sol::
 
 		WX2_LOG_TRACE("アプリケーション初期化開始");
 	}
@@ -136,6 +140,9 @@ namespace wx2
 					terminate = !Update(deltaTime);
 				}
 			}
+
+			// 正常終了
+			return EXIT_SUCCESS;
 		}
 		catch (const RuntimeError& exception)
 		{
@@ -149,8 +156,5 @@ namespace wx2
 			WX2_LOG_ERROR(exception.what());
 			return EXIT_FAILURE;
 		}
-
-		// 正常終了
-		return EXIT_SUCCESS;
 	}
 }

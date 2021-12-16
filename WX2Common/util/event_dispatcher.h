@@ -37,7 +37,7 @@ namespace wx2
 		 * @brief コールバック関数をセットする
 		 * @param callback コールバック関数 
 		 */
-		EventListener(CallbackFunc callback)
+		EventListener(const CallbackFunc& callback)
 			: callback_(callback) {}
 		~EventListener() = default;
 
@@ -49,10 +49,9 @@ namespace wx2
 
 		/**
 		 * @brief コールバック関数をセットする
-		 * @param event イベントの種類
 		 * @param callback コールバック関数
 		 */
-		void SetCallback(const EventType& event, const CallbackFunc& callback) noexcept
+		void SetCallback(const CallbackFunc& callback) noexcept
 		{
 			callback_ = callback;
 		}
@@ -85,7 +84,7 @@ namespace wx2
 		 */
 		void OnDispatch(Args&&... args)
 		{
-			callback_(args);
+			callback_(std::forward<Args>(args)...);
 		}
 
 		//! コールバック関数
@@ -120,38 +119,40 @@ namespace wx2
 		 * @param event イベントの種類
 		 * @param args コールバックに渡す引数
 		 */
-		void Dispatch(const EventType& event, Args&&... args)
+		void Dispatch(EventType&& event, Args&&... args)
 		{
-			for (auto& observer : events_)
+			auto [itr, end] = listeners_.equal_range(std::forward<EventType>(event));
+			for (; itr != end; ++itr)
 			{
-				observer->OnDispatch(event, std::forward<Args>(args)...);
+				itr->second->OnDispatch(std::forward<Args>(args)...);
 			}
 		}
 
 		/**
 		 * @brief イベントリスナーを登録する
+		 * @param event イベントの種類
 		 * @param eventListener 登録するイベントリスナー
 		 */
-		void AddEventListener(const EventListenerType& eventListener)
+		void AddEventListener(EventType&& event, EventListenerType& eventListener)
 		{
 			eventListener.eventDispatchers_.insert(this);
-			events_.emplace_back(&eventListener);
+			listeners_.emplace(std::forward<EventType>(event), &eventListener);
 		}
 
 		/**
-		 * @brief  
-		 * @param  eventListener 
+		 * @brief イベントリスナーを除外する 
+		 * @param eventListener 
 		 */
 		void RemoveEventListener(const EventListenerType& eventListener)
 		{
 			std::erase_if(
-				events_, 
+				listeners_, 
 				[&eventListener](const EventListenerType* cb) { return cb == &eventListener; });
 			eventListener.eventDispatchers_.erase(this);
 		}
 
 	private:
 		//! イベントリスナーの連想配列
-		std::unordered_multimap<EventType, EventListenerType*> events_{};
+		std::unordered_multimap<EventType, EventListenerType*> listeners_{};
 	};
 }

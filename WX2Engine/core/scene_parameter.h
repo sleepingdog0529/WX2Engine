@@ -5,7 +5,7 @@
  * @brief  シーンへ渡すパラメーター
  ********************************************************************/
 #pragma once
-#include <variant>
+#include <any>
 #include <string>
 #include <unordered_map>
 
@@ -16,10 +16,6 @@ namespace wx2
 	 */
 	class SceneParameter final
 	{
-	private:
-		// パラメーターとして設定できる値型
-		using ParameterType = std::variant<int, std::string>;
-
 	public:
 		SceneParameter() = default;
 		~SceneParameter() = default;
@@ -48,20 +44,28 @@ namespace wx2
 		template <typename T>
 		std::optional<T> Get(const std::string& key) const noexcept
 		{
-			// 指定されたキーが見つらないか、値の型が違ったらnulloptを返す
-			const auto itr = parameters_.find(key);
-			if (itr == parameters_.end() || 
-				!std::holds_alternative<T>(itr->second))
+			try
 			{
+				// 指定されたキーの値を取得する
+				const auto& val = parameters_.at(key);
+
+				// 指定された値型に変換して返す
+				return std::any_cast<T>(val);
+			}
+			catch (const std::out_of_range& exception)
+			{
+				WX2_LOG_ERROR("シーンパラメーターのキーを持つ要素が存在しません");
 				return std::nullopt;
 			}
-
-			// 指定された値型に変換して返す
-			return std::get<T>(itr->second);
+			catch (const std::bad_any_cast& exception)
+			{
+				WX2_LOG_ERROR("シーンパラメーターを間違った型で取得しようとしました。");
+				return std::nullopt;
+			}
 		}
 
 	private:
 		//! パラメータのマップ
-		std::unordered_map<std::string, ParameterType> parameters_{};
+		std::unordered_map<std::string, std::any> parameters_{};
 	};
 }

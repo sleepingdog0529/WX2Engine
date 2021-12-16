@@ -71,7 +71,7 @@ namespace wx2
 		WX2_DISALLOW_COPY_AND_MOVE(Mouse);
 
 		void Initialize(const DInputPtr& directInput, const HWND hwnd) noexcept;
-		void Regist() noexcept;
+		void Regist();
 		void Update() noexcept;
 
 		[[nodiscard]] bool IsDown(const Buttons button) const noexcept

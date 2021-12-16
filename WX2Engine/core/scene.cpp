@@ -2,11 +2,16 @@
 
 namespace wx2
 {
-	void SceneBase::Update()
+	void Scene::Start(const std::string& sceneName, const SceneParameter& parameter)
+	{
+
+	}
+
+	void Scene::Update()
 	{
 	}
 
-	void SceneBase::Draw()
+	void Scene::Draw()
 	{
 	}
 }

@@ -24,7 +24,7 @@ namespace wx2
 		hwnd_ = hwnd;
 	}
 
-	void Mouse::Regist() noexcept
+	void Mouse::Regist()
 	{
 		// Œ»ÝÚ‘±’†‚ÌƒfƒoƒCƒX‚ð—ñ‹“‚µ‚Ä“o˜^
 		const HRESULT hr = directInput_->EnumDevices(
