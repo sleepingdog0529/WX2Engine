@@ -97,15 +97,15 @@ namespace wx2
 		//! キー押下時のコールバック
 		void OnKeyDown(const WPARAM wp, const LPARAM lp) noexcept;
 
-		WindowContainer* container_;	//! ウィンドウコンテナ
-		HWND hwnd_;						//! ウィンドウハンドル
-		std::string className_;			//! ウィンドウクラス名
-		WindowProperty windowProp_;		//! ウィンドウ情報
+		WindowContainer* container_{};	//! ウィンドウコンテナ
+		HWND hwnd_{};					//! ウィンドウハンドル
+		std::string className_{};		//! ウィンドウクラス名
+		WindowProperty windowProp_{};	//! ウィンドウ情報
 
 		// フルスクリーンを解除するときに必要な情報を記憶しておくための変数
-		int recordWindowX_;			//! 通常時ウィンドウのX座標の記録
-		int recordWindowY_;			//! 通常時ウィンドウのY座標の記録
-		int recordWindowWidth_;		//! 通常時ウィンドウの幅の記録
-		int recordWindowHeight_;	//! 通常時ウィンドウの高さの記録
+		int recordWindowX_{};			//! 通常時ウィンドウのX座標の記録
+		int recordWindowY_{};			//! 通常時ウィンドウのY座標の記録
+		int recordWindowWidth_{};		//! 通常時ウィンドウの幅の記録
+		int recordWindowHeight_{};		//! 通常時ウィンドウの高さの記録
 	};
 }

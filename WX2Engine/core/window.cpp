@@ -112,7 +112,7 @@ namespace wx2
 		}
 
 		// 動的なウィンドウプロシージャに処理を委譲する
-		window->container_->WindowProcedure(hwnd, msg, wp, lp);
+		return window->container_->WindowProcedure(hwnd, msg, wp, lp);
 	}
 
 	LRESULT CALLBACK Window::HandleMessageSetup(const HWND hwnd, const  UINT msg, const WPARAM wp, const LPARAM lp)
