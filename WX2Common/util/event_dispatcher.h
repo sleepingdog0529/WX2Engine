@@ -5,6 +5,7 @@
  * @brief  イベント発行機とイベントリスナー
  ********************************************************************/
 #pragma once
+#include <algorithm>
 #include <functional>
 #include <unordered_map>
 #include <unordered_set>
@@ -35,10 +36,10 @@ namespace wx2
 		EventListener() = default;
 		/**
 		 * @brief コールバック関数をセットする
-		 * @param callback コールバック関数 
+		 * @param callback コールバック関数
 		 */
-		EventListener(const CallbackFunc& callback)
-			: callback_(callback) {}
+		EventListener(CallbackFunc callback)
+			: callback_(std::move(callback)) {}
 		~EventListener() = default;
 
 		// ムーブとコピーを許可
@@ -79,12 +80,12 @@ namespace wx2
 
 	private:
 		/**
-		 * @brief 呼び出されたときのコールバック
-		 * @param args 
+		 * @brief  コールバックを呼び出す
+		 * @param  args コールバックの引数
 		 */
-		void OnDispatch(Args&&... args)
+		void OnDispatch(const Args&... args)
 		{
-			callback_(std::forward<Args>(args)...);
+			callback_(args...);
 		}
 
 		//! コールバック関数
@@ -119,12 +120,12 @@ namespace wx2
 		 * @param event イベントの種類
 		 * @param args コールバックに渡す引数
 		 */
-		void Dispatch(EventType&& event, Args&&... args)
+		void Dispatch(const EventType& event, const Args&... args)
 		{
-			auto [itr, end] = listeners_.equal_range(std::forward<EventType>(event));
+			auto [itr, end] = listeners_.equal_range(event);
 			for (; itr != end; ++itr)
 			{
-				itr->second->OnDispatch(std::forward<Args>(args)...);
+				itr->second->OnDispatch(args...);
 			}
 		}
 
@@ -140,14 +141,15 @@ namespace wx2
 		}
 
 		/**
-		 * @brief イベントリスナーを除外する 
-		 * @param eventListener 
+		 * @brief イベントリスナーを除外する
+		 * @param event 除外するイベントの種類
+		 * @param eventListener 除外するイベントリスナー
 		 */
-		void RemoveEventListener(const EventListenerType& eventListener)
+		void RemoveEventListener(const EventType& event, EventListenerType& eventListener)
 		{
 			std::erase_if(
-				listeners_, 
-				[&eventListener](const EventListenerType* cb) { return cb == &eventListener; });
+				listeners_,
+				[&](const auto& l) { return l.first == event && l.second == &eventListener; });
 			eventListener.eventDispatchers_.erase(this);
 		}
 

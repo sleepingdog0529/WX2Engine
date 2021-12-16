@@ -143,7 +143,7 @@ namespace wx2
 		using DevicePtr = Microsoft::WRL::ComPtr<IDirectInputDevice8>;
 
 		//! キーボードのキー数
-		static constexpr std::size_t NUM_KEYS = 221;
+		static constexpr std::size_t NUM_KEYS = 256;
 
 		//! @brief キーボード入力の状態
 		struct KeyboardState

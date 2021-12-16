@@ -78,9 +78,7 @@ namespace wx2
 		[[nodiscard]] std::size_t NumThread() const { return threadCount_; }
 
 	private:
-		/**
-		 * @brief スレッドにタスクを与える
-		 */
+		//! @brief スレッドにタスクを与える
 		void Join() noexcept;
 
 
