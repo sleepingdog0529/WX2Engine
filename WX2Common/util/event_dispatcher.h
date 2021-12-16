@@ -2,7 +2,7 @@
  * @file   event_dispatcher.h
  * @author Tomomi Murakami
  * @date   2021/12/12 15:10
- * @brief  イベント発行機とイベントリスナー
+ * @brief  イベントディスパッチャーパターン
  ********************************************************************/
 #pragma once
 #include <algorithm>
@@ -19,15 +19,15 @@ namespace wx2
 	/**
 	 * @brief  イベントリスナー
 	 * @tparam EventType イベントの種類を判別するためのキーの型
-	 * @tparam Args コールバックに渡される引数の型
+	 * @tparam CallbackArgsType コールバックに渡される引数の型
 	 */
-	template <typename EventType, typename... Args>
+	template <typename EventType, typename... CallbackArgsType>
 	class EventListener final
 	{
 		//! 対応したイベント発行クラスの型
-		using EventDispatcherType = EventDispatcher<EventType, Args...>;
+		using EventDispatcherType = EventDispatcher<EventType, CallbackArgsType...>;
 		//! コールバック関数型
-		using CallbackFunc = std::function<void(Args...)>;
+		using CallbackFunc = std::function<void(CallbackArgsType ...)>;
 
 		//! イベント発行クラスのアクセスを許可
 		friend class EventDispatcherType;
@@ -38,8 +38,9 @@ namespace wx2
 		 * @brief コールバック関数をセットする
 		 * @param callback コールバック関数
 		 */
-		EventListener(CallbackFunc callback)
+		explicit EventListener(CallbackFunc callback) noexcept
 			: callback_(std::move(callback)) {}
+
 		~EventListener() = default;
 
 		// ムーブとコピーを許可
@@ -58,52 +59,49 @@ namespace wx2
 		}
 
 		/**
-		 * @brief コールバックの登録を解除する
+		 * @brief 初期化する
 		 */
 		void Clear() noexcept
 		{
-			// 自身が登録されている全てのイベント発行クラスから自身を登録解除する
-			for (auto& dispatcher : eventDispatchers_)
-			{
-				if (dispatcher)
-				{
-					dispatcher->RemoveEventListener(*this);
-				}
-			}
+			callback_ = {};
 		}
 
 		/**
 		 * @brief  コールバック関数を呼び出し可能か調べる
 		 * @return 呼び出し可能か
 		 */
-		[[nodiscard]] bool HasCallback() const noexcept { return !!callback_; }
+		[[nodiscard]] bool HasCallback() const noexcept
+		{
+			return static_cast<bool>(callback_);
+		}
 
 	private:
 		/**
-		 * @brief  コールバックを呼び出す
-		 * @param  args コールバックの引数
+		 * @brief コールバックを呼び出す
+		 * @param args コールバックの引数
 		 */
-		void OnDispatch(const Args&... args)
+		void OnDispatch(const CallbackArgsType&... args) const
 		{
-			callback_(args...);
+			if (HasCallback())
+			{
+				callback_(args...);
+			}
 		}
 
 		//! コールバック関数
 		CallbackFunc callback_{};
-		//! 自身が登録されている全てのイベント発行クラス
-		std::unordered_set<EventDispatcherType*> eventDispatchers_{};
 	};
 
 	/**
 	 * @brief  イベント発行機
 	 * @tparam EventType イベントの種類を判定するためのキーの型
-	 * @tparam Args コールバックに渡される引数の型
+	 * @tparam CallbackArgsType コールバックに渡される引数の型
 	 */
-	template <typename EventType, typename... Args>
+	template <typename EventType, typename... CallbackArgsType>
 	class EventDispatcher
 	{
 		//! イベントリスナーの型
-		using EventListenerType = EventListener<EventType, Args...>;
+		using EventListenerType = EventListener<EventType, CallbackArgsType...>;
 
 	public:
 		EventDispatcher() = default;
@@ -120,12 +118,15 @@ namespace wx2
 		 * @param event イベントの種類
 		 * @param args コールバックに渡す引数
 		 */
-		void Dispatch(const EventType& event, const Args&... args)
+		void Dispatch(EventType&& event, const CallbackArgsType&... args)
 		{
-			auto [itr, end] = listeners_.equal_range(event);
+			auto [itr, end] = listeners_.equal_range(std::forward<EventType>(event));
 			for (; itr != end; ++itr)
 			{
-				itr->second->OnDispatch(args...);
+				if (itr->second)
+					itr->second->OnDispatch(args...);
+				else
+					itr = listeners_.erase(itr);
 			}
 		}
 
@@ -134,23 +135,32 @@ namespace wx2
 		 * @param event イベントの種類
 		 * @param eventListener 登録するイベントリスナー
 		 */
-		void AddEventListener(EventType&& event, EventListenerType& eventListener)
+		void AppendListener(EventType&& event, EventListenerType& eventListener)
 		{
-			eventListener.eventDispatchers_.insert(this);
 			listeners_.emplace(std::forward<EventType>(event), &eventListener);
 		}
 
 		/**
-		 * @brief イベントリスナーを除外する
-		 * @param event 除外するイベントの種類
-		 * @param eventListener 除外するイベントリスナー
+		 * @brief 指定したイベントのイベントリスナーを登録解除する
+		 * @param event 登録解除するイベントの種類
+		 * @param eventListener 登録解除するイベントリスナー
 		 */
-		void RemoveEventListener(const EventType& event, EventListenerType& eventListener)
+		void RemoveListener(const EventType& event, EventListenerType& eventListener)
 		{
 			std::erase_if(
 				listeners_,
-				[&](const auto& l) { return l.first == event && l.second == &eventListener; });
-			eventListener.eventDispatchers_.erase(this);
+				[&](const auto& x)
+				{
+					return x.first == event && x.second == &eventListener;
+				});
+		}
+
+		/**
+		 * @brief イベントリスナーを全て登録解除
+		 */
+		void Clear()
+		{
+			listeners_.clear();
 		}
 
 	private:
