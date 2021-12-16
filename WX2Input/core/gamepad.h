@@ -25,6 +25,7 @@ namespace wx2
 	class Gamepad final
 	{
 	public:
+		//! @brief コントローラーのボタンの種類
 		enum Buttons
 		{
 			DPadUp = 0,
@@ -43,6 +44,7 @@ namespace wx2
 			Y
 		};
 
+		// @brief コントローラーの軸の種類
 		enum Axises
 		{
 			LTrigger = 0,
@@ -71,7 +73,7 @@ namespace wx2
 		//! 軸数
 		static constexpr size_t NUM_AXISES = 6;
 
-		//! @brief ゲームパッドの状態
+		//! @brief ゲームパッド入力の状態
 		struct GamepadState
 		{
 			struct
@@ -88,7 +90,7 @@ namespace wx2
 		// コピーとムーブ禁止
 		WX2_DISALLOW_COPY_AND_MOVE(Gamepad);
 
-		//! @brief コントローラーの状態を更新
+		//! @brief コントローラーの入力状態を更新
 		void Update() noexcept;
 
 		/**
@@ -149,7 +151,7 @@ namespace wx2
 	private:
 		//! ゲームパッドの状態リスト
 		std::array<GamepadState, XUSER_MAX_COUNT> states_{};
-		//! ゲームパッドの状態を取得する一時バッファ
+		//! ゲームパッドの入力状態を取得する一時バッファ
 		XINPUT_STATE buffer_{};
 	};
 }

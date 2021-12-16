@@ -5,6 +5,7 @@ namespace wx2
 {
 	Keyboard::~Keyboard() noexcept
 	{
+		// 登録された全てのキーボードデバイスを解放
 		for (auto& [device, instance, capability] : keyboards_)
 		{
 			if (device)
@@ -25,21 +26,20 @@ namespace wx2
 
 	void Keyboard::Regist()
 	{
+		// 現在接続中のデバイスを列挙して登録
 		const HRESULT hr = directInput_->EnumDevices(
 			DI8DEVTYPE_KEYBOARD,
 			SetupKeyboardCallback,
 			this,
 			DIEDFL_ATTACHEDONLY);
-
 		WX2_COM_ERROR_IF_FAILED(hr, "キーボードデバイスの作成に失敗しました。");
 	}
 
 	void Keyboard::Update() noexcept
 	{
+		// 前フレームの情報を更新
 		state_.previous = state_.current;
-		std::memset(&state_.current, 0, sizeof(state_.current));
-
-		BYTE stateBuffer[NUM_KEYS] = {};
+		state_.current = {};
 
 		// 全てのキーボードの状態を取得
 		for (const auto& [device, instance, capability] : keyboards_)
@@ -52,20 +52,18 @@ namespace wx2
 				continue;
 			}
 
-			std::memset(&stateBuffer, 0, sizeof(stateBuffer));
-
 			// キーボード状態取得
-			hr = device->GetDeviceState(static_cast<DWORD>(sizeof(stateBuffer)), &stateBuffer);
+			hr = device->GetDeviceState(static_cast<DWORD>(sizeof(stateBuffer_)), &stateBuffer_);
 			if (FAILED(hr))
 			{
 				WX2_LOG_WARN("キーボード状態取得に失敗しました。");
 				continue;
 			}
 
-			// キー情報を格納
+			// キー入力情報を格納
 			for (std::size_t i = 0; i < NUM_KEYS; ++i)
 			{
-				state_.current.keys[i] = state_.current.keys[i] || (stateBuffer[i] & 0x80);
+				state_.current.keys[i] = state_.current.keys[i] || (stateBuffer_[i] & 0x80);
 			}
 		}
 	}
@@ -86,10 +84,11 @@ namespace wx2
 			return DIENUM_CONTINUE;
 		}
 
+		// キーボードのデバイス情報
 		KeyboardDevice keyboardDev = {};
 		keyboardDev.instance = static_cast<DIDEVICEINSTANCE>(*lpddi);
 
-		// デバイス作成
+		// キーボードのデバイス作成
 		HRESULT hr = keyboard->directInput_->CreateDevice(
 			keyboardDev.instance.guidInstance,
 			keyboardDev.device.GetAddressOf(),
@@ -133,6 +132,7 @@ namespace wx2
 			return DIENUM_CONTINUE;
 		}
 
+		// 登録済みキーボードデバイスリストに追加
 		keyboard->keyboards_.push_back(std::move(keyboardDev));
 
 		return DIENUM_CONTINUE;

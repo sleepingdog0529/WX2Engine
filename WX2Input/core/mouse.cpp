@@ -3,13 +3,9 @@
 
 namespace wx2
 {
-	Mouse::Mouse() noexcept
-		: hwnd_()
-	{
-	}
-
 	Mouse::~Mouse() noexcept
 	{
+		// 登録された全てのマウスデバイスを解放 
 		for (auto& [device, instance, capability] : mouses_)
 		{
 			if (device)
@@ -23,30 +19,28 @@ namespace wx2
 	{
 		WX2_ASSERT_MSG(directInput, "IDirectInputDevice8がnullptrです。");
 		WX2_ASSERT_MSG(IsWindowEnabled(hwnd) != 0, "ウィンドウハンドルが無効です。");
+
 		directInput_ = directInput;
 		hwnd_ = hwnd;
 	}
 
 	void Mouse::Regist() noexcept
 	{
-		if (const HRESULT hr = directInput_->EnumDevices(
+		// 現在接続中のデバイスを列挙して登録
+		const HRESULT hr = directInput_->EnumDevices(
 			DI8DEVTYPE_MOUSE,
 			SetupMouseCallback,
 			this,
-			DIEDFL_ATTACHEDONLY); FAILED(hr))
-		{
-			WX2_LOG_ERROR("マウスデバイスの作成に失敗しました。");
-			exit(EXIT_FAILURE);
-		}
+			DIEDFL_ATTACHEDONLY);
+		WX2_COM_ERROR_IF_FAILED(hr, "マウスデバイスの作成に失敗しました。");
 	}
 
 	void Mouse::Update() noexcept
 	{
+		// 前フレームの情報を更新
 		state_.previous = state_.current;
-		std::memset(&state_.current, 0, sizeof(state_.current));
-		std::memset(&state_.axises, 0, sizeof(state_.axises));
-
-		DIMOUSESTATE2 stateBuffer = {};
+		state_.current = {};
+		state_.axises = {};
 
 		// 全てのマウスの状態を取得
 		for (const auto& [device, instance, capability] : mouses_)
@@ -59,10 +53,8 @@ namespace wx2
 				continue;
 			}
 
-			std::memset(&stateBuffer, 0, sizeof(stateBuffer));
-
 			// マウス状態取得
-			hr = device->GetDeviceState(static_cast<DWORD>(sizeof(stateBuffer)), &stateBuffer);
+			hr = device->GetDeviceState(static_cast<DWORD>(sizeof(stateBuffer_)), &stateBuffer_);
 			if (FAILED(hr))
 			{
 				WX2_LOG_WARN("マウス状態取得に失敗しました。");
@@ -72,13 +64,13 @@ namespace wx2
 			// ボタン情報を格納
 			for (std::size_t i = 0; i < NUM_BUTTONS; ++i)
 			{
-				state_.current.buttons[i] = state_.current.buttons[i] || (stateBuffer.rgbButtons[i] & 0x80);
+				state_.current.buttons[i] = state_.current.buttons[i] || (stateBuffer_.rgbButtons[i] & 0x80);
 			}
 
 			// 軸情報を格納
-			state_.axises[CursorX] += static_cast<float>(stateBuffer.lX);
-			state_.axises[CursorY] += static_cast<float>(stateBuffer.lY);
-			state_.axises[WheellScroll] += static_cast<float>(stateBuffer.lZ) / static_cast<float>(WHEEL_DELTA);
+			state_.axises[CursorX] += static_cast<float>(stateBuffer_.lX);
+			state_.axises[CursorY] += static_cast<float>(stateBuffer_.lY);
+			state_.axises[WheellScroll] += static_cast<float>(stateBuffer_.lZ) / static_cast<float>(WHEEL_DELTA);
 		}
 	}
 
@@ -98,10 +90,11 @@ namespace wx2
 			return DIENUM_CONTINUE;
 		}
 
+		// マウスのデバイス情報
 		MouseDevice mouseDev = {};
 		mouseDev.instance = static_cast<DIDEVICEINSTANCE>(*lpddi);
 
-		// デバイス作成
+		// マウスのデバイス作成
 		HRESULT hr = mouse->directInput_->CreateDevice(
 			mouseDev.instance.guidInstance,
 			mouseDev.device.GetAddressOf(),
@@ -159,6 +152,7 @@ namespace wx2
 			return DIENUM_CONTINUE;
 		}
 
+		// 登録済みマウスデバイスリストに追加
 		mouse->mouses_.push_back(std::move(mouseDev));
 
 		return DIENUM_CONTINUE;

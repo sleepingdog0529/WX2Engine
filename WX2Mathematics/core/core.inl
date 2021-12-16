@@ -563,8 +563,8 @@ namespace wx2
 	inline float Vector4::DistanceSquared(const Vector4& v1, const Vector4& v2) noexcept
 	{
 		return DirectX::XMVectorGetX(
-			DirectX::XMVector4LengthSq(
-				DirectX::XMVectorSubtract(v1.vector_, v2.vector_)));
+				   DirectX::XMVector4LengthSq(
+					   DirectX::XMVectorSubtract(v1.vector_, v2.vector_)));
 	}
 
 	inline float Vector4::Dot(const Vector4& v1, const Vector4& v2) noexcept

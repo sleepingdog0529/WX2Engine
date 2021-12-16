@@ -17,6 +17,7 @@ namespace wx2
 	class Mouse final
 	{
 	public:
+		//! @brief マウスのボタンの種類
 		enum Buttons
 		{
 			Left = 0,
@@ -26,6 +27,7 @@ namespace wx2
 			X2
 		};
 
+		//! @brief マウスの軸の種類
 		enum Axises
 		{
 			CursorX,
@@ -34,12 +36,17 @@ namespace wx2
 		};
 
 	private:
+		//! IDirectInput8のComPtr
 		using DInputPtr = Microsoft::WRL::ComPtr<IDirectInput8>;
+		//! IDirectInputDevice8のComPtr
 		using DevicePtr = Microsoft::WRL::ComPtr<IDirectInputDevice8>;
 
-		static constexpr std::size_t NUM_BUTTONS = 5;	// ボタン数
-		static constexpr std::size_t NUM_AXISES = 3;	// 軸数
+		//! マウスのボタン数
+		static constexpr std::size_t NUM_BUTTONS = 5;
+		//! マウスの軸数
+		static constexpr std::size_t NUM_AXISES = 3;
 
+		//! @brief マウス入力の状態
 		struct MouseState
 		{
 			struct
@@ -49,6 +56,7 @@ namespace wx2
 			std::array<float, NUM_AXISES> axises{};
 		};
 
+		//! @brief マウスのデバイス情報
 		struct MouseDevice
 		{
 			DevicePtr device;
@@ -57,7 +65,7 @@ namespace wx2
 		};
 
 	public:
-		Mouse() noexcept;
+		Mouse() = default;
 		~Mouse() noexcept;
 
 		WX2_DISALLOW_COPY_AND_MOVE(Mouse);
@@ -87,12 +95,20 @@ namespace wx2
 		}
 
 	private:
+		//! @brief マウスデバイスを登録する為のコールバック
 		static BOOL CALLBACK SetupMouseCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef) noexcept;
 
-		DInputPtr directInput_;
-		HWND hwnd_;
+		//! DirectInput8のComPtr
+		DInputPtr directInput_{};
+		//! 入力を受け付けるウィンドウのハンドル
+		HWND hwnd_{};
 
-		std::vector<MouseDevice> mouses_;
-		MouseState state_;
+		//! 接続されたマウスのデバイス情報リスト
+		std::vector<MouseDevice> mouses_{};
+		//! マウスの入力情報
+		MouseState state_{};
+
+		//! マウスの入力状態を取得する一時バッファ
+		DIMOUSESTATE2 stateBuffer_ = {};
 	};
 }

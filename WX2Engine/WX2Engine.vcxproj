@@ -70,7 +70,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>$(ProjectDir)pch\pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Mathematics;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Mathematics;$(SolutionDir)WX2Physics</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -85,8 +85,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Input\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lua52.lib;WX2CommonD.lib;WX2InputD.lib;WX2GraphicsD.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Input\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Physics\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua52.lib;WX2CommonD.lib;WX2InputD.lib;WX2GraphicsD.lib;WX2PhysicsD.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -101,7 +101,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>$(ProjectDir)pch\pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Mathematics;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Mathematics;$(SolutionDir)WX2Physics</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -119,8 +119,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Input\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lua52.lib;WX2Common.lib;WX2Input.lib;WX2Graphics.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Input\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Physics\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua52.lib;WX2Common.lib;WX2Input.lib;WX2Graphics.lib;WX2Physics.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -18,6 +18,7 @@ namespace wx2
 	class Keyboard final
 	{
 	public:
+		// キーボードのキーの種類
 		enum Keys
 		{
 			Escape = 0x01,
@@ -136,11 +137,15 @@ namespace wx2
 		};
 
 	private:
+		//! IDirectInput8のComPtr
 		using DInputPtr = Microsoft::WRL::ComPtr<IDirectInput8>;
+		//! IDirectInputDevice8のComPtr
 		using DevicePtr = Microsoft::WRL::ComPtr<IDirectInputDevice8>;
 
-		static constexpr std::size_t NUM_KEYS = 256;	// キー数
+		//! キーボードのキー数
+		static constexpr std::size_t NUM_KEYS = 221;
 
+		//! @brief キーボード入力の状態
 		struct KeyboardState
 		{
 			struct
@@ -149,6 +154,7 @@ namespace wx2
 			} current, previous;
 		};
 
+		//! キーボードのデバイス情報
 		struct KeyboardDevice
 		{
 			DevicePtr device;
@@ -158,36 +164,69 @@ namespace wx2
 
 	public:
 		Keyboard() = default;
+
+		//! @brief 全てのキーボードデバイスを解放する
 		~Keyboard() noexcept;
 
+		// コピーとムーブ禁止
 		WX2_DISALLOW_COPY_AND_MOVE(Keyboard);
 
+		/**
+		 * @brief  キーボードの初期化
+		 * @param  directInput DirectInput8のComPtr
+		 * @param  hwnd 入力を受け付けるウィンドウのハンドル
+		 */
 		void Initialize(const DInputPtr& directInput, HWND hwnd) noexcept;
+		//! @brief 新たに接続されたキーボードデバイスを登録する
 		void Regist();
+		//! @brief キーボードの入力状態の更新
 		void Update() noexcept;
 
+		/**
+		 * @brief  ボタンが押されているか
+		 * @param  key キーの種類
+		 * @return 押されているか
+		 */
 		[[nodiscard]] bool IsDown(const Keys key) const noexcept
 		{
 			return state_.current.keys[key];
 		}
 
+		/**
+		 * @brief  ボタンが押されたか
+		 * @param  key キーの種類
+		 * @return 押されたか
+		 */
 		[[nodiscard]] bool IsPressed(const Keys key) const noexcept
 		{
 			return state_.current.keys[key] && !state_.previous.keys[key];
 		}
 
+		/**
+		 * @brief  ボタンが離されたか
+		 * @param  key キーの種類
+		 * @return 離されたか
+		 */
 		[[nodiscard]] bool IsReleased(const Keys key) const noexcept
 		{
 			return !state_.current.keys[key] && state_.previous.keys[key];
 		}
 
 	private:
+		//! @brief キーボードデバイスを登録する為のコールバック
 		static BOOL CALLBACK SetupKeyboardCallback(LPCDIDEVICEINSTANCE lpddi, const LPVOID pvRef) noexcept;
 
-		DInputPtr directInput_;
+		//! DirectInput8のComPtr
+		DInputPtr directInput_{};
+		//! 入力を受け付けるウィンドウのハンドル
 		HWND hwnd_{};
 
-		std::vector<KeyboardDevice> keyboards_;
-		KeyboardState state_;
+		//! 接続されたキーボードのデバイス情報リスト
+		std::vector<KeyboardDevice> keyboards_{};
+		//! キーボードの入力情報
+		KeyboardState state_{};
+
+		//! キーボードの入力状態を取得する一時バッファ
+		BYTE stateBuffer_[NUM_KEYS] = {};
 	};
 }

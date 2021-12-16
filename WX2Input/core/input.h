@@ -27,6 +27,7 @@ namespace wx2
 		Input() = default;
 		~Input() = default;
 
+		// コピーとムーブ禁止
 		WX2_DISALLOW_COPY_AND_MOVE(Input);
 
 		/**
@@ -36,18 +37,24 @@ namespace wx2
 		 */
 		bool Initialize(HWND hwnd) noexcept;
 
-
+		//! @brief 入力情報の更新
 		void Update() noexcept;
 
+		//! @brief キーボード入力クラスを取得する
 		[[nodiscard]] const Keyboard& GetKeyboard() const noexcept { return keyboard_; }
+		//! @brief マウス入力クラスを取得する
 		[[nodiscard]] const Mouse& GetMouse()       const noexcept { return mouse_; }
+		//! @brief コントローラー入力クラスを取得する
 		[[nodiscard]] const Gamepad& GetGamepad()   const noexcept { return gamepad_; }
 
 	private:
-		//! DirectInputの
+		//! DirectInputの入力デバイス
 		DInputPtr directInput_;
+		//! キーボード入力
 		Keyboard keyboard_;
+		//! マウス入力
 		Mouse mouse_;
+		//! コントローラー入力
 		Gamepad gamepad_;
 	};
 }
