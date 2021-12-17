@@ -25,6 +25,12 @@ namespace wx2::physics
 
 		[[nodiscard]] bool Initialize(const PxU32 numThread) noexcept;
 
+		[[nodiscard]] PxRigidDynamic* CreateDynamic(
+			const PxTransform& transform,
+			const PxGeometry& geometry,
+			PxMaterial& material,
+			PxReal density = 10.0f);
+
 	private:
 		PxFoundation* foundation_{};
 		PxDefaultAllocator allocator_{};
@@ -38,7 +44,6 @@ namespace wx2::physics
 
 #if !defined(NDEBUG)
 		physx::PxPvd* pvd_{};
-		PxPvdTransport* tranceport_{};
 #endif
 	};
 }

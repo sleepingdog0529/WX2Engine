@@ -12,11 +12,6 @@ namespace wx2::physics
 		{
 			pvd_->release();
 		}
-
-		if (tranceport_)
-		{
-			tranceport_->release();
-		}
 #endif
 
 		SafeRelease(foundation_);
@@ -34,16 +29,14 @@ namespace wx2::physics
 
 #if !defined(NDEBUG)
 			pvd_ = PxCreatePvd(*foundation_);
-			tranceport_ = PxDefaultPvdSocketTransportCreate("localhost", 5425, 10);
-			pvd_->connect(*tranceport_, PxPvdInstrumentationFlag::eALL);
+			PxPvdTransport* tranceport = PxDefaultPvdSocketTransportCreate("localhost", 5425, 10);
+			pvd_->connect(*tranceport, PxPvdInstrumentationFlag::eALL);
 #endif
-
-			scale_ = PxTolerancesScale();
 
 			physics_ = PxCreatePhysics(
 				PX_PHYSICS_VERSION,
 				*foundation_,
-				scale_,
+				PxTolerancesScale(),
 				true,
 				pvd_);
 			WX2_RUNTIME_ERROR_IF_FAILED(physics_, "PxPhysicsÇÃçÏê¨Ç…é∏îsÇµÇ‹ÇµÇΩÅB");
@@ -81,6 +74,7 @@ namespace wx2::physics
 				PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES | 
 				PxPvdSceneFlag::eTRANSMIT_CONTACTS);
 #endif
+
 			return true;
 		}
 		catch (const RuntimeError& runtimeError)

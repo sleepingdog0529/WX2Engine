@@ -12,6 +12,7 @@
 #include <WX2Input.h>
 #include <WX2Graphics.h>
 #include <WX2Mathematics.h>
+#include <WX2Physics.h>
 
 #define STRICT
 #define WIN32_LEAN_AND_MEAN
