@@ -9,7 +9,7 @@
 #include <memory>
 #include <WX2Common.h>
 
-namespace wx2::physics
+namespace wx2
 {
 	using namespace physx; // Pxってプレフィックスあるならusingして良さげ？
 
@@ -26,11 +26,18 @@ namespace wx2::physics
 
 		[[nodiscard]] bool Initialize(const PxU32 numThread) noexcept;
 
+		[[nodiscard]] PxMaterial* CreateMaterial(
+			const float staticFriction,
+			const float dynamicFriction,
+			const float bounciness) const noexcept;
+
 		[[nodiscard]] PxRigidDynamic* CreateDynamic(
 			const PxTransform& transform,
 			const PxGeometry& geometry,
 			PxMaterial& material,
-			PxReal density = 10.0f);
+			PxReal density = 10.0f) const noexcept;
+
+		void Step(const float deltaTime) const noexcept;
 
 	private:
 		PxFoundation* foundation_{};
@@ -38,7 +45,7 @@ namespace wx2::physics
 		PxDefaultErrorCallback errorCallback_{};
 		PxTolerancesScale scale_{};
 		PxPhysics* physics_{};
-		//PxCooking* cooking_{};
+		PxCooking* cooking_{};
 		PxCudaContextManager* cudaContextManager_{};
 		PxDefaultCpuDispatcher* cpuDispacher_{};
 		PxScene* scene_{};

@@ -7,6 +7,7 @@
 #pragma once
 #include <WX2Input.h>
 #include <WX2Graphics.h>
+#include <WX2Physics.h>
 #include "window_container.h"
 
 // エントリポイントを前方宣言
@@ -66,11 +67,16 @@ namespace wx2
 		Input input_;						//! 入力管理
 		WindowPtr mainWindow_;	//! メインウィンドウ
 		Graphics graphics_;		//! 描画管理
+		Physics physics_;
 
 	private:
-		//! @brief アプリケーションを実行する 
-		int Run() noexcept;
-
+		/**
+		 * @brief  アプリケーションを実行する
+		 * @param  fps リフレッシュレート
+		 * @return アプリケーションの終了コード
+		 */
+		int Run(float fps) noexcept;
+		
 		//! 既にインスタンス化されているか
 		static inline bool instantiated_ = false;
 	};

@@ -17,8 +17,6 @@ namespace wx2
 		std::wcout.imbue(ctypeDefault);
 		std::wcin.imbue(ctypeDefault);
 
-		physics::Physics physx;
-		physx.Initialize(16);
 
 		WX2_LOG_TRACE("アプリケーション初期化開始");
 	}
@@ -30,10 +28,12 @@ namespace wx2
 		instantiated_ = false;
 	}
 
-	int Application::Run() noexcept
+	int Application::Run(const float fps) noexcept
 	{
 		try
 		{
+			WX2_LOG_TRACE("アプリケーション実行開始");
+
 			// 画面サイズ取得
 			const int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 			const int screenHeight = GetSystemMetrics(SM_CYSCREEN);
@@ -54,20 +54,19 @@ namespace wx2
 			mainWindow_ = windowContainer_.Create("Main", wndProp);
 
 			// 入力の初期化
-			input_.Initialize(mainWindow_->GetHandle());
+			bool res = input_.Initialize(mainWindow_->GetHandle());
+			WX2_RUNTIME_ERROR_IF_FAILED(res, "入力の初期化でエラーが発生したためアプリケーションを終了します。");
 
 			// グラフィックスの初期化
-			const bool res = graphics_.Initialize(
+			res = graphics_.Initialize(
 				mainWindow_->GetHandle(),
 				mainWindow_->GetWindowPropertyPtr(),
 				true);
-			if (!res)
-			{
-				WX2_LOG_ERROR("グラフィックスのエラーが発生したためアプリケーションを終了します。");
-				return EXIT_FAILURE;
-			}
+			WX2_RUNTIME_ERROR_IF_FAILED(res, "グラフィックスの初期化でエラーが発生したためアプリケーションを終了します。");
 
-			WX2_LOG_TRACE("アプリケーション実行開始");
+			// 物理演算の初期化
+			res = physics_.Initialize(0);
+			WX2_RUNTIME_ERROR_IF_FAILED(res, "物理演算の初期化でエラーが発生したためアプリケーションを終了します。");
 
 			// アプリケーション開始時の処理を呼び出す
 			Start();
@@ -77,8 +76,8 @@ namespace wx2
 
 			// FPS計測用
 			UINT frame = 0;	// 1秒間のフレームカウンタ
-			UINT fps = 0;	// FPS
-			UINT avg = 0;	// 平均FPS
+			UINT measuredFps = 0;		// 実測FPS
+			UINT measuredAvgFps = 0;	// 実測平均FPS
 			std::deque<int> fpsRecords{};	// FPS記録用デキュー
 			Timer<> frameTimer{};	// フレーム計測用タイマー
 			Timer<> fpsTimer{};		// FPS計測用タイマー
@@ -90,7 +89,7 @@ namespace wx2
 				const auto elapced = frameTimer.ElapcedTime();
 
 				// 1フレームの時間が経過するまでウィンドウメッセージを処理
-				if (elapced < 1000 / 120.0f)
+				if (elapced < 1000 / fps)
 				{
 					terminate = !windowContainer_.ProcessMessage();
 				}
@@ -114,20 +113,20 @@ namespace wx2
 						}
 
 						// FPSを求める
-						fps = frame;
+						measuredFps = frame;
 
 						// FPSの記録の平均から平均FPSを求める
-						avg = std::reduce(fpsRecords.begin(), fpsRecords.end(), 0);
-						avg /= static_cast<UINT>(fpsRecords.size());
+						measuredAvgFps = std::reduce(fpsRecords.begin(), fpsRecords.end(), 0);
+						measuredAvgFps /= static_cast<UINT>(fpsRecords.size());
 
 						// ウィンドウのタイトルをFPSに設定
-						mainWindow_->SetTitle(std::format("FPS: {} AVG: {}", fps, avg));
+						mainWindow_->SetTitle(std::format("FPS: {} AVG: {}", measuredFps, measuredAvgFps));
 
 						frame = 0;
 					}
 
 					// フレームの経過時間を求める
-					const float deltaTime = static_cast<float>(elapced) / 120.0f;
+					const float deltaTime = static_cast<float>(elapced) / 1000.0f;
 
 					// アプリケーションの描画処理を呼び出す
 					graphics_.DrawBegin();
@@ -136,6 +135,7 @@ namespace wx2
 
 					// 入力の更新
 					input_.Update();
+					physics_.Step(deltaTime);
 
 					// アプリケーションの更新を呼び出す
 					terminate = !Update(deltaTime);

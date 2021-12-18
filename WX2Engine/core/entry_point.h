@@ -29,5 +29,5 @@ int main(int argc, char** argv)
 	const auto app = wx2::CreateApp();
 
 	// アプリケーション起動
-	return app->Run();
+	return app->Run(120.0f);
 }

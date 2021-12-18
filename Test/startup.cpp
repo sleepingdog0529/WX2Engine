@@ -36,6 +36,12 @@ namespace wx2
 				modelPath = OpenFileDialog("*.fbx\0\0");
 			}
 			model_ = modelLoader_.Load(modelPath);
+
+			auto* mat = physics_.CreateMaterial(0.5f, 0.5f, 0.5f);
+			auto* sphere = physics_.CreateDynamic(
+				PxTransform(PxVec3(0.0f, 10.0f, 0.0f)),
+				PxSphereGeometry(1.0f),
+				*mat);
 		}
 
 		/**

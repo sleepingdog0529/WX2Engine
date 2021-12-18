@@ -1,7 +1,7 @@
 #include "physics.h"
 #include <exception>
 
-namespace wx2::physics
+namespace wx2
 {
 	Physics::~Physics() noexcept
 	{
@@ -37,9 +37,9 @@ namespace wx2::physics
 				pvd_);
 			WX2_RUNTIME_ERROR_IF_FAILED(physics_, "PxPhysics‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
 
-			//cooking_ = PxCreateCooking(
-			//	PX_PHYSICS_VERSION, *foundation_, px::PxCookingParams(scale_));
-			//WX2_RUNTIME_ERROR_IF_FAILED(cooking_, "PxCooling‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
+			cooking_ = PxCreateCooking(
+				PX_PHYSICS_VERSION, *foundation_, PxCookingParams(scale_));
+			WX2_RUNTIME_ERROR_IF_FAILED(cooking_, "PxCooling‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
 
 			cpuDispacher_ = PxDefaultCpuDispatcherCreate(numThread);
 			WX2_RUNTIME_ERROR_IF_FAILED(cpuDispacher_, "PxDefaultCPUDispacher‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
@@ -55,10 +55,8 @@ namespace wx2::physics
 			WX2_RUNTIME_ERROR_IF_FAILED(scene_, "PxScene‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
 			
 			PxPvdSceneClient* pvdClient = scene_->getScenePvdClient();
-			if(!pvdClient)
-			{
-				WX2_LOG_WARN("PVD‚ÌÝ’è‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
-			}
+			WX2_RUNTIME_ERROR_IF_FAILED(pvdClient, "PVD‚ÌÝ’è‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
+
 			scene_->getScenePvdClient()->setScenePvdFlags(
 				PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS | 
 				PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES | 
@@ -71,5 +69,31 @@ namespace wx2::physics
 			WX2_LOG_ERROR(runtimeError.what());
 			return false;
 		}
+	}
+
+	PxMaterial* Physics::CreateMaterial(
+		const float staticFriction,
+		const float dynamicFriction,
+		const float bounciness) const noexcept
+	{
+		return physics_->createMaterial(staticFriction, dynamicFriction, bounciness);
+	}
+
+	PxRigidDynamic* Physics::CreateDynamic(
+		const PxTransform& transform, 
+		const PxGeometry& geometry, 
+		PxMaterial& material,
+		const PxReal density) const noexcept
+	{
+		PxRigidDynamic* rigidDynamic = 
+			PxCreateDynamic(*physics_, transform, geometry, material, density);
+		scene_->addActor(*rigidDynamic);
+		return rigidDynamic;
+	}
+
+	void Physics::Step(const float deltaTime) const noexcept
+	{
+		scene_->simulate(deltaTime);
+		scene_->fetchResults(true);
 	}
 }
