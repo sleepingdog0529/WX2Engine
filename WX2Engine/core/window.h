@@ -28,8 +28,8 @@ namespace wx2
 		//! @brief ウィンドウを閉じる
 		~Window() noexcept;
 
-		// コピーとムーブ禁止
-		WX2_DISALLOW_COPY_AND_MOVE(Window);
+		WX2_DISALLOW_COPY(Window);
+		WX2_DISALLOW_MOVE(Window);
 
 		//! ウィンドウのウィンドウプロシージャ
 		static LRESULT CALLBACK HandleMessageRedirect(const HWND hwnd, const UINT msg, const  WPARAM wp, const  LPARAM lp);

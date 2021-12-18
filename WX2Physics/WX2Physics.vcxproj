@@ -94,7 +94,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2CommonD.lib;PhysXExtensions_static_64.lib;PhysX_static_64.lib;PhysXCooking_static_64.lib;PhysXCommon_static_64.lib;PhysXVehicle_static_64.lib;PhysXPvdSDK_static_64.lib;PhysXCharacterKinematic_static_64.lib;PhysXFoundation_static_64.lib</AdditionalDependencies>
+      <AdditionalDependencies>WX2CommonD.lib;PhysX_static_64.lib;PhysXCommon_static_64.lib;PhysXCooking_static_64.lib;PhysXExtensions_static_64.lib;PhysXFoundation_static_64.lib;PhysXPvdSDK_static_64.lib;PhysXVehicle_static_64.lib;PhysXCharacterKinematic_static_64.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -128,7 +128,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2Common.lib;PhysXExtensions_static_64.lib;PhysX_static_64.lib;PhysXCooking_static_64.lib;PhysXCommon_static_64.lib;PhysXVehicle_static_64.lib;PhysXPvdSDK_static_64.lib;PhysXCharacterKinematic_static_64.lib;PhysXFoundation_static_64.lib</AdditionalDependencies>
+      <AdditionalDependencies>WX2Common.lib;PhysX_static_64.lib;PhysXCommon_static_64.lib;PhysXCooking_static_64.lib;PhysXExtensions_static_64.lib;PhysXFoundation_static_64.lib;PhysXPvdSDK_static_64.lib;PhysXVehicle_static_64.lib;PhysXCharacterKinematic_static_64.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -7,25 +7,33 @@
 #pragma once
 
 /**
- * @brief コピーコンストラクタの呼び出しを禁止する
+ * @brief デフォルトコピーコンストラクタと代入演算子を定義する
+ * @param name クラス名
+ */
+#define WX2_COPYABLE(name)					\
+	name(const name&) = default;			\
+	name& operator = (const name&) = default
+
+ /**
+  * @brief デフォルトムーブコンストラクタと移動代入演算子を定義する
+  * @param name クラス名
+  */
+#define WX2_MOVEABLE(name)					\
+	name(name&&) = default;					\
+	name& operator = (name&&) = default
+
+/**
+ * @brief コピーコンストラクタと代入演算子の呼び出しを禁止する
  * @param name クラス名
  */
 #define WX2_DISALLOW_COPY(name)				\
 	name(const name&) = delete;				\
-	name& operator=(const name&) = delete
+	name& operator = (const name&) = delete
 
 /**
- * @brief ムーブコンストラクタの呼び出しを禁止する
+ * @brief ムーブコンストラクタと移動代入演算子の呼び出しを禁止する
  * @param name クラス名
  */
 #define WX2_DISALLOW_MOVE(name)				\
 	name(name&&) = delete;					\
-	name& operator=(name&&) = delete
-
-/**
- * @brief コピー＆ムーブコンストラクタの呼び出しを禁止する
- * @param name クラス名
- */
-#define WX2_DISALLOW_COPY_AND_MOVE(name)	\
-	WX2_DISALLOW_COPY(name);				\
-	WX2_DISALLOW_MOVE(name)
+	name& operator = (name&&) = delete

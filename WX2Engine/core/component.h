@@ -28,7 +28,8 @@ namespace wx2
 		IComponent() = default;
 		virtual ~IComponent() = default;
 
-		WX2_DISALLOW_COPY_AND_MOVE(IComponent);
+		WX2_DISALLOW_COPY(IComponent);
+		WX2_DISALLOW_MOVE(IComponent);
 
 		virtual void Update() {};
 		virtual void Draw() {};

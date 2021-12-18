@@ -168,8 +168,9 @@ namespace wx2
 		//! @brief 全てのキーボードデバイスを解放する
 		~Keyboard() noexcept;
 
-		// コピーとムーブ禁止
-		WX2_DISALLOW_COPY_AND_MOVE(Keyboard);
+		
+		WX2_DISALLOW_COPY(Keyboard);
+		WX2_DISALLOW_MOVE(Keyboard);
 
 		/**
 		 * @brief  キーボードの初期化

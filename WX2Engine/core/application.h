@@ -37,8 +37,9 @@ namespace wx2
 		//! @brief  アプリケーション終了
 		virtual ~Application() noexcept;
 
-		// コピーとムーブ禁止
-		WX2_DISALLOW_COPY_AND_MOVE(Application);
+		
+		WX2_DISALLOW_COPY(Application);
+		WX2_DISALLOW_MOVE(Application);
 
 	protected:
 		//! @brief アプリケーション開始時の処理

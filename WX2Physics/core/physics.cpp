@@ -38,7 +38,12 @@ namespace wx2::physics
 				*foundation_,
 				PxTolerancesScale(),
 				true,
-				pvd_);
+#if !defined(NDEBUG)
+				pvd_
+#else
+				nullptr
+#endif
+			);
 			WX2_RUNTIME_ERROR_IF_FAILED(physics_, "PxPhysicsÇÃçÏê¨Ç…é∏îsÇµÇ‹ÇµÇΩÅB");
 
 			//cooking_ = PxCreateCooking(

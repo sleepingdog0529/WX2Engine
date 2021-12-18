@@ -21,7 +21,8 @@ namespace wx2
 		VertexShader() = default;
 		~VertexShader() = default;
 
-		WX2_DISALLOW_COPY_AND_MOVE(VertexShader);
+		WX2_DISALLOW_COPY(VertexShader);
+		WX2_DISALLOW_MOVE(VertexShader);
 
 		void Initialize(
 			Device* devices,

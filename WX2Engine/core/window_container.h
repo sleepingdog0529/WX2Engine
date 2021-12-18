@@ -33,7 +33,8 @@ namespace wx2
 		 */
 		virtual ~WindowContainer() noexcept;
 
-		WX2_DISALLOW_COPY_AND_MOVE(WindowContainer);
+		WX2_DISALLOW_COPY(WindowContainer);
+		WX2_DISALLOW_MOVE(WindowContainer);
 
 		/**
 		 * @brief     ウィンドウを生成する

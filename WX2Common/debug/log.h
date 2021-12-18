@@ -58,8 +58,8 @@ namespace wx2
 		//! @brief ロガーの終了処理
 		~Logger() noexcept;
 
-		// コピーとムーブ禁止
-		WX2_DISALLOW_COPY_AND_MOVE(Logger);
+		WX2_DISALLOW_COPY(Logger);
+		WX2_DISALLOW_MOVE(Logger);
 
 	private:
 		//! ロガー本体

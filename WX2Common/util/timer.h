@@ -21,7 +21,8 @@ namespace wx2
 
 		~Timer() = default;
 
-		WX2_DISALLOW_COPY_AND_MOVE(Timer);
+		WX2_DISALLOW_COPY(Timer);
+		WX2_DISALLOW_MOVE(Timer);
 
 		void Start() noexcept
 		{

@@ -30,7 +30,12 @@ namespace wx2
 
 			// モデルのロード
 			modelLoader_.Initialize(&devices);
-			model_ = modelLoader_.Load(OpenFileDialog("*.fbx\0\0"));
+			std::filesystem::path modelPath{};
+			while (modelPath.empty())
+			{
+				modelPath = OpenFileDialog("*.fbx\0\0");
+			}
+			model_ = modelLoader_.Load(modelPath);
 		}
 
 		/**
@@ -43,6 +48,7 @@ namespace wx2
 			// キーボードとマウスの入力を取得
 			const auto& keyboard = input_.GetKeyboard();
 			const auto& mouse = input_.GetMouse();
+			const auto& gamepad = input_.GetGamepad();
 
 			// Rキーが押されたら回転を0に
 			if (keyboard.IsDown(Keyboard::R))
@@ -53,20 +59,23 @@ namespace wx2
 			// カーソルの動きにあわせて回転
 			const float cursorX = mouse.GetAxisVelocity(Mouse::CursorX);
 			const float cursorY = mouse.GetAxisVelocity(Mouse::CursorY);
-			rot_ *= Quaternion::FromAxisAngle(Vector3::Up(), cursorX * 0.001f);
-			rot_ *= Quaternion::FromAxisAngle(Vector3::Right(), cursorY * 0.001f);
+			rot_ *= Quaternion::RotationY(cursorX * 0.001f);
+			rot_ *= Quaternion::AxisAngle(rot_.Right(), cursorY * 0.001f);
 
 			// キーの入力から移動方向を設定
 			Vector3 move;
+			move.Z() = gamepad.GetAxisValue(GamepadAxises::LThumbY);
 			if (keyboard.IsDown(Keyboard::D))		++move[0];
 			if (keyboard.IsDown(Keyboard::A))		--move[0];
 			if (keyboard.IsDown(Keyboard::Space))	++move[1];
 			if (keyboard.IsDown(Keyboard::LShift))	--move[1];
 			if (keyboard.IsDown(Keyboard::W))		++move[2];
 			if (keyboard.IsDown(Keyboard::S))		--move[2];
+			move = Vector3::Clamp(move, -1.0f, 1.0f);
+			move.Normalized();
 
 			// 移動方向に回転を適応して進行方向にそわせる
-			pos_ += Vector3::Transform(Vector3::Normalize(move), rot_) * deltaTime * 3.0f;
+			pos_ += Vector3::Transform(move, rot_) * deltaTime * 3.0f;
 
 			// スケール
 			const float wheel = mouse.GetAxisVelocity(Mouse::WheellScroll);
@@ -106,7 +115,7 @@ namespace wx2
 				0.01f,
 				1000.0f);
 			constantBufferWVP.data.view = Matrix::LookAt(
-				Vector3::Backward() * 50,
+				Vector3::Backward() * 10,
 				Vector3::Zero(),
 				Vector3::Up());
 

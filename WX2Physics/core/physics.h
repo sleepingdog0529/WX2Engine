@@ -21,7 +21,8 @@ namespace wx2::physics
 		Physics() = default;
 		~Physics() noexcept;
 
-		WX2_DISALLOW_COPY_AND_MOVE(Physics);
+		WX2_DISALLOW_COPY(Physics);
+		WX2_DISALLOW_MOVE(Physics);
 
 		[[nodiscard]] bool Initialize(const PxU32 numThread) noexcept;
 

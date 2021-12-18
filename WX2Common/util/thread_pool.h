@@ -33,9 +33,9 @@ namespace wx2
 		explicit ThreadPool(std::size_t threadCount = std::thread::hardware_concurrency()) noexcept;
 		//! @brief  スレッドをJoinする 
 		~ThreadPool() noexcept;
-
-		// コピーとムーブ禁止
-		WX2_DISALLOW_COPY_AND_MOVE(ThreadPool);
+		
+		WX2_DISALLOW_COPY(ThreadPool);
+		WX2_DISALLOW_MOVE(ThreadPool);
 
 		/**
 		 * @brief  タスクキューに関数をプッシュする

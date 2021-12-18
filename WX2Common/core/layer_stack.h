@@ -23,8 +23,8 @@ namespace wx2
 		LayerStack() = default;
 		~LayerStack() = default;
 
-		// コピーとムーブの禁止
-		WX2_DISALLOW_COPY_AND_MOVE(LayerStack);
+		WX2_DISALLOW_COPY(LayerStack);
+		WX2_DISALLOW_MOVE(LayerStack);
 
 		/**
 		 * @brief  レイヤーをスタック内に直接構築する

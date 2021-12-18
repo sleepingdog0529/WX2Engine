@@ -44,7 +44,8 @@ namespace wx2
 		ModelLoader() = default;
 		~ModelLoader() = default;
 
-		WX2_DISALLOW_COPY_AND_MOVE(ModelLoader);
+		WX2_DISALLOW_COPY(ModelLoader);
+		WX2_DISALLOW_MOVE(ModelLoader);
 
 		void Initialize(Device* devices);
 

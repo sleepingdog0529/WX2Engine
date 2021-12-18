@@ -26,9 +26,9 @@ namespace wx2
 	public:
 		Input() = default;
 		~Input() = default;
-
-		// コピーとムーブ禁止
-		WX2_DISALLOW_COPY_AND_MOVE(Input);
+		
+		WX2_DISALLOW_COPY(Input);
+		WX2_DISALLOW_MOVE(Input);
 
 		/**
 		 * @brief  各入力デバイスの初期化

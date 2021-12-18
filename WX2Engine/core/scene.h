@@ -14,9 +14,9 @@ namespace wx2
 	public:
 		Scene() = default;
 		~Scene() = default;
-
-		// コピーとムーブ禁止
-		WX2_DISALLOW_COPY_AND_MOVE(Scene);
+		
+		WX2_DISALLOW_COPY(Scene);
+		WX2_DISALLOW_MOVE(Scene);
 
 		/**
 		 * @brief シーンの開始時の処理

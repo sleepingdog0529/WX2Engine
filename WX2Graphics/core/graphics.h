@@ -30,7 +30,8 @@ namespace wx2
 		Graphics() = default;
 		~Graphics() = default;
 
-		WX2_DISALLOW_COPY_AND_MOVE(Graphics);
+		WX2_DISALLOW_COPY(Graphics);
+		WX2_DISALLOW_MOVE(Graphics);
 
 		/**
 		 * @brief  グラフィックスの初期化

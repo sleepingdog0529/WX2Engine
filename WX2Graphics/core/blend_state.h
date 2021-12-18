@@ -33,7 +33,8 @@ namespace wx2
 		BlendState() = default;
 		~BlendState() = default;
 
-		WX2_DISALLOW_COPY_AND_MOVE(BlendState);
+		WX2_DISALLOW_COPY(BlendState);
+		WX2_DISALLOW_MOVE(BlendState);
 
 		void Initialize(Device* devices);
 

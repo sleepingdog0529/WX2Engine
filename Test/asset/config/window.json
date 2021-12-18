@@ -3,14 +3,14 @@
         {
             "key": "Main",
             "value": {
-                "title": "FPS: 112 AVG: 104",
+                "title": "FPS: 111 AVG: 111",
                 "x": 493,
                 "y": 175,
                 "width": 528,
                 "height": 471,
                 "style": 282001408,
                 "exStyle": 256,
-                "maximized": false,
+                "maximized": true,
                 "fullscreen": false
             }
         }

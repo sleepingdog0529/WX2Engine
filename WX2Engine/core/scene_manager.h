@@ -16,8 +16,8 @@ namespace wx2
 		SceneStack() = default;
 		~SceneStack() = default;
 
-		// コピーとムーブ禁止
-		WX2_DISALLOW_COPY_AND_MOVE(SceneStack);
+		WX2_DISALLOW_COPY(SceneStack);
+		WX2_DISALLOW_MOVE(SceneStack);
 
 		/**
 		 * @brief  シーンをプッシュする

@@ -148,6 +148,12 @@ namespace wx2
 		return Vector2(DirectX::XMVector2Normalize(v.vector_));
 	}
 
+	inline Vector2 Vector2::Clamp(const Vector2& v, const float min, const float max) noexcept
+	{
+		WX2_ASSERT_MSG(min <= max, "最小値に最大値より大きい値が設定されました。");
+		return Vector2(DirectX::XMVectorClamp(v.vector_, DirectX::XMVectorReplicate(min), DirectX::XMVectorReplicate(max)));
+	}
+
 	inline Vector2 Vector2::Clamp(const Vector2& v, const Vector2& vmin, const Vector2& vmax) noexcept
 	{
 		return Vector2(DirectX::XMVectorClamp(v.vector_, vmin.vector_, vmax.vector_));
@@ -378,6 +384,12 @@ namespace wx2
 		return Vector3(DirectX::XMVector3Normalize(v.vector_));
 	}
 
+	inline Vector3 Vector3::Clamp(const Vector3& v, const float min, const float max) noexcept
+	{
+		WX2_ASSERT_MSG(min <= max, "最小値に最大値より大きい値が設定されました。");
+		return Vector3(DirectX::XMVectorClamp(v.vector_, DirectX::XMVectorReplicate(min), DirectX::XMVectorReplicate(max)));
+	}
+
 	inline Vector3 Vector3::Clamp(const Vector3& v, const Vector3& vmin, const Vector3& vmax) noexcept
 	{
 		return Vector3(DirectX::XMVectorClamp(v.vector_, vmin.vector_, vmax.vector_));
@@ -580,6 +592,12 @@ namespace wx2
 	inline Vector4 Vector4::Normalize(const Vector4& v) noexcept
 	{
 		return Vector4(DirectX::XMVector4Normalize(v.vector_));
+	}
+
+	inline Vector4 Vector4::Clamp(const Vector4& v, const float min, const float max) noexcept
+	{
+		WX2_ASSERT_MSG(min <= max, "最小値に最大値より大きい値が設定されました。");
+		return Vector4(DirectX::XMVectorClamp(v.vector_, DirectX::XMVectorReplicate(min), DirectX::XMVectorReplicate(max)));
 	}
 
 	inline Vector4 Vector4::Clamp(const Vector4& v, const Vector4& vmin, const Vector4& vmax) noexcept
@@ -1145,6 +1163,36 @@ namespace wx2
 		return DirectX::XMVectorGetX(DirectX::XMQuaternionLengthSq(quaternion_));
 	}
 
+	inline Vector3 Quaternion::Forward() const noexcept
+	{
+		const auto [x, y, z, w] = quaternion_.m128_f32;
+
+		return {
+			2 * (x * z + w * y),
+			2 * (y * z - w * x),
+			1 - 2 * (x * x + y * y) };
+	}
+
+	inline Vector3 Quaternion::Up() const noexcept
+	{
+		const auto [x, y, z, w] = quaternion_.m128_f32;
+
+		return {
+			2 * (x * y - w * z),
+			1 - 2 * (x * x + z * z),
+			2 * (y * z + w * x) };
+	}
+
+	inline Vector3 Quaternion::Right() const noexcept
+	{
+		const auto [x, y, z, w] = quaternion_.m128_f32;
+
+		return {
+			1 - 2 * (y * y + z * z),
+			2 * (x * y + w * z),
+			2 * (x * z - w * y) };
+	}
+
 	inline float Quaternion::Dot(const Quaternion& q1, const Quaternion& q2) noexcept
 	{
 		return DirectX::XMVectorGetX(DirectX::XMQuaternionDot(q1.quaternion_, q2.quaternion_));
@@ -1165,12 +1213,27 @@ namespace wx2
 		return Quaternion(DirectX::XMQuaternionInverse(q.quaternion_));
 	}
 
-	inline Quaternion Quaternion::FromAxisAngle(const Vector3& axis, const float angle) noexcept
+	inline Quaternion Quaternion::RotationX(const float rotation) noexcept
+	{
+		return Quaternion(DirectX::XMQuaternionRotationRollPitchYaw(rotation, 0.0f, 0.0f));
+	}
+
+	inline Quaternion Quaternion::RotationY(const float rotation) noexcept
+	{
+		return Quaternion(DirectX::XMQuaternionRotationRollPitchYaw(0.0f, rotation, 0.0f));
+	}
+
+	inline Quaternion Quaternion::RotationZ(const float rotation) noexcept
+	{
+		return Quaternion(DirectX::XMQuaternionRotationRollPitchYaw(0.0f, 0.0f, rotation));
+	}
+
+	inline Quaternion Quaternion::AxisAngle(const Vector3& axis, const float angle) noexcept
 	{
 		return Quaternion(DirectX::XMQuaternionRotationAxis(axis, angle));
 	}
 
-	inline Quaternion Quaternion::FromYawPitchRoll(const float yaw, const float pitch, const float roll) noexcept
+	inline Quaternion Quaternion::YawPitchRoll(const float yaw, const float pitch, const float roll) noexcept
 	{
 		return Quaternion(DirectX::XMQuaternionRotationRollPitchYaw(pitch, yaw, roll));
 	}
@@ -1272,13 +1335,13 @@ namespace wx2
 		return *this;
 	}
 
-	inline const float& Color::operator[](const std::size_t index) const noexcept
+	inline const float& Color::operator[] (const std::size_t index) const noexcept
 	{
 		WX2_ASSERT_MSG(index < 4, "添え字の値が範囲外です。");
 		return color_.m128_f32[index];
 	}
 
-	inline float& Color::operator[](const std::size_t index) noexcept
+	inline float& Color::operator[] (const std::size_t index) noexcept
 	{
 		WX2_ASSERT_MSG(index < 4, "添え字の値が範囲外です。");
 		return color_.m128_f32[index];

@@ -25,7 +25,8 @@ namespace wx2
 		virtual ~ILayer() = default;
 
 		// コピーとムーブの禁止
-		WX2_DISALLOW_COPY_AND_MOVE(ILayer);
+		WX2_DISALLOW_COPY(ILayer);
+		WX2_DISALLOW_MOVE(ILayer);
 
 		//! @brief レイヤースタックにプッシュされたときのコールバック
 		virtual void OnAttach() {}

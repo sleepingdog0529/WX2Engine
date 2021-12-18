@@ -20,8 +20,9 @@ namespace wx2
 		SceneParameter() = default;
 		~SceneParameter() = default;
 
-		// コピーとムーブ禁止
-		WX2_DISALLOW_COPY_AND_MOVE(SceneParameter);
+		
+		WX2_DISALLOW_COPY(SceneParameter);
+		WX2_DISALLOW_MOVE(SceneParameter);
 
 		/**
 		 * @brief  パラメーターに値を追加する

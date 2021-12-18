@@ -143,26 +143,15 @@ namespace wx2
 		}
 
 		/**
-		 * @brief  2DベクトルのX成分を取得する
-		 * @return X成分の値
+		 * @brief  2DベクトルのX成分の参照を返す
+		 * @return X成分の値の参照
 		 */
-		[[nodiscard]] float X() const noexcept { return DirectX::XMVectorGetX(vector_); }
+		[[nodiscard]] float& X() noexcept { return vector_.m128_f32[0]; }
 		/**
-		 * @brief  2DベクトルのY成分を取得する
-		 * @return Y成分の値
+		 * @brief  2DベクトルのY成分の参照を返す
+		 * @return Y成分の値の参照
 		 */
-		[[nodiscard]] float Y() const noexcept { return DirectX::XMVectorGetY(vector_); }
-
-		/**
-		 * @brief  2DベクトルのX成分を設定する
-		 * @param  x X成分の値
-		 */
-		void X(const float x) noexcept { vector_ = DirectX::XMVectorSetX(vector_, x); }
-		/**
-		 * @brief  2DベクトルのY成分を設定する
-		 * @param  y Y成分の値
-		 */
-		void Y(const float y) noexcept { vector_ = DirectX::XMVectorSetY(vector_, y); }
+		[[nodiscard]] float& Y() noexcept { return vector_.m128_f32[1]; }
 
 		/**
 		 * @brief  2Dベクトルを正規化する
@@ -225,6 +214,14 @@ namespace wx2
 		 * @return 正規化された2Dベクトル
 		 */
 		static Vector2 Normalize(const Vector2& v) noexcept;
+		/**
+		 * @brief  2Dベクトルの成分を指定した最小値と最大値の範囲にクランプする
+		 * @param  v クランプされる成分を持つ2Dベクトル
+		 * @param  min 要素の範囲の最小値
+		 * @param  max 要素の範囲の最大値
+		 * @return クランプされた2Dベクトル
+		 */
+		static Vector2 Clamp(const Vector2& v, const float min, const float max) noexcept;
 		/**
 		 * @brief  2Dベクトルの成分を指定した最小値と最大値の範囲にクランプする
 		 * @param  v クランプされる成分を持つ2Dベクトル
@@ -468,36 +465,20 @@ namespace wx2
 		}
 
 		/**
-		 * @brief  3DベクトルのX成分を取得する
-		 * @return X成分の値
+		 * @brief  3DベクトルのX成分の参照を取得する
+		 * @return X成分の値の参照
 		 */
-		[[nodiscard]] float X() const noexcept { return DirectX::XMVectorGetX(vector_); }
+		[[nodiscard]] float& X() noexcept { return vector_.m128_f32[0]; }
 		/**
-		 * @brief  3DベクトルのY成分を取得する
-		 * @return Y成分の値
+		 * @brief  3DベクトルのY成分の参照を取得する
+		 * @return Y成分の値の参照
 		 */
-		[[nodiscard]] float Y() const noexcept { return DirectX::XMVectorGetY(vector_); }
+		[[nodiscard]] float& Y() noexcept { return vector_.m128_f32[1]; }
 		/**
-		 * @brief  3DベクトルのZ成分を取得する
-		 * @return Z成分の値
+		 * @brief  3DベクトルのZ成分の参照を取得する
+		 * @return Z成分の値の参照
 		 */
-		[[nodiscard]] float Z() const noexcept { return DirectX::XMVectorGetZ(vector_); }
-
-		/**
-		 * @brief  3DベクトルのX成分を設定する
-		 * @param  x Y成分の値
-		 */
-		void X(const float x) noexcept { vector_ = DirectX::XMVectorSetX(vector_, x); }
-		/**
-		 * @brief  3DベクトルのY成分を設定する
-		 * @param  y Y成分の値
-		 */
-		void Y(const float y) noexcept { vector_ = DirectX::XMVectorSetY(vector_, y); }
-		/**
-		 * @brief  3DベクトルのZ成分を設定する
-		 * @param  z Y成分の値
-		 */
-		void Z(const float z) noexcept { vector_ = DirectX::XMVectorSetZ(vector_, z); }
+		[[nodiscard]] float& Z() noexcept { return vector_.m128_f32[2]; }
 
 		/**
 		 * @brief  3Dベクトルを正規化する
@@ -556,6 +537,14 @@ namespace wx2
 		 * @return 正規化された3Dベクトル
 		 */
 		static Vector3 Normalize(const Vector3& v) noexcept;
+		/**
+		 * @brief  3Dベクトルの成分を指定した最小値と最大値の範囲にクランプする
+		 * @param  v クランプされる成分を持つ3Dベクトル
+		 * @param  min 要素の範囲の最小値
+		 * @param  max 要素の範囲の最大値
+		 * @return クランプされた3Dベクトル
+		 */
+		static Vector3 Clamp(const Vector3& v, const float min, const float max) noexcept;
 		/**
 		 * @brief  3Dベクトルの成分を指定した最小値と最大値の範囲にクランプする
 		 * @param  v クランプされる成分を持つ3Dベクトル
@@ -802,46 +791,25 @@ namespace wx2
 		}
 
 		/**
-		 * @brief  4DベクトルのX成分を取得する
-		 * @return X成分の値
+		 * @brief  4DベクトルのX成分の参照を取得する
+		 * @return X成分の値の参照
 		 */
-		[[nodiscard]] float X() const noexcept { return DirectX::XMVectorGetX(vector_); }
+		[[nodiscard]] float& X() noexcept { return vector_.m128_f32[0]; }
 		/**
-		 * @brief  4DベクトルのY成分を取得する
-		 * @return Y成分の値
+		 * @brief  4DベクトルのY成分の参照を取得する
+		 * @return Y成分の値の参照
 		 */
-		[[nodiscard]] float Y() const noexcept { return DirectX::XMVectorGetY(vector_); }
+		[[nodiscard]] float& Y() noexcept { return vector_.m128_f32[1]; }
 		/**
-		 * @brief  4DベクトルのZ成分を取得する
-		 * @return Z成分の値
+		 * @brief  4DベクトルのZ成分の参照を取得する
+		 * @return Z成分の値の参照
 		 */
-		[[nodiscard]] float Z() const noexcept { return DirectX::XMVectorGetZ(vector_); }
+		[[nodiscard]] float& Z() noexcept { return vector_.m128_f32[2]; }
 		/**
-		 * @brief  4DベクトルのW成分を取得する
-		 * @return W成分の値
+		 * @brief  4DベクトルのW成分の参照を取得する
+		 * @return W成分の値の参照
 		 */
-		[[nodiscard]] float W() const noexcept { return DirectX::XMVectorGetW(vector_); }
-
-		/**
-		 * @brief  4DベクトルのX成分を設定する
-		 * @param  x X成分の値
-		 */
-		void X(const float x) noexcept { vector_ = DirectX::XMVectorSetX(vector_, x); }
-		/**
-		 * @brief  4DベクトルのY成分を設定する
-		 * @param  y Y成分の値
-		 */
-		void Y(const float y) noexcept { vector_ = DirectX::XMVectorSetY(vector_, y); }
-		/**
-		 * @brief  4DベクトルのZ成分を設定する
-		 * @param  z Z成分の値
-		 */
-		void Z(const float z) noexcept { vector_ = DirectX::XMVectorSetZ(vector_, z); }
-		/**
-		 * @brief  4DベクトルのW成分を設定する
-		 * @param  w W成分の値
-		 */
-		void W(const float w) noexcept { vector_ = DirectX::XMVectorSetW(vector_, w); }
+		[[nodiscard]] float& W() noexcept { return vector_.m128_f32[3]; }
 
 		/**
 		 * @brief  4Dベクトルを正規化する
@@ -901,6 +869,14 @@ namespace wx2
 		 * @return 正規化された4Dベクトル
 		 */
 		static Vector4 Normalize(const Vector4& v) noexcept;
+		/**
+		 * @brief  4Dベクトルの成分を指定した最小値と最大値の範囲にクランプする
+		 * @param  v クランプされる成分を持つ4Dベクトル
+		 * @param  min 要素の範囲の最小値
+		 * @param  max 要素の範囲の最大値
+		 * @return クランプされた4Dベクトル
+		 */
+		static Vector4 Clamp(const Vector4& v, const float min, const float max) noexcept;
 		/**
 		 * @brief  4Dベクトルの成分を指定した最小値と最大値の範囲にクランプする
 		 * @param  v クランプされる成分を持つ4Dベクトル
@@ -1361,12 +1337,31 @@ namespace wx2
 		[[nodiscard]] float Length() const noexcept;
 		[[nodiscard]] float LengthSquared() const noexcept;
 
+		/**
+		 * @brief  クォータニオンの軸の前方向を指す単位ベクトルを求める
+		 * @return 前方向ベクトル
+		 */
+		[[nodiscard]] Vector3 Forward() const noexcept;
+		/**
+		 * @brief  クォータニオンの軸の上方向を指す単位ベクトルを求める
+		 * @return 前方向ベクトル
+		 */
+		[[nodiscard]] Vector3 Up() const noexcept;
+		/**
+		 * @brief  クォータニオンの軸の右方向を指す単位ベクトルを求める
+		 * @return 前方向ベクトル
+		 */
+		[[nodiscard]] Vector3 Right() const noexcept;
+
 		static float Dot(const Quaternion& q1, const Quaternion& q2) noexcept;
 		static Quaternion Normalize(const Quaternion& q) noexcept;
 		static Quaternion Conjugate(const Quaternion& q) noexcept;
 		static Quaternion Inverse(const Quaternion& q) noexcept;
-		static Quaternion FromAxisAngle(const Vector3& axis, float angle) noexcept;
-		static Quaternion FromYawPitchRoll(float yaw, float pitch, float roll) noexcept;
+		static Quaternion RotationX(float rotation) noexcept;
+		static Quaternion RotationY(float rotation) noexcept;
+		static Quaternion RotationZ(float rotation) noexcept;
+		static Quaternion AxisAngle(const Vector3& axis, float angle) noexcept;
+		static Quaternion YawPitchRoll(float yaw, float pitch, float roll) noexcept;
 		static Quaternion FromRotationMatrix(const Matrix& m) noexcept;
 		static Quaternion Lerp(const Quaternion& q1, const Quaternion& q2, float t) noexcept;
 		static Quaternion Slerp(const Quaternion& q1, const Quaternion& q2, float t) noexcept;
@@ -1420,15 +1415,10 @@ namespace wx2
 		operator DirectX::XMVECTOR() const noexcept;
 		operator DirectX::XMFLOAT4() const noexcept;
 
-		[[nodiscard]] float R() const noexcept { return DirectX::XMVectorGetX(color_); }
-		[[nodiscard]] float G() const noexcept { return DirectX::XMVectorGetY(color_); }
-		[[nodiscard]] float B() const noexcept { return DirectX::XMVectorGetZ(color_); }
-		[[nodiscard]] float A() const noexcept { return DirectX::XMVectorGetW(color_); }
-
-		void R(const float r) noexcept { color_ = DirectX::XMVectorSetX(color_, r); }
-		void G(const float g) noexcept { color_ = DirectX::XMVectorSetX(color_, g); }
-		void B(const float b) noexcept { color_ = DirectX::XMVectorSetX(color_, b); }
-		void A(const float a) noexcept { color_ = DirectX::XMVectorSetX(color_, a); }
+		[[nodiscard]] float& R() noexcept { return color_.m128_f32[0]; }
+		[[nodiscard]] float& G() noexcept { return color_.m128_f32[1]; }
+		[[nodiscard]] float& B() noexcept { return color_.m128_f32[2]; }
+		[[nodiscard]] float& A() noexcept { return color_.m128_f32[3]; }
 
 		static Color Negate(const Color& c) noexcept;
 		static Color Saturate(const Color& c) noexcept;

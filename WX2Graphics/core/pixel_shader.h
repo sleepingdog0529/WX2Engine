@@ -21,7 +21,8 @@ namespace wx2
 		PixelShader() = default;
 		~PixelShader() = default;
 
-		WX2_DISALLOW_COPY_AND_MOVE(PixelShader);
+		WX2_DISALLOW_COPY(PixelShader);
+		WX2_DISALLOW_MOVE(PixelShader);
 
 		void Initialize(
 			Device* devices,

@@ -68,7 +68,8 @@ namespace wx2
 		Mouse() = default;
 		~Mouse() noexcept;
 
-		WX2_DISALLOW_COPY_AND_MOVE(Mouse);
+		WX2_DISALLOW_COPY(Mouse);
+		WX2_DISALLOW_MOVE(Mouse);
 
 		void Initialize(const DInputPtr& directInput, const HWND hwnd) noexcept;
 		void Regist();

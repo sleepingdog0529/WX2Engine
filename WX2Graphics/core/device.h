@@ -21,7 +21,8 @@ namespace wx2
 		Device() = default;
 		virtual ~Device() = default;
 
-		WX2_DISALLOW_COPY_AND_MOVE(Device);
+		WX2_DISALLOW_COPY(Device);
+		WX2_DISALLOW_MOVE(Device);
 
 		void Initialize();
 
