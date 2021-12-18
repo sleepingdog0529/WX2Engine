@@ -6,13 +6,11 @@ namespace wx2::physics
 	Physics::~Physics() noexcept
 	{
 		SafeRelease(physics_);
-
-#if !defined(NDEBUG)
+		
 		if (pvd_)
 		{
 			pvd_->release();
 		}
-#endif
 
 		SafeRelease(foundation_);
 	}
@@ -26,34 +24,22 @@ namespace wx2::physics
 			WX2_RUNTIME_ERROR_IF_FAILED(foundation_, "PxFoundation‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
 
 			bool recordMemoryAllocations = true;
-
-#if !defined(NDEBUG)
+			
 			pvd_ = PxCreatePvd(*foundation_);
 			PxPvdTransport* tranceport = PxDefaultPvdSocketTransportCreate("localhost", 5425, 10);
 			pvd_->connect(*tranceport, PxPvdInstrumentationFlag::eALL);
-#endif
 
 			physics_ = PxCreatePhysics(
 				PX_PHYSICS_VERSION,
 				*foundation_,
 				PxTolerancesScale(),
 				true,
-#if !defined(NDEBUG)
-				pvd_
-#else
-				nullptr
-#endif
-			);
+				pvd_);
 			WX2_RUNTIME_ERROR_IF_FAILED(physics_, "PxPhysics‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
 
 			//cooking_ = PxCreateCooking(
 			//	PX_PHYSICS_VERSION, *foundation_, px::PxCookingParams(scale_));
 			//WX2_RUNTIME_ERROR_IF_FAILED(cooking_, "PxCooling‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
-
-			const PxCudaContextManagerDesc cudaContextManagerDesc;
-			cudaContextManager_ = 
-				PxCreateCudaContextManager(*foundation_, cudaContextManagerDesc, PxGetProfilerCallback());
-			WX2_RUNTIME_ERROR_IF_FAILED(cudaContextManager_, "PxCudaContextManager‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
 
 			cpuDispacher_ = PxDefaultCpuDispatcherCreate(numThread);
 			WX2_RUNTIME_ERROR_IF_FAILED(cpuDispacher_, "PxDefaultCPUDispacher‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
@@ -67,8 +53,7 @@ namespace wx2::physics
 			sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;
 			scene_ = physics_->createScene(sceneDesc);
 			WX2_RUNTIME_ERROR_IF_FAILED(scene_, "PxScene‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B");
-
-#if !defined(NDEBUG)
+			
 			PxPvdSceneClient* pvdClient = scene_->getScenePvdClient();
 			if(!pvdClient)
 			{
@@ -78,7 +63,6 @@ namespace wx2::physics
 				PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS | 
 				PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES | 
 				PxPvdSceneFlag::eTRANSMIT_CONTACTS);
-#endif
 
 			return true;
 		}

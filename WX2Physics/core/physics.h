@@ -42,9 +42,6 @@ namespace wx2::physics
 		PxCudaContextManager* cudaContextManager_{};
 		PxDefaultCpuDispatcher* cpuDispacher_{};
 		PxScene* scene_{};
-
-#if !defined(NDEBUG)
-		physx::PxPvd* pvd_{};
-#endif
+		PxPvd* pvd_{};
 	};
 }
