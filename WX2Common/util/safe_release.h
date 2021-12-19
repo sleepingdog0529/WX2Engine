@@ -54,4 +54,13 @@ namespace wx2
 			x = nullptr;
 		}
 	}
+
+	template<typename T = void>
+	struct SafeDeleter
+	{
+		void operator()(T* x) const
+		{
+			SafeRelease(x);
+		}
+	};
 }

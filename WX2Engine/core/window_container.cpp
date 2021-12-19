@@ -20,18 +20,23 @@ namespace wx2
 		Serialize();
 	}
 
-	WindowContainer::WindowPtr WindowContainer::Create(const std::string& name, const WindowProperty& defaultProp) noexcept
+	WindowContainer::WindowPtr WindowContainer::Create(const std::string& name, const WindowProperty& defaultProp) 
 	{
 		auto [propItr, unuse] = windowProps_.try_emplace(name, defaultProp);
 
 		auto [wndItr, success] = windows_.try_emplace(name, std::make_shared<Window>(this, propItr->second));
-		if (!success)
-		{
-			WX2_LOG_CRITICAL("ウィンドウ名が重複しています。ウィンドウ名: {}", name);
-			exit(EXIT_FAILURE);
-		}
+		WX2_RUNTIME_ERROR_IF_FAILED(success, "ウィンドウ名が重複しています。ウィンドウ名: {}", name);
 
 		return wndItr->second;
+	}
+
+	WindowContainer::EventListenerType WindowContainer::AppendCallback(
+		const WindowEvent event, 
+		const EventCallbackType& callback) noexcept
+	{
+		auto listener = EventListenerType(callback);
+		eventDispatcher_.AppendListener(event, listener);
+		return listener;
 	}
 
 	bool WindowContainer::ProcessMessage() noexcept
@@ -54,6 +59,8 @@ namespace wx2
 
 	LRESULT WindowContainer::WindowProcedure(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp) noexcept
 	{
+		eventDispatcher_.Dispatch(static_cast<WindowEvent>(msg), hwnd, wp, lp);
+
 		return DefWindowProc(hwnd, msg, wp, lp);
 	}
 

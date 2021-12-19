@@ -62,7 +62,7 @@ namespace wx2
 		WX2_DISALLOW_MOVE(Gamepad);
 
 		//! @brief コントローラーの入力状態を更新
-		void Update() const noexcept;
+		void Update() noexcept;
 
 		/**
 		 * @brief  ボタンが押されているか

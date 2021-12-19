@@ -19,6 +19,7 @@
     <ClInclude Include="core\model_loader.h" />
     <ClInclude Include="core\texture.h" />
     <ClInclude Include="core\texture_type.h" />
+    <ClInclude Include="core\camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\graphics.cpp" />
@@ -32,5 +33,6 @@
     <ClCompile Include="core\model.cpp" />
     <ClCompile Include="core\model_loader.cpp" />
     <ClCompile Include="core\texture.cpp" />
+    <ClCompile Include="core\camera.cpp" />
   </ItemGroup>
 </Project>

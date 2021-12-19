@@ -142,6 +142,7 @@
     <ClInclude Include="core\window_container.h" />
     <ClInclude Include="core\entry_point.h" />
     <ClInclude Include="core\application.h" />
+    <ClInclude Include="core\window_event.h" />
     <ClInclude Include="pch\pch.h" />
     <ClInclude Include="WX2Engine.h" />
   </ItemGroup>

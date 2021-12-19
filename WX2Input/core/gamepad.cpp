@@ -161,7 +161,7 @@ namespace wx2
 
 	Gamepad::~Gamepad() = default;
 
-	void Gamepad::Update() const noexcept
+	void Gamepad::Update() noexcept
 	{
 		pimpl_->Update();
 	}

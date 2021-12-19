@@ -996,7 +996,7 @@ namespace wx2
 		return Matrix(DirectX::XMMatrixRotationQuaternion(q));
 	}
 
-	inline Matrix Matrix::RotationYawPitchRoll(const float yaw, const float pitch, const float roll) noexcept
+	inline Matrix Matrix::RotationRollPitchYaw(const float roll, const float pitch, const float yaw) noexcept
 	{
 		return Matrix(DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll));
 	}
@@ -1046,9 +1046,14 @@ namespace wx2
 		return Matrix(DirectX::XMMatrixOrthographicOffCenterLH(left, right, bottom, top, zNearPlane, zFarPlane));
 	}
 
-	inline Matrix Matrix::LookAt(const Vector3& position, const Vector3& target, const Vector3& up) noexcept
+	inline Matrix Matrix::LookAt(const Vector3& position, const Vector3& target, const Vector3& up = Vector3::Up()) noexcept
 	{
 		return Matrix(DirectX::XMMatrixLookAtLH(position, target, up));
+	}
+
+	inline Matrix Matrix::LookTo(const Vector3& position, const Vector3& forward, const Vector3& up = Vector3::Up()) noexcept
+	{
+		return Matrix(DirectX::XMMatrixLookToLH(position, forward, up));
 	}
 
 	inline Matrix Matrix::World(const Vector3& position, const Vector3& forward, const Vector3& up) noexcept
@@ -1143,6 +1148,18 @@ namespace wx2
 		return *this;
 	}
 
+	inline const float& Quaternion::operator[](const std::size_t index) const noexcept
+	{
+		WX2_ASSERT_MSG(index < 4, "添え字の値が範囲外です。");
+		return quaternion_.m128_f32[index];
+	}
+
+	inline float& Quaternion::operator[](const std::size_t index) noexcept
+	{
+		WX2_ASSERT_MSG(index < 4, "添え字の値が範囲外です。");
+		return quaternion_.m128_f32[index];
+	}
+
 	inline Quaternion::operator DirectX::XMVECTOR() const noexcept
 	{
 		return quaternion_;
@@ -1168,9 +1185,19 @@ namespace wx2
 		const auto [x, y, z, w] = quaternion_.m128_f32;
 
 		return {
-			2 * (x * z + w * y),
-			2 * (y * z - w * x),
-			1 - 2 * (x * x + y * y) };
+			2.0f * (x * z + w * y),
+			2.0f * (y * z - w * x),
+			1.0f - 2.0f * (x * x + y * y) };
+	}
+
+	inline Vector3 Quaternion::Backward() const noexcept
+	{
+		const auto [x, y, z, w] = quaternion_.m128_f32;
+
+		return {
+			-(2.0f * (x * z + w * y)),
+			-(2.0f * (y * z - w * x)),
+			-(1.0f - 2.0f * (x * x + y * y)) };
 	}
 
 	inline Vector3 Quaternion::Up() const noexcept
@@ -1178,9 +1205,19 @@ namespace wx2
 		const auto [x, y, z, w] = quaternion_.m128_f32;
 
 		return {
-			2 * (x * y - w * z),
-			1 - 2 * (x * x + z * z),
-			2 * (y * z + w * x) };
+			2.0f * (x * y - w * z),
+			1.0f - 2.0f * (x * x + z * z),
+			2.0f * (y * z + w * x) };
+	}
+
+	inline Vector3 Quaternion::Down() const noexcept
+	{
+		const auto [x, y, z, w] = quaternion_.m128_f32;
+
+		return {
+			-(2.0f * (x * y - w * z)),
+			-(1.0f - 2.0f * (x * x + z * z)),
+			-(2.0f * (y * z + w * x)) };
 	}
 
 	inline Vector3 Quaternion::Right() const noexcept
@@ -1188,9 +1225,19 @@ namespace wx2
 		const auto [x, y, z, w] = quaternion_.m128_f32;
 
 		return {
-			1 - 2 * (y * y + z * z),
-			2 * (x * y + w * z),
-			2 * (x * z - w * y) };
+			1.0f - 2.0f * (y * y + z * z),
+			2.0f * (x * y + w * z),
+			2.0f * (x * z - w * y) };
+	}
+
+	inline Vector3 Quaternion::Left() const noexcept
+	{
+		const auto [x, y, z, w] = quaternion_.m128_f32;
+
+		return {
+			-(1.0f - 2.0f * (y * y + z * z)),
+			-(2.0f * (x * y + w * z)),
+			-(2.0f * (x * z - w * y)) };
 	}
 
 	inline float Quaternion::Dot(const Quaternion& q1, const Quaternion& q2) noexcept
@@ -1233,7 +1280,21 @@ namespace wx2
 		return Quaternion(DirectX::XMQuaternionRotationAxis(axis, angle));
 	}
 
-	inline Quaternion Quaternion::YawPitchRoll(const float yaw, const float pitch, const float roll) noexcept
+	inline Quaternion Quaternion::LookAtRotation(const Vector3& position, const Vector3& target, const Vector3& up) noexcept
+	{
+		return Quaternion(
+			DirectX::XMQuaternionRotationMatrix(
+				DirectX::XMMatrixLookAtLH(position, target, up)));
+	}
+
+	inline Quaternion Quaternion::LookToRotation(const Vector3& position, const Vector3& forward, const Vector3& up) noexcept
+	{
+		return Quaternion(
+			DirectX::XMQuaternionRotationMatrix(
+				DirectX::XMMatrixLookToLH(position, forward, up)));
+	}
+
+	inline Quaternion Quaternion::RollPitchYaw(const float roll, const float pitch, const float yaw) noexcept
 	{
 		return Quaternion(DirectX::XMQuaternionRotationRollPitchYaw(pitch, yaw, roll));
 	}
@@ -1243,7 +1304,7 @@ namespace wx2
 		return Quaternion(DirectX::XMQuaternionRotationMatrix(m));
 	}
 
-	inline Quaternion Quaternion::Lerp(const Quaternion& q1, const Quaternion& q2, float t) noexcept
+	inline Quaternion Quaternion::Lerp(const Quaternion& q1, const Quaternion& q2, const float t) noexcept
 	{
 		const DirectX::XMVECTOR dot = DirectX::XMVector4Dot(q1, q2);
 

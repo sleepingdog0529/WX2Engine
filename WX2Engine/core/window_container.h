@@ -6,6 +6,7 @@
  ********************************************************************/
 #pragma once
 #include "window.h"
+#include "window_event.h"
 
 namespace wx2
 {
@@ -18,6 +19,8 @@ namespace wx2
 	{
 	private:
 		using WindowPtr = std::shared_ptr<Window>;
+		using EventListenerType = EventListener<WindowEvent, HWND, WPARAM, LPARAM>;
+		using EventCallbackType = std::function<void(HWND, WPARAM, LPARAM)>;
 
 		//! ウィンドウ設定の保存先パス
 		static constexpr const char* PROPERTY_FILE_NAME = "window.json";
@@ -42,7 +45,12 @@ namespace wx2
 		 * @param[in] defaultProp シリアライズ済みのデータが無い場合に使用するウィンドウ設定
 		 * @return    WindowPtr 作成したウィンドウのポインタ
 		 */
-		WindowPtr Create(const std::string& name, const WindowProperty& defaultProp) noexcept;
+		WindowPtr Create(const std::string& name, const WindowProperty& defaultProp);
+
+
+		EventListenerType AppendCallback(
+			WindowEvent event,
+			const EventCallbackType& callback) noexcept;
 
 		/**
 		 * @brief  全てのウィンドウのメッセージを一つ処理する
@@ -53,7 +61,7 @@ namespace wx2
 		/**
 		 * @brief アプリケーションの全てのウィンドウ共通のウィンドウプロシージャ
 		 */
-		static LRESULT CALLBACK WindowProcedure(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp) noexcept;
+		LRESULT CALLBACK WindowProcedure(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp) noexcept;
 
 	private:
 		/**
@@ -71,5 +79,8 @@ namespace wx2
 
 		//! ウィンドウ設定の連想配列
 		std::unordered_map<std::string, WindowProperty> windowProps_;
+
+		//! ウィンドウイベント発行
+		EventDispatcher<WindowEvent, HWND, WPARAM, LPARAM> eventDispatcher_;
 	};
 }

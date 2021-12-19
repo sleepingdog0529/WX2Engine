@@ -37,11 +37,19 @@ namespace wx2
 			}
 			model_ = modelLoader_.Load(modelPath);
 
-			auto* mat = physics_.CreateMaterial(0.5f, 0.5f, 0.5f);
-			auto* sphere = physics_.CreateDynamic(
-				PxTransform(PxVec3(0.0f, 10.0f, 0.0f)),
-				PxSphereGeometry(1.0f),
+			auto* mat = physics_.CreateMaterial(0.5f, 0.5f, 0.3f);
+			box_ = physics_.CreateDynamic(
+				physx::PxTransform(physx::PxVec3(0.0f, 10.0f, 0.0f)),
+				physx::PxBoxGeometry(1.0f, 1.0f, 2.0f),
 				*mat);
+
+			plane_ = physics_.CreateStatic(
+				physx::PxTransform(physx::PxVec3(0.0f, 0.0f, 0.0f)),
+				physx::PxBoxGeometry(100.0f, 1.0f, 100.0f),
+				*mat);
+
+			camera_.SetPositon(0.0f, 5.0f, -10.0f);
+			camera_.SetLookAt(Vector3::Zero());
 		}
 
 		/**
@@ -56,36 +64,33 @@ namespace wx2
 			const auto& mouse = input_.GetMouse();
 			const auto& gamepad = input_.GetGamepad();
 
-			// Rキーが押されたら回転を0に
-			if (keyboard.IsDown(Keyboard::R))
-			{
-				rot_ = Quaternion::Identity();
-			}
-
 			// カーソルの動きにあわせて回転
 			const float cursorX = mouse.GetAxisVelocity(Mouse::CursorX);
 			const float cursorY = mouse.GetAxisVelocity(Mouse::CursorY);
-			rot_ *= Quaternion::RotationY(cursorX * 0.001f);
-			rot_ *= Quaternion::AxisAngle(rot_.Right(), cursorY * 0.001f);
+			camera_.AddRotation(Quaternion::RotationY(cursorX * deltaTime * 0.3f));
+			camera_.AddRotation(Quaternion::AxisAngle(camera_.Right(), cursorY * deltaTime * 0.3f));
 
 			// キーの入力から移動方向を設定
-			Vector3 move;
-			move.Z() = gamepad.GetAxisValue(GamepadAxises::LThumbY);
-			if (keyboard.IsDown(Keyboard::D))		++move[0];
-			if (keyboard.IsDown(Keyboard::A))		--move[0];
-			if (keyboard.IsDown(Keyboard::Space))	++move[1];
-			if (keyboard.IsDown(Keyboard::LShift))	--move[1];
-			if (keyboard.IsDown(Keyboard::W))		++move[2];
-			if (keyboard.IsDown(Keyboard::S))		--move[2];
-			move = Vector3::Clamp(move, -1.0f, 1.0f);
-			move.Normalized();
+			Vector3 camMove;
+			if (keyboard.IsDown(Keyboard::D))		camMove[0] += 1.0f;
+			if (keyboard.IsDown(Keyboard::A))		camMove[0] -= 1.0f;
+			if (keyboard.IsDown(Keyboard::W))		camMove[2] += 1.0f;
+			if (keyboard.IsDown(Keyboard::S))		camMove[2] -= 1.0f;
+			camMove = Vector3::Transform(camMove, camera_.GetRotation());
 
-			// 移動方向に回転を適応して進行方向にそわせる
-			pos_ += Vector3::Transform(move, rot_) * deltaTime * 3.0f;
+			if (keyboard.IsDown(Keyboard::Space))	camMove[1] += 1.0f;
+			if (keyboard.IsDown(Keyboard::LShift))	camMove[1] -= 1.0f;
+			camMove.Normalized();
+			
+			camera_.AddPositon(camMove * deltaTime * 10.0f);
 
-			// スケール
-			const float wheel = mouse.GetAxisVelocity(Mouse::WheellScroll);
-			scale_ += Vector3(wheel);
+			if (keyboard.IsDown(Keyboard::R))
+			{
+				box_.SetPosition(Vector3::Up() * 10.0f);
+			}
+
+			pos_ = box_.GetPosition();
+			rot_ = box_.GetRotation();
 
 			// ESCキーが押されていたらアプリケーション終了
 			return !keyboard.IsPressed(Keyboard::Escape);
@@ -106,6 +111,7 @@ namespace wx2
 
 			// ウィンドウ情報を取得
 			const auto& windowProp = mainWindow_->GetWindowProperty();
+			camera_.SetProjectionValues(PIDIV2, windowProp.AspectRatio(), 0.1f, 10000.0f);
 
 			// 拡縮回転移動をワールド行列に適応
 			Matrix world;
@@ -115,15 +121,8 @@ namespace wx2
 
 			// WVP行列情報をセット
 			constantBufferWVP.data.world = world;
-			constantBufferWVP.data.projection = Matrix::PerspectiveFieldOfView(
-				PIDIV2,
-				windowProp.AspectRatio(),
-				0.01f,
-				1000.0f);
-			constantBufferWVP.data.view = Matrix::LookAt(
-				Vector3::Backward() * 10,
-				Vector3::Zero(),
-				Vector3::Up());
+			constantBufferWVP.data.projection = camera_.GetProjectionMatrix();
+			constantBufferWVP.data.view = camera_.GetViewMatrix();
 
 			// WVP行列定数バッファを頂点シェーダーにバインド
 			constantBufferWVP.ApplyChange();
@@ -143,6 +142,11 @@ namespace wx2
 		Vector3 pos_{};		//! モデル位置
 		Vector3 scale_ = Vector3::One();	//! モデル拡縮
 		Quaternion rot_{};	//! モデル回転
+
+		Camera camera_{};
+
+		phys::RigidDynamic box_{};
+		phys::RigidStatic plane_{};
 
 		VertexShader vertexShader_{};	//! 頂点シェーダー
 		PixelShader pixelShader_{};		//! ピクセルシェーダー

@@ -6,13 +6,12 @@
  ********************************************************************/
 #pragma once
 #include <physx/PxPhysicsAPI.h>
-#include <memory>
 #include <WX2Common.h>
+#include "scene.h"
+#include "rigid.h"
 
-namespace wx2
+namespace wx2::phys
 {
-	using namespace physx; // Pxってプレフィックスあるならusingして良さげ？
-
 	class Physics final
 	{
 	private:
@@ -24,31 +23,35 @@ namespace wx2
 		WX2_DISALLOW_COPY(Physics);
 		WX2_DISALLOW_MOVE(Physics);
 
-		[[nodiscard]] bool Initialize(const PxU32 numThread) noexcept;
+		[[nodiscard]] bool Initialize(const physx::PxU32 numThread) noexcept;
 
-		[[nodiscard]] PxMaterial* CreateMaterial(
+		[[nodiscard]] physx::PxMaterial* CreateMaterial(
 			const float staticFriction,
 			const float dynamicFriction,
 			const float bounciness) const noexcept;
 
-		[[nodiscard]] PxRigidDynamic* CreateDynamic(
-			const PxTransform& transform,
-			const PxGeometry& geometry,
-			PxMaterial& material,
-			PxReal density = 10.0f) const noexcept;
+		[[nodiscard]] RigidDynamic CreateDynamic(
+			const physx::PxTransform& transform,
+			const physx::PxGeometry& geometry,
+			physx::PxMaterial& material,
+			physx::PxReal density = 10.0f) const noexcept;
+
+		[[nodiscard]] RigidStatic CreateStatic(
+			const physx::PxTransform& transform,
+			const physx::PxGeometry& geometry,
+			physx::PxMaterial& material) const noexcept;
 
 		void Step(const float deltaTime) const noexcept;
 
 	private:
-		PxFoundation* foundation_{};
-		PxDefaultAllocator allocator_{};
-		PxDefaultErrorCallback errorCallback_{};
-		PxTolerancesScale scale_{};
-		PxPhysics* physics_{};
-		PxCooking* cooking_{};
-		PxCudaContextManager* cudaContextManager_{};
-		PxDefaultCpuDispatcher* cpuDispacher_{};
-		PxScene* scene_{};
-		PxPvd* pvd_{};
+		physx::PxFoundation* foundation_{};
+		physx::PxDefaultAllocator allocator_{};
+		physx::PxDefaultErrorCallback errorCallback_{};
+		physx::PxPhysics* physics_{};
+		physx::PxCooking* cooking_{};
+		physx::PxCudaContextManager* cudaContextManager_{};
+		physx::PxDefaultCpuDispatcher* cpuDispacher_{};
+		Scene scene_{};
+		physx::PxPvd* pvd_{};
 	};
 }

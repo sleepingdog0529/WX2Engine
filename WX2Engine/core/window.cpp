@@ -76,11 +76,11 @@ namespace wx2
 		{
 		case WM_MOVING:	// ウィンドウ移動時
 			window->OnMoving(wp, lp);
-			return TRUE;
+			break;
 
 		case WM_SIZING: // ウィンドウサイズ変更時
 			window->OnSizing(wp, lp);
-			return TRUE;
+			break;
 
 		case WM_SYSCOMMAND:	// ウィンドウ最大化、通常化時
 			if (wp == SC_MAXIMIZE ||
@@ -97,7 +97,7 @@ namespace wx2
 
 		case WM_KEYDOWN:	// キー押下時
 			window->OnKeyDown(wp, lp);
-			return 0;
+			break;
 
 		case WM_DESTROY:	// ウィンドウを破棄したとき
 			PostQuitMessage(0);

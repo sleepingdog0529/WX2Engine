@@ -17,7 +17,6 @@ namespace wx2
 		std::wcout.imbue(ctypeDefault);
 		std::wcin.imbue(ctypeDefault);
 
-
 		WX2_LOG_TRACE("アプリケーション初期化開始");
 	}
 

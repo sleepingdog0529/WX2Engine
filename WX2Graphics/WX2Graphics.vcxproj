@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\camera.h" />
     <ClInclude Include="core\blend_state.h" />
     <ClInclude Include="core\constant_buffer.h" />
     <ClInclude Include="core\constant_buffer_type.h" />
@@ -31,6 +32,7 @@
     <ClInclude Include="WX2Graphics.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="core\camera.cpp" />
     <ClCompile Include="core\blend_state.cpp" />
     <ClCompile Include="core\device.cpp" />
     <ClCompile Include="core\graphics.cpp" />
@@ -119,8 +121,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2CommonD.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;assimp-vc143-mtd.lib;zlibstaticd.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>WX2CommonD.lib;WX2MathematicsD.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;assimp-vc143-mtd.lib;zlibstaticd.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -153,8 +155,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2Common.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;assimp-vc143-mt.lib;zlibstatic.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>WX2Common.lib;WX2Mathematics.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;assimp-vc143-mt.lib;zlibstatic.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

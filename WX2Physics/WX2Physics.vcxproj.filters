@@ -2,9 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="core\physics.cpp" />
+    <ClCompile Include="core\rigid.cpp" />
+    <ClCompile Include="core\scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\physics.h" />
     <ClInclude Include="WX2Physics.h" />
+    <ClInclude Include="core\rigid.h" />
+    <ClInclude Include="core\scene.h" />
   </ItemGroup>
 </Project>

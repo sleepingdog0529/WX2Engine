@@ -1262,7 +1262,7 @@ namespace wx2
 		 */
 		static Matrix RotationAxisAngle(const Vector3& axis, float radians) noexcept;
 		static Matrix RotationFromQuaternion(const Quaternion& q) noexcept;
-		static Matrix RotationYawPitchRoll(float yaw, float pitch, float roll) noexcept;
+		static Matrix RotationRollPitchYaw(float roll, float pitch, float yaw) noexcept;
 		/**
 		 * @brief  視野角と縦横比、ニアおよびファービュー平面距離に基づき透視投影行列を作成する
 		 * @param  fov 視野角
@@ -1285,6 +1285,7 @@ namespace wx2
 		static Matrix Orthographic(float width, float height, float zNearPlane, float zFarPlane) noexcept;
 		static Matrix OrthographicOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane) noexcept;
 		static Matrix LookAt(const Vector3& position, const Vector3& target, const Vector3& up) noexcept;
+		static Matrix LookTo(const Vector3& position, const Vector3& forward, const Vector3& up) noexcept;
 		static Matrix World(const Vector3& position, const Vector3& forward, const Vector3& up) noexcept;
 		static Matrix Lerp(const Matrix& m1, const Matrix& m2, float t) noexcept;
 		static Matrix Transform(const Matrix& m, const Quaternion& rotation) noexcept;
@@ -1330,6 +1331,10 @@ namespace wx2
 		Quaternion& operator *= (const Quaternion& rhs) noexcept;
 		Quaternion& operator *= (float rhs) noexcept;
 
+		// 添字演算子
+		const float& operator [] (std::size_t index) const noexcept;
+		float& operator [] (std::size_t index) noexcept;
+
 		operator DirectX::XMVECTOR() const noexcept;
 
 		void Normalized() noexcept;
@@ -1343,15 +1348,30 @@ namespace wx2
 		 */
 		[[nodiscard]] Vector3 Forward() const noexcept;
 		/**
+		 * @brief  クォータニオンの軸の後ろ方向を指す単位ベクトルを求める
+		 * @return 後ろ方向ベクトル
+		 */
+		[[nodiscard]] Vector3 Backward() const noexcept;
+		/**
 		 * @brief  クォータニオンの軸の上方向を指す単位ベクトルを求める
 		 * @return 前方向ベクトル
 		 */
 		[[nodiscard]] Vector3 Up() const noexcept;
 		/**
+		 * @brief  クォータニオンの軸の下方向を指す単位ベクトルを求める
+		 * @return 下方向ベクトル
+		 */
+		[[nodiscard]] Vector3 Down() const noexcept;
+		/**
 		 * @brief  クォータニオンの軸の右方向を指す単位ベクトルを求める
 		 * @return 前方向ベクトル
 		 */
 		[[nodiscard]] Vector3 Right() const noexcept;
+		/**
+		 * @brief  クォータニオンの軸の左方向を指す単位ベクトルを求める
+		 * @return 左方向ベクトル
+		 */
+		[[nodiscard]] Vector3 Left() const noexcept;
 
 		static float Dot(const Quaternion& q1, const Quaternion& q2) noexcept;
 		static Quaternion Normalize(const Quaternion& q) noexcept;
@@ -1361,7 +1381,9 @@ namespace wx2
 		static Quaternion RotationY(float rotation) noexcept;
 		static Quaternion RotationZ(float rotation) noexcept;
 		static Quaternion AxisAngle(const Vector3& axis, float angle) noexcept;
-		static Quaternion YawPitchRoll(float yaw, float pitch, float roll) noexcept;
+		static Quaternion LookAtRotation(const Vector3& position, const Vector3& target, const Vector3& up = Vector3::Up()) noexcept;
+		static Quaternion LookToRotation(const Vector3& position, const Vector3& forward, const Vector3& up = Vector3::Up()) noexcept;
+		static Quaternion RollPitchYaw(float roll, float pitch, float yaw) noexcept;
 		static Quaternion FromRotationMatrix(const Matrix& m) noexcept;
 		static Quaternion Lerp(const Quaternion& q1, const Quaternion& q2, float t) noexcept;
 		static Quaternion Slerp(const Quaternion& q1, const Quaternion& q2, float t) noexcept;

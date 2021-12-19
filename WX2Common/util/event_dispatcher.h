@@ -118,9 +118,12 @@ namespace wx2
 		 * @param event イベントの種類
 		 * @param args コールバックに渡す引数
 		 */
-		void Dispatch(EventType&& event, const CallbackArgsType&... args)
+		void Dispatch(EventType event, const CallbackArgsType&... args)
 		{
-			auto [itr, end] = listeners_.equal_range(std::forward<EventType>(event));
+			if (listeners_.empty()) 
+				return;
+
+			auto [itr, end] = listeners_.equal_range(event);
 			for (; itr != end; ++itr)
 			{
 				if (itr->second)
@@ -135,9 +138,9 @@ namespace wx2
 		 * @param event イベントの種類
 		 * @param eventListener 登録するイベントリスナー
 		 */
-		void AppendListener(EventType&& event, EventListenerType& eventListener)
+		void AppendListener(EventType event, EventListenerType& eventListener)
 		{
-			listeners_.emplace(std::forward<EventType>(event), &eventListener);
+			listeners_.emplace(event, &eventListener);
 		}
 
 		/**
@@ -145,8 +148,11 @@ namespace wx2
 		 * @param event 登録解除するイベントの種類
 		 * @param eventListener 登録解除するイベントリスナー
 		 */
-		void RemoveListener(const EventType& event, EventListenerType& eventListener)
+		void RemoveListener(EventType event, EventListenerType& eventListener)
 		{
+			if (listeners_.empty())
+				return;
+			
 			std::erase_if(
 				listeners_,
 				[&](const auto& x)

@@ -3,8 +3,12 @@
   <ItemGroup>
     <ClInclude Include="WX2Mathematics.h" />
     <ClInclude Include="core\core.h" />
+    <ClInclude Include="core\transform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="core\core.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core\transform.cpp" />
   </ItemGroup>
 </Project>

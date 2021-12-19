@@ -4,6 +4,13 @@
 
 ### WX2 ###
 lib/
+bin/
+bin-int/
+*.recipe
+*.idb
+*.ifc
+*.ifcast
+*.command
 
 ### C++ ###
 # Prerequisites

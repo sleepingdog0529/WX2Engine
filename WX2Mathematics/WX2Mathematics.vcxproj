@@ -12,10 +12,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\core.h" />
+    <ClInclude Include="core\transform.h" />
     <ClInclude Include="WX2Mathematics.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="core\core.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core\transform.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -62,12 +62,12 @@ namespace wx2
 		//! @brief  ImGuiの描画処理
 		virtual void DrawImGui() noexcept = 0;
 		
-		Logger log_;	//! ログ出力
 		WindowContainer windowContainer_;	//! ウィンドウの管理コンテナ
-		Input input_;						//! 入力管理
+		Logger log_;			//! ログ出力
+		Input input_;			//! 入力管理
 		WindowPtr mainWindow_;	//! メインウィンドウ
 		Graphics graphics_;		//! 描画管理
-		Physics physics_;
+		phys::Physics physics_;		//! 物理演算
 
 	private:
 		/**
