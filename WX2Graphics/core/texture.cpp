@@ -5,10 +5,10 @@
 
 namespace wx2
 {
-	void Texture::Initialize(Device* devices, const std::filesystem::path& filePath)
+	Texture::Texture(Device* devices, const std::filesystem::path& filePath)
+		: devices_(devices)
 	{
-		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
-		devices_ = devices;
+		WX2_ASSERT_MSG(devices_, "デバイスがnullptrでした。");
 
 		std::string ext = filePath.extension().string();
 		boost::algorithm::to_lower(ext);
@@ -38,14 +38,15 @@ namespace wx2
 		{
 			WX2_LOG_WARN("ファイルからのテクスチャの読み込みに失敗しました。パス: {}", filePath.string());
 
-			Initialize(devices, { 1.0f, 0.0f, 1.0f });
+			Texture::Texture(devices, { 1.0f, 0.0f, 1.0f });
 		}
 	}
 
-	void Texture::Initialize(Device* devices, const uint8_t* data, size_t size)
+	Texture::Texture(Device* devices, const uint8_t* data, const std::size_t size)
+		: devices_(devices)
 	{
-		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
-		devices_ = devices;
+		WX2_ASSERT_MSG(devices_, "デバイスがnullptrでした。");
+
 
 		auto* dev = devices_->GetDevice();
 
@@ -60,14 +61,15 @@ namespace wx2
 		{
 			WX2_LOG_WARN("メモリからのテクスチャの読み込みに失敗しました。");
 
-			Initialize(devices, { 1.0f, 0.0f, 1.0f });
+			Texture::Texture(devices, { 1.0f, 0.0f, 1.0f });
 		}
 	}
 
-	void Texture::Initialize(Device* devices, const Color& color)
+	Texture::Texture(Device* devices, const Color& color)
+		: devices_(devices)
 	{
-		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
-		devices_ = devices;
+		WX2_ASSERT_MSG(devices_, "デバイスがnullptrでした。");
+
 
 		const CD3D11_TEXTURE2D_DESC td(DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1);
 

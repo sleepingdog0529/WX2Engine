@@ -4,20 +4,18 @@ namespace wx2
 {
 	void Model::Initialize(
 		Device* devices,
-		std::span<Mesh> meshes)
+		std::span<std::shared_ptr<Mesh>> meshes) noexcept
 	{
-		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
+		Drawable::Initialize(devices);
 
-		devices_ = devices;
-
-		std::ranges::copy(meshes, std::back_inserter(meshes_));
+		meshes_ = { meshes.begin(), meshes.end() };
 	}
 
 	void Model::Draw() const noexcept
 	{
 		for (const auto& m : meshes_)
 		{
-			m.Draw();
+			m->Draw();
 		}
 	}
 }

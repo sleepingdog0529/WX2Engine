@@ -21,9 +21,9 @@ namespace wx2
 		Texture() = default;
 		~Texture() = default;
 
-		void Initialize(Device* devices, const std::filesystem::path& filePath);
-		void Initialize(Device* devices, const uint8_t* data, size_t size);
-		void Initialize(Device* devices, const Color& color);
+		Texture(Device* devices, const std::filesystem::path& filePath);
+		Texture(Device* devices, const uint8_t* data, std::size_t size);
+		Texture(Device* devices, const Color& color);
 
 		void BindPS(const UINT slot) const noexcept;
 

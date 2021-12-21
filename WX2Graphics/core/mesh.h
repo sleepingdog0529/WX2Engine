@@ -9,38 +9,39 @@
 #include <span>
 #include <map>
 #include <WX2Mathematics.h>
-
-#include "device.h"
+#include "drawable.h"
 #include "vertex_type.h"
 #include "vertex_buffer.h"
 #include "index_buffer.h"
 #include "texture.h"
-#include "texture_type.h"
+#include "material_type.h"
 
 namespace wx2
 {
-	class Mesh final
+	class Mesh final : public Drawable
 	{
 	public:
 		Mesh() = default;
-		~Mesh() = default;
+		~Mesh() override = default;
+
+		WX2_COPYABLE(Mesh);
+		WX2_MOVEABLE(Mesh);
 
 		void Initialize(
 			Device* devices,
 			std::span<ModelVertex> vertices,
 			std::span<DWORD> indices,
-			const std::map<TextureType, Texture>& textures);
+			std::unordered_multimap<TextureType, std::shared_ptr<Texture>>& textures);
 
-		void Draw() const noexcept;
+		void Draw() const noexcept override;
 
 	private:
 		void PSBindTexture(const UINT slot, const TextureType& texType) const noexcept;
-
-		Device* devices_{};
-		VertexBuffer<ModelVertex> vertexBuffer_;
-		IndexBuffer indexBuffer_;
+		
+		VertexBuffer<ModelVertex> vertexBuffer_{};
+		IndexBuffer indexBuffer_{};
 		std::vector<ModelVertex> vertices_{};
 		std::vector<DWORD> indices_{};
-		std::map<TextureType, Texture> textures_{};
+		std::unordered_multimap<TextureType, Texture> textures_{};
 	};
 }

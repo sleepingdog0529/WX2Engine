@@ -15,11 +15,13 @@
     <ClInclude Include="core\sampler_state.h" />
     <ClInclude Include="core\mesh.h" />
     <ClInclude Include="core\model.h" />
-    <ClInclude Include="core\model_bank.h" />
+    <ClInclude Include="core\model_storage.h" />
     <ClInclude Include="core\model_loader.h" />
     <ClInclude Include="core\texture.h" />
-    <ClInclude Include="core\texture_type.h" />
+    <ClInclude Include="core\material_type.h" />
     <ClInclude Include="core\camera.h" />
+    <ClInclude Include="core\geometric_primitive.h" />
+    <ClInclude Include="core\drawable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\graphics.cpp" />
@@ -34,5 +36,6 @@
     <ClCompile Include="core\model_loader.cpp" />
     <ClCompile Include="core\texture.cpp" />
     <ClCompile Include="core\camera.cpp" />
+    <ClCompile Include="core\model_storage.cpp" />
   </ItemGroup>
 </Project>

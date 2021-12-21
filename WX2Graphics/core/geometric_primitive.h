@@ -1,18 +1,12 @@
 /*********************************************************************
- * @file   texture_type.h
+ * @file   geometric_primitive.h
  * @author Tomomi Murakami
- * @date   2021/12/02 15:10
- * @brief  テクスチャの種類
+ * @date   2021/12/20 12:04
+ * @brief  基本的な形状モデル
  ********************************************************************/
 #pragma once
 
 namespace wx2
 {
-	enum class TextureType
-	{
-		Diffuse,
-		Specular,
-		Ambient,
-		Normals,
-	};
+	
 }

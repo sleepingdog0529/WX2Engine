@@ -6,19 +6,21 @@ namespace wx2
 		Device* devices,
 		std::span<ModelVertex> vertices,
 		std::span<DWORD> indices,
-		const std::map<TextureType, Texture>& textures)
+		std::unordered_multimap<TextureType, std::shared_ptr<Texture>>& textures)
 	{
-		WX2_ASSERT_MSG(devices, "デバイスがnullptrでした。");
+		Drawable::Initialize(devices);
 
-		devices_ = devices;
+		vertices_ = {
+			std::make_move_iterator(vertices.begin()),
+			std::make_move_iterator(vertices.end()) };
 
-		vertices_.resize(vertices.size());
-		std::ranges::move(vertices, vertices_.begin());
+		indices_ = {
+			std::make_move_iterator(indices.begin()),
+			std::make_move_iterator(indices.end()) };
 
-		indices_.resize(indices.size());
-		std::ranges::move(indices, indices_.begin());
-
-		textures_ = std::move(textures);
+		textures_ = {
+			std::make_move_iterator(textures.begin()),
+			std::make_move_iterator(textures.end()) };
 
 		vertexBuffer_.Initialize(devices_, vertices_);
 		indexBuffer_.Initialize(devices_, indices_);
@@ -40,9 +42,7 @@ namespace wx2
 	{
 		const auto itr = textures_.find(texType);
 		if (itr == textures_.end())
-		{
 			return;
-		}
 
 		itr->second.BindPS(slot);
 	}

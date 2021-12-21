@@ -12,7 +12,7 @@ namespace wx2
 		devices_ = devices;
 	}
 
-	Model ModelLoader::Load(const std::filesystem::path& filePath)
+	std::shared_ptr<Model> ModelLoader::Load(const std::string& key, const std::filesystem::path& filePath)
 	{
 		WX2_ASSERT_MSG(std::filesystem::exists(filePath), "モデルファイルが存在しません。");;
 
@@ -29,11 +29,11 @@ namespace wx2
 			aiProcess_CalcTangentSpace);
 		WX2_RUNTIME_ERROR_IF_FAILED(scene, "モデルファイルの読み込みに失敗しました。パス: {}", filePath.string());
 
-		std::vector<Mesh> meshes;
+		std::vector<std::shared_ptr<Mesh>> meshes;
 		return ProcessNode(meshes, scene->mRootNode, scene, directory);
 	}
 
-	Mesh ModelLoader::ProcessMesh(
+	std::shared_ptr<Mesh> ModelLoader::ProcessMesh(
 		const aiMesh* aiMesh,
 		const aiScene* aiScene,
 		const std::filesystem::path& directory) const noexcept
@@ -87,15 +87,17 @@ namespace wx2
 		}
 
 		const aiMaterial* aiMat = aiScene->mMaterials[aiMesh->mMaterialIndex];
-		const auto textures = LoadMaterialTextures(aiMat, aiScene, directory);
 
-		Mesh mesh;
-		mesh.Initialize(devices_, vertices, indices, textures);
+		TexturesMap textures;
+		LoadMaterialTextures(aiMat, aiScene, aiTextureType_DIFFUSE, directory, textures);
+
+		auto mesh = std::make_shared<Mesh>();
+		mesh->Initialize(devices_, vertices, indices, textures);
 		return mesh;
 	}
 
-	Model ModelLoader::ProcessNode(
-		std::vector<Mesh>& meshes,
+	std::shared_ptr<Model> ModelLoader::ProcessNode(
+		std::vector<std::shared_ptr<Mesh>>& meshes,
 		const aiNode* aiNode,
 		const aiScene* aiScene,
 		const std::filesystem::path& directory) noexcept
@@ -112,8 +114,8 @@ namespace wx2
 			ProcessNode(meshes, aiNode->mChildren[i], aiScene, directory);
 		}
 
-		Model model;
-		model.Initialize(devices_, meshes);
+		auto model = std::make_shared<Model>();
+		model->Initialize(devices_, meshes);
 		return model;
 	}
 
@@ -164,112 +166,94 @@ namespace wx2
 		return TextureStorageType::None;
 	}
 
-	std::map<TextureType, Texture> ModelLoader::LoadMaterialTextures(
+	void ModelLoader::LoadMaterialTextures(
 		const aiMaterial* aiMat,
 		const aiScene* aiScene,
-		const std::filesystem::path& directory) const
+		const aiTextureType texType,
+		const std::filesystem::path& directory,
+		TexturesMap& out) const
 	{
-		std::map<TextureType, Texture> textures;
+		const auto texCount = aiMat->GetTextureCount(texType);
 
-		for (int i = 0; i < aiTextureType::aiTextureType_UNKNOWN; i++)
+		if (texCount > 0)
 		{
-			const auto aiTexType = static_cast<aiTextureType>(i);
-			const auto texCount = aiMat->GetTextureCount(aiTexType);
-
-			const auto texTypeItr = TEXTURE_TYPE_TRANSLATOR.find(aiTexType);
-			if (texTypeItr == TEXTURE_TYPE_TRANSLATOR.end())
+			for (int j = 0; j < texCount; j++)
 			{
-				continue;
-			}
+				aiString path;
+				aiMat->GetTexture(texType, j, &path);
 
-			const auto texType = texTypeItr->second;
+				std::shared_ptr<Texture> texture;
 
-			if (texCount > 0)
-			{
-				for (int j = 0; j < texCount; j++)
+				switch (DetermineTextureStorageType(aiScene, aiMat, j, texType))
 				{
-					aiString path;
-					aiMat->GetTexture(aiTexType, j, &path);
-
-					// TODO: 既にロードしてあればそれを使うようにする
-
-					switch (DetermineTextureStorageType(aiScene, aiMat, j, aiTexType))
-					{
-					case TextureStorageType::EmbeddedIndexCompressed:
-					{
-						const int index = boost::lexical_cast<int>(&path.C_Str()[1]);
-
-						Texture embeddedIndexedTexture;
-						embeddedIndexedTexture.Initialize(
-							devices_,
-							reinterpret_cast<uint8_t*>(aiScene->mTextures[index]->pcData),
-							aiScene->mTextures[index]->mWidth);
-
-						textures.emplace(texType, std::move(embeddedIndexedTexture));
-						break;
-					}
-					case TextureStorageType::EmbeddedCompressed:
-					{
-						const aiTexture* texture =
-							aiScene->GetEmbeddedTexture(path.C_Str());
-
-						Texture embeddedTexture;
-						embeddedTexture.Initialize(
-							devices_,
-							reinterpret_cast<uint8_t*>(texture->pcData),
-							texture->mWidth);
-
-						textures.emplace(texType, std::move(embeddedTexture));
-						break;
-					}
-					case TextureStorageType::Disk:
-					{
-						const auto fileName = directory / path.C_Str();
-
-						Texture diskTexture;
-						diskTexture.Initialize(devices_, fileName);
-
-						textures.emplace(texType, std::move(diskTexture));
-						break;
-					}
-					default:
-						WX2_LOG_WARN("非対応のテクスチャ保存形式です。");
-						break;
-					}
-				}
-			}
-			else
-			{
-				switch (texType)
+				case TextureStorageType::EmbeddedIndexCompressed:
 				{
-				case TextureType::Diffuse:
-				{
-					aiColor3D aiColor;
-					aiMat->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
-
-					Texture diffuseTexture;
-					diffuseTexture.Initialize(
+					const int index = boost::lexical_cast<int>(&path.C_Str()[1]);
+					texture = std::make_shared<Texture>(
 						devices_,
-						{ aiColor.r, aiColor.g, aiColor.b, 1.0f });
-
-					textures.emplace(texType, std::move(diffuseTexture));
+						reinterpret_cast<uint8_t*>(aiScene->mTextures[index]->pcData),
+						aiScene->mTextures[index]->mWidth);
 					break;
 				}
-				case TextureType::Normals:
+				case TextureStorageType::EmbeddedCompressed:
 				{
-					Texture normalTexture;
-					normalTexture.Initialize(
+					const aiTexture* aiTexture =
+						aiScene->GetEmbeddedTexture(path.C_Str());
+					texture = std::make_shared<Texture>(
 						devices_,
-						{ 0.5f, 0.5f, 1.0f, 1.0f });
-
-					textures.emplace(texType, std::move(normalTexture));
+						reinterpret_cast<uint8_t*>(aiTexture->pcData),
+						aiTexture->mWidth);
+					break;
+				}
+				case TextureStorageType::Disk:
+				{
+					const auto fileName = directory / path.C_Str();
+					texture = std::make_shared<Texture>(devices_, fileName);
 					break;
 				}
 				default:
+					WX2_LOG_WARN("非対応のテクスチャ保存形式です。");
 					break;
 				}
+
+				if (!texture)
+					continue;
+
+				out.emplace(
+					static_cast<TextureType>(texType),
+					std::move(texture));
 			}
 		}
-		return textures;
+		else
+		{
+			std::shared_ptr<Texture> texture;
+
+			switch (texType)
+			{
+			case aiTextureType_DIFFUSE:
+			{
+				aiColor3D aiColor;
+				aiMat->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
+				
+				texture = std::make_shared<Texture>(
+					devices_,
+					Color(aiColor.r, aiColor.g, aiColor.b, 1.0f));
+
+				out.emplace(
+					static_cast<TextureType>(texType),
+					std::move(texture));
+				break;
+			}
+			case aiTextureType_NORMALS:
+			{
+				texture = std::make_shared<Texture>(
+					devices_, 
+					Color(0.5f, 0.5f, 1.0f, 1.0f));
+				break;
+			}
+			default:
+				break;
+			}
+		}
 	}
 }
