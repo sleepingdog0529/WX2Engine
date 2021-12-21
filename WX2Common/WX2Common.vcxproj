@@ -74,16 +74,16 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)-$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)bin-int\$(Platform)-$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(SolutionDir)include;C:\boost_1_77_0\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\$(Platform)-$(Configuration);C:\boost_1_77_0\lib\$(Platform)-$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)include;$(BOOST_INCLUDEDIR);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Platform)-$(Configuration);$(BOOST_LIBRARYDIR);$(LibraryPath)</LibraryPath>
     <TargetName>$(TargetName)D</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)-$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)bin-int\$(Platform)-$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(SolutionDir)include;C:\boost_1_77_0\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\$(Platform)-$(Configuration);C:\boost_1_77_0\lib\$(Platform)-$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)include;$(BOOST_INCLUDEDIR);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Platform)-$(Configuration);$(BOOST_LIBRARYDIR);$(LibraryPath)</LibraryPath>
     <TargetName>$(TargetName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
