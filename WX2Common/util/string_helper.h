@@ -19,25 +19,50 @@ namespace wx2
 	}
 
 	/**
-	 * @brief  wstringをstringに変換する
-	 * @param  wstr ワイド文字列
-	 * @return 変換後の文字列
+	 * @brief  マルチバイト文字列をワイド文字列に変換する
+	 * @param  str 変換対象のマルチバイト文字列
+	 * @return 変換されたワイド文字列
 	 */
-	inline std::string ToString(const std::wstring& wstr) noexcept
+	inline std::wstring Utf8ToUtf16(const std::string_view str) noexcept
 	{
-		const std::size_t len = wstr.size();
-		std::size_t convertedLen;
+		// 変換対象の文字列が空の場合
+		if (str.empty() || str[0] == '\0')
+			return {};
 
-		std::vector<char> conv;
-		conv.resize(sizeof(char) * len * 2 + 1);
-		if (wcstombs_s(&convertedLen, conv.data(), sizeof(char) * len * 2 + 1, wstr.c_str(), len * 2) != 0 ||
-			conv[0] == '\0')
-		{
-			WX2_LOG_ERROR("ワイド文字列から文字列への変換に失敗しました。");
-			return "";
-		}
+		// 変換に必要なサイズを確保
+		std::wstring out(str.size() * sizeof(char), '\0');
 
-		std::string convStr(conv.begin(), conv.end());
-		return convStr;
+		// ワイド文字列への変換
+		if (::mbstowcs_s(nullptr, out.data(), out.size() + 1, str.data(), _TRUNCATE) != 0)
+			return {};
+
+		// 終端から後ろの不要な部分を削る
+		out.resize(std::char_traits<wchar_t>::length(out.data()));
+
+		return out;
+	}
+
+	/**
+	 * @brief  ワイド文字列をマルチバイト文字列に変換する
+	 * @param  wstr 変換対象のワイド文字列
+	 * @return 変換されたマルチバイト文字列
+	 */
+	inline std::string Utf16ToUtf8(const std::wstring_view wstr) noexcept
+	{
+		// 変換対象の文字列が空の場合
+		if (wstr.empty() || wstr[0] == L'\0')
+			return {};
+
+		// 変換に必要なサイズを確保
+		std::string out(wstr.size() * sizeof(wchar_t), '\0');
+
+		// マルチバイト文字列への変換
+		if (::wcstombs_s(nullptr, out.data(), out.size() + 1, wstr.data(), _TRUNCATE) != 0)
+			return {};
+
+		// 終端から後ろの不要な部分を削る
+		out.resize(std::char_traits<char>::length(out.data()));
+
+		return out;
 	}
 }

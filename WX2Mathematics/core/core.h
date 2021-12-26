@@ -18,6 +18,10 @@ namespace wx2
 	class Matrix;
 	class Quaternion;
 
+	using Float2 = DirectX::XMFLOAT2;
+	using Float3 = DirectX::XMFLOAT3;
+	using Float4 = DirectX::XMFLOAT4;
+
 	//! @brief π
 	static constexpr float PI = DirectX::XM_PI;
 	//! @brief τ (π * 2)
@@ -92,7 +96,7 @@ namespace wx2
 		 * @brief  XMFLOAT2型から2Dベクトルを構築する
 		 * @param  xmf XMFLOAT
 		 */
-		explicit Vector2(const DirectX::XMFLOAT2& xmf) noexcept
+		explicit Vector2(const Float2& xmf) noexcept
 			: vector_(DirectX::XMLoadFloat2(&xmf)) {}
 
 		~Vector2() = default;
@@ -129,18 +133,13 @@ namespace wx2
 
 		// キャスト演算子
 		operator DirectX::XMVECTOR() const noexcept;
-		operator DirectX::XMFLOAT2() const noexcept;
+		operator Float2() const noexcept;
 
 		/**
 		 * @brief  2Dベクトルを文字列に変換する
 		 * @return 文字列化された2Dベクトル
 		 */
-		[[nodiscard]] std::string ToString() const noexcept
-		{
-			return std::format("({:6f}, {:6f})",
-				DirectX::XMVectorGetX(vector_),
-				DirectX::XMVectorGetY(vector_));
-		}
+		[[nodiscard]] std::string ToString() const noexcept;
 
 		/**
 		 * @brief  2DベクトルのX成分の参照を返す
@@ -413,7 +412,7 @@ namespace wx2
 		 * @brief  XMFLOAT3型から3Dベクトルを構築する
 		 * @param  xmf XMFLOAT
 		 */
-		explicit Vector3(const DirectX::XMFLOAT3& xmf) noexcept
+		explicit Vector3(const Float3& xmf) noexcept
 			: vector_(DirectX::XMLoadFloat3(&xmf)) {}
 
 		~Vector3() = default;
@@ -450,19 +449,13 @@ namespace wx2
 
 		// キャスト演算子
 		operator DirectX::XMVECTOR() const noexcept;
-		operator DirectX::XMFLOAT3() const noexcept;
+		operator Float3() const noexcept;
 
 		/**
 		 * @brief  3Dベクトルを文字列に変換する
 		 * @return 文字列化された3Dベクトル
 		 */
-		[[nodiscard]] std::string ToString() const noexcept
-		{
-			return std::format("({:6f}, {:6f}, {:6f})",
-				DirectX::XMVectorGetX(vector_),
-				DirectX::XMVectorGetY(vector_),
-				DirectX::XMVectorGetZ(vector_));
-		}
+		[[nodiscard]] std::string ToString() const noexcept;
 
 		/**
 		 * @brief  3DベクトルのX成分の参照を取得する
@@ -738,7 +731,7 @@ namespace wx2
 		 * @brief  XMFLOAT4型から4Dベクトルを構築する
 		 * @param  xmf XMFLOAT
 		 */
-		explicit Vector4(const DirectX::XMFLOAT4& xmf) noexcept
+		explicit Vector4(const Float4& xmf) noexcept
 			: vector_(DirectX::XMLoadFloat4(&xmf)) {}
 
 		~Vector4() = default;
@@ -775,20 +768,13 @@ namespace wx2
 
 		// キャスト演算子
 		operator DirectX::XMVECTOR() const noexcept;
-		operator DirectX::XMFLOAT4() const noexcept;
+		operator Float4() const noexcept;
 
 		/**
 		 * @brief  4Dベクトルを文字列に変換する
 		 * @return 文字列化された4Dベクトル
 		 */
-		[[nodiscard]] std::string ToString() const noexcept
-		{
-			return std::format("({:6f}, {:6f}, {:6f}, {:6f})",
-				DirectX::XMVectorGetX(vector_),
-				DirectX::XMVectorGetY(vector_),
-				DirectX::XMVectorGetZ(vector_),
-				DirectX::XMVectorGetW(vector_));
-		}
+		[[nodiscard]] std::string ToString() const noexcept;
 
 		/**
 		 * @brief  4DベクトルのX成分の参照を取得する
@@ -1406,7 +1392,7 @@ namespace wx2
 			: color_{ array[0], array[1], array[2], array[3] } {}
 		explicit Color(const DirectX::XMVECTOR& xmv) noexcept
 			: color_(xmv) {}
-		explicit Color(const DirectX::XMFLOAT4& xmf) noexcept
+		explicit Color(const Float4& xmf) noexcept
 			: color_(DirectX::XMLoadFloat4(&xmf)) {}
 		~Color() = default;
 
@@ -1435,7 +1421,13 @@ namespace wx2
 		float& operator [] (std::size_t index) noexcept;
 		
 		operator DirectX::XMVECTOR() const noexcept;
-		operator DirectX::XMFLOAT4() const noexcept;
+		operator Float4() const noexcept;
+
+		/**
+		 * @brief  RGBAカラーを文字列に変換する
+		 * @return 文字列化されたRGBAカラー
+		 */
+		[[nodiscard]] std::string ToString() const noexcept;
 
 		[[nodiscard]] float& R() noexcept { return color_.m128_f32[0]; }
 		[[nodiscard]] float& G() noexcept { return color_.m128_f32[1]; }

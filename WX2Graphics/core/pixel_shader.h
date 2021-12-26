@@ -6,7 +6,6 @@
  ********************************************************************/
 #pragma once
 #include <filesystem>
-#include <span>
 #include "device.h"
 
 namespace wx2

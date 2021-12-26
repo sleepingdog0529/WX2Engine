@@ -16,7 +16,7 @@ namespace wx2
 	{
 		return
 			Matrix::Scale(scale_) *
-			Matrix::RotationFromQuaternion(rotation_),
+			Matrix::RotationFromQuaternion(rotation_) *
 			Matrix::Translation(position_);
 	}
 

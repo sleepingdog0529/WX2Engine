@@ -21,6 +21,9 @@ namespace wx2
 		IndexBuffer() = default;
 		~IndexBuffer() = default;
 
+		WX2_COPYABLE(IndexBuffer);
+		WX2_MOVEABLE(IndexBuffer);
+
 		void Initialize(Device* devices, std::span<DWORD> indices);
 
 		void Bind() const noexcept;

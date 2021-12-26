@@ -18,17 +18,12 @@
     <ClInclude Include="core\graphics.h" />
     <ClInclude Include="core\device.h" />
     <ClInclude Include="core\index_buffer.h" />
-    <ClInclude Include="core\model.h" />
-    <ClInclude Include="core\model_bank.h" />
-    <ClInclude Include="core\model_loader.h" />
     <ClInclude Include="core\pixel_shader.h" />
     <ClInclude Include="core\sampler_state.h" />
-    <ClInclude Include="core\texture.h" />
-    <ClInclude Include="core\texture_type.h" />
+    <ClInclude Include="core\shader_type.h" />
     <ClInclude Include="core\vertex_buffer.h" />
     <ClInclude Include="core\vertex_shader.h" />
     <ClInclude Include="core\vertex_type.h" />
-    <ClInclude Include="core\mesh.h" />
     <ClInclude Include="WX2Graphics.h" />
   </ItemGroup>
   <ItemGroup>
@@ -37,12 +32,8 @@
     <ClCompile Include="core\device.cpp" />
     <ClCompile Include="core\graphics.cpp" />
     <ClCompile Include="core\index_buffer.cpp" />
-    <ClCompile Include="core\mesh.cpp" />
-    <ClCompile Include="core\model.cpp" />
-    <ClCompile Include="core\model_loader.cpp" />
     <ClCompile Include="core\pixel_shader.cpp" />
     <ClCompile Include="core\sampler_state.cpp" />
-    <ClCompile Include="core\texture.cpp" />
     <ClCompile Include="core\vertex_shader.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -122,7 +113,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2CommonD.lib;WX2MathematicsD.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;assimp-vc143-mtd.lib;zlibstaticd.lib;</AdditionalDependencies>
+      <AdditionalDependencies>WX2CommonD.lib;WX2MathematicsD.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -156,7 +147,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2Common.lib;WX2Mathematics.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;assimp-vc143-mt.lib;zlibstatic.lib;</AdditionalDependencies>
+      <AdditionalDependencies>WX2Common.lib;WX2Mathematics.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

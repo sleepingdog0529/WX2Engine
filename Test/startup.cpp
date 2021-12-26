@@ -1,3 +1,6 @@
+#include <boost/flyweight.hpp>
+#include <boost/flyweight/key_value.hpp>
+
 namespace wx2
 {
 	/**
@@ -36,8 +39,17 @@ namespace wx2
 				modelPath = OpenFileDialog("*.fbx\0\0");
 			}
 			model_ = modelLoader_.Load(modelPath);
+			auto model1 = modelLoader_.Load(modelPath);
+			auto model2 = modelLoader_.Load(modelPath);
+			auto model3 = modelLoader_.Load(modelPath);
+			auto model4 = modelLoader_.Load(modelPath);
+			auto model5 = modelLoader_.Load(modelPath);
+			auto model6 = modelLoader_.Load(modelPath);
+			auto model7 = modelLoader_.Load(modelPath);
+			auto model8 = modelLoader_.Load(modelPath);
+			auto model9 = modelLoader_.Load(modelPath);
 
-			auto* mat = physics_.CreateMaterial(0.5f, 0.5f, 0.3f);
+			auto* mat = physics_.CreateMaterial(0.5f, 0.5f, 1.0f);
 			box_ = physics_.CreateDynamic(
 				physx::PxTransform(physx::PxVec3(0.0f, 10.0f, 0.0f)),
 				physx::PxBoxGeometry(1.0f, 1.0f, 2.0f),
@@ -89,8 +101,8 @@ namespace wx2
 				box_.SetPosition(Vector3::Up() * 10.0f);
 			}
 
-			pos_ = box_.GetPosition();
-			rot_ = box_.GetRotation();
+			transform_.SetPositon(box_.GetPosition());
+			transform_.SetRotation(box_.GetRotation());
 
 			// ESCキーが押されていたらアプリケーション終了
 			return !keyboard.IsPressed(Keyboard::Escape);
@@ -113,23 +125,17 @@ namespace wx2
 			const auto& windowProp = mainWindow_->GetWindowProperty();
 			camera_.SetProjectionValues(PIDIV2, windowProp.AspectRatio(), 0.1f, 10000.0f);
 
-			// 拡縮回転移動をワールド行列に適応
-			Matrix world;
-			world *= Matrix::Scale(scale_);
-			world *= Matrix::RotationFromQuaternion(rot_);
-			world *= Matrix::Translation(pos_);
-
 			// WVP行列情報をセット
-			constantBufferWVP.data.world = world;
+			constantBufferWVP.data.world = transform_.GetWorldMatrix();
 			constantBufferWVP.data.projection = camera_.GetProjectionMatrix();
 			constantBufferWVP.data.view = camera_.GetViewMatrix();
 
 			// WVP行列定数バッファを頂点シェーダーにバインド
 			constantBufferWVP.ApplyChange();
-			constantBufferWVP.VSBind(0);
+			constantBufferWVP.Bind(ShaderType::Vertex, 0);
 
 			// モデルの描画
-			model_.Draw();
+			model_->Draw();
 		}
 
 		void DrawImGui() noexcept override
@@ -139,9 +145,7 @@ namespace wx2
 			//ImGui::End();
 		}
 
-		Vector3 pos_{};		//! モデル位置
-		Vector3 scale_ = Vector3::One();	//! モデル拡縮
-		Quaternion rot_{};	//! モデル回転
+		Transform transform_;
 
 		Camera camera_{};
 
@@ -151,7 +155,7 @@ namespace wx2
 		VertexShader vertexShader_{};	//! 頂点シェーダー
 		PixelShader pixelShader_{};		//! ピクセルシェーダー
 		ModelLoader modelLoader_{};		//!	モデル読み込みクラス
-		Model model_{};		//! モデル
+		std::shared_ptr<Model> model_;		//! モデル
 	};
 }
 

@@ -27,6 +27,7 @@
     <ClInclude Include="debug\runtime_errer.h" />
     <ClInclude Include="core\window_property.h" />
     <ClInclude Include="util\file_dialog.h" />
+    <ClInclude Include="util\flyweight.h" />
     <ClInclude Include="util\hash.h" />
     <ClInclude Include="util\event_dispatcher.h" />
     <ClInclude Include="util\safe_release.h" />

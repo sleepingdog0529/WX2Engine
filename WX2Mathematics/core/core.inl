@@ -86,11 +86,17 @@ namespace wx2
 		return vector_;
 	}
 
-	inline Vector2::operator DirectX::XMFLOAT2() const noexcept
+	inline Vector2::operator Float2() const noexcept
 	{
 		DirectX::XMFLOAT2 xmf;
 		DirectX::XMStoreFloat2(&xmf, vector_);
 		return xmf;
+	}
+
+	inline std::string Vector2::ToString() const noexcept {
+		return std::format("({:6f}, {:6f})",
+		                   DirectX::XMVectorGetX(vector_),
+		                   DirectX::XMVectorGetY(vector_));
 	}
 
 	inline void Vector2::Normalized() noexcept
@@ -327,11 +333,18 @@ namespace wx2
 		return vector_;
 	}
 
-	inline Vector3::operator DirectX::XMFLOAT3() const noexcept
+	inline Vector3::operator Float3() const noexcept
 	{
 		DirectX::XMFLOAT3 xmf;
 		DirectX::XMStoreFloat3(&xmf, vector_);
 		return xmf;
+	}
+
+	inline std::string Vector3::ToString() const noexcept {
+		return std::format("({:6f}, {:6f}, {:6f})",
+		                   DirectX::XMVectorGetX(vector_),
+		                   DirectX::XMVectorGetY(vector_),
+		                   DirectX::XMVectorGetZ(vector_));
 	}
 
 	inline void Vector3::Normalized() noexcept
@@ -537,11 +550,19 @@ namespace wx2
 		return vector_;
 	}
 
-	inline Vector4::operator DirectX::XMFLOAT4() const noexcept
+	inline Vector4::operator Float4() const noexcept
 	{
 		DirectX::XMFLOAT4 xmf;
 		DirectX::XMStoreFloat4(&xmf, vector_);
 		return xmf;
+	}
+
+	inline std::string Vector4::ToString() const noexcept {
+		return std::format("({:6f}, {:6f}, {:6f}, {:6f})",
+		                   DirectX::XMVectorGetX(vector_),
+		                   DirectX::XMVectorGetY(vector_),
+		                   DirectX::XMVectorGetZ(vector_),
+		                   DirectX::XMVectorGetW(vector_));
 	}
 
 	inline void Vector4::Normalized() noexcept
@@ -1413,11 +1434,19 @@ namespace wx2
 		return color_;
 	}
 
-	inline Color::operator DirectX::XMFLOAT4() const noexcept
+	inline Color::operator Float4() const noexcept
 	{
 		DirectX::XMFLOAT4 xmf;
 		DirectX::XMStoreFloat4(&xmf, color_);
 		return xmf;
+	}
+
+	inline std::string Color::ToString() const noexcept {
+		return std::format("({:6f}, {:6f}, {:6f}, {:6f})",
+		                   DirectX::XMVectorGetX(color_),
+		                   DirectX::XMVectorGetY(color_),
+		                   DirectX::XMVectorGetZ(color_),
+		                   DirectX::XMVectorGetW(color_));
 	}
 
 	inline Color Color::Negate(const Color& c) noexcept

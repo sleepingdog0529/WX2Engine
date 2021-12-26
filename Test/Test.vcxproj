@@ -67,7 +67,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>$(ProjectDir)pch\pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Mathematics;$(SolutionDir)WX2Physics</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Mathematics;$(SolutionDir)WX2Model;$(SolutionDir)WX2Physics</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -79,7 +79,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Platform)-$(Configuration);$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Engine\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Engine\</AdditionalLibraryDirectories>
       <AdditionalDependencies>WX2EngineD.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
@@ -99,7 +99,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)pch\pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>$(ProjectDir)pch\pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Mathematics;$(SolutionDir)WX2Physics</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)WX2Common;$(SolutionDir)WX2Engine;$(SolutionDir)WX2Graphics;$(SolutionDir)WX2Input;$(SolutionDir)WX2Mathematics;$(SolutionDir)WX2Model;$(SolutionDir)WX2Physics</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -114,7 +114,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Platform)-$(Configuration);$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Engine\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Engine\</AdditionalLibraryDirectories>
       <AdditionalDependencies>WX2Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>

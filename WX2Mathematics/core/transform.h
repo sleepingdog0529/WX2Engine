@@ -12,7 +12,20 @@ namespace wx2
 	class Transform
 	{
 	public:
-		Transform() = default;
+		Transform() noexcept
+			: position_()
+			, rotation_()
+			, scale_(Vector3::One())
+		{}
+
+		explicit Transform(
+			const Vector3& position,
+			const Quaternion& rotation = Quaternion::Identity(),
+			const Vector3& scale = Vector3::One()) noexcept
+			: position_(position)
+			, rotation_(rotation)
+			, scale_(Vector3::One())
+		{}
 		virtual ~Transform() = default;
 
 		WX2_COPYABLE(Transform);

@@ -25,5 +25,6 @@
     <ClInclude Include="util\event_dispatcher.h" />
     <ClInclude Include="core\layer.h" />
     <ClInclude Include="core\layer_stack.h" />
+    <ClInclude Include="util\flyweight.h" />
   </ItemGroup>
 </Project>

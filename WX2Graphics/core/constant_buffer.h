@@ -6,6 +6,7 @@
  ********************************************************************/
 #pragma once
 #include "device.h"
+#include "shader_type.h"
 
 namespace wx2
 {
@@ -58,21 +59,37 @@ namespace wx2
 			WX2_COM_ERROR_IF_FAILED(hr, "定数バッファのマップに失敗しました。");
 
 			std::memcpy(msr.pData, &data, sizeof(data));
-			;			deviceContext->Unmap(buffer_.Get(), 0);
+			deviceContext->Unmap(buffer_.Get(), 0);
 		}
 
-		void VSBind(const UINT startSlot) noexcept
+		void Bind(const ShaderType& type, const UINT slot) noexcept
 		{
 			auto* deviceContext = devices_->GetDeviceContext();
 
-			deviceContext->VSSetConstantBuffers(startSlot, 1, buffer_.GetAddressOf());
-		}
-
-		void PSBind(const UINT startSlot) noexcept
-		{
-			auto* deviceContext = devices_->GetDeviceContext();
-
-			deviceContext->PSSetConstantBuffers(startSlot, 1, buffer_.GetAddressOf());
+			switch (type)
+			{
+			case ShaderType::Pixel:
+				deviceContext->PSSetConstantBuffers(slot, 1, buffer_.GetAddressOf());
+				break;
+			case ShaderType::Vertex:
+				deviceContext->VSSetConstantBuffers(slot, 1, buffer_.GetAddressOf());
+				break;
+			case ShaderType::Geometry:
+				deviceContext->GSSetConstantBuffers(slot, 1, buffer_.GetAddressOf());
+				break;
+			case ShaderType::Hull:
+				deviceContext->HSSetConstantBuffers(slot, 1, buffer_.GetAddressOf());
+				break;
+			case ShaderType::Domain:
+				deviceContext->DSSetConstantBuffers(slot, 1, buffer_.GetAddressOf());
+				break;
+			case ShaderType::Compute:
+				deviceContext->CSSetConstantBuffers(slot, 1, buffer_.GetAddressOf());
+				break;
+			default:
+				WX2_LOG_ERROR("不正なシェーダータイプです。");
+				break;
+			}
 		}
 
 	private:

@@ -5,18 +5,10 @@
  * @brief  グラフィックス
  ********************************************************************/
 #pragma once
-#include <DirectXMath.h>
-#include <dxgi1_6.h>
 #include "device.h"
 #include "blend_state.h"
 #include "constant_buffer.h"
 #include "constant_buffer_type.h"
-#include "index_buffer.h"
-#include "vertex_buffer.h"
-#include "vertex_type.h"
-#include "vertex_shader.h"
-#include "pixel_shader.h"
-#include "model_loader.h"
 
 namespace wx2
 {

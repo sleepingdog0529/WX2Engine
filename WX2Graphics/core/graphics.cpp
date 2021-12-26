@@ -182,7 +182,7 @@ namespace wx2
 	//	{
 	//		DXGI_ADAPTER_DESC ad = {};
 	//		adapter->GetDesc(&ad);
-	//		std::string description = ToString(ad.Description);
+	//		std::string description = Utf8ToUtf16(ad.Description);
 
 	//		int videoCardMem = static_cast<int>(ad.DedicatedVideoMemory) / 1024 / 1024;
 	//		WX2_LOG_INFO("==================================================");

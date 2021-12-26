@@ -11,10 +11,6 @@
 
 namespace wx2
 {
-	struct test
-	{
-	};
-
 	template <typename VertexType>
 	class VertexBuffer
 	{
@@ -25,6 +21,9 @@ namespace wx2
 	public:
 		VertexBuffer() = default;
 		~VertexBuffer() = default;
+
+		WX2_COPYABLE(VertexBuffer);
+		WX2_MOVEABLE(VertexBuffer);
 
 		void Initialize(Device* devices, std::span<VertexType> vertices)
 		{
