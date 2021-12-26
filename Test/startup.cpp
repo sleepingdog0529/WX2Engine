@@ -32,22 +32,13 @@ namespace wx2
 			pixelShader_.Initialize(&devices, ".\\asset\\shader\\simple.hlsl");
 
 			// モデルのロード
-			modelLoader_.Initialize(&devices);
+			ModelLoader::Initialize(&devices);
 			std::filesystem::path modelPath{};
 			while (modelPath.empty())
 			{
 				modelPath = OpenFileDialog("*.fbx\0\0");
 			}
-			model_ = modelLoader_.Load(modelPath);
-			auto model1 = modelLoader_.Load(modelPath);
-			auto model2 = modelLoader_.Load(modelPath);
-			auto model3 = modelLoader_.Load(modelPath);
-			auto model4 = modelLoader_.Load(modelPath);
-			auto model5 = modelLoader_.Load(modelPath);
-			auto model6 = modelLoader_.Load(modelPath);
-			auto model7 = modelLoader_.Load(modelPath);
-			auto model8 = modelLoader_.Load(modelPath);
-			auto model9 = modelLoader_.Load(modelPath);
+			ModelLoader::LoadAsync("car", modelPath);
 
 			auto* mat = physics_.CreateMaterial(0.5f, 0.5f, 1.0f);
 			box_ = physics_.CreateDynamic(
@@ -135,7 +126,10 @@ namespace wx2
 			constantBufferWVP.Bind(ShaderType::Vertex, 0);
 
 			// モデルの描画
-			model_->Draw();
+			if (const auto model = ModelLoader::Get("car"))
+			{
+				model->Draw();
+			}
 		}
 
 		void DrawImGui() noexcept override
@@ -154,8 +148,6 @@ namespace wx2
 
 		VertexShader vertexShader_{};	//! 頂点シェーダー
 		PixelShader pixelShader_{};		//! ピクセルシェーダー
-		ModelLoader modelLoader_{};		//!	モデル読み込みクラス
-		std::shared_ptr<Model> model_;		//! モデル
 	};
 }
 

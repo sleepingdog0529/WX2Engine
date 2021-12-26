@@ -24,6 +24,9 @@ namespace wx2
 		Texture(Device* devices, const Color& color);
 		~Texture() = default;
 
+		WX2_COPYABLE(Texture);
+		WX2_MOVEABLE(Texture);
+
 		void Bind(ShaderType type, UINT slot) const noexcept;
 
 	private:

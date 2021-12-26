@@ -9,6 +9,7 @@
     <ClInclude Include="core\texture_loader.h" />
     <ClInclude Include="core\texture_storage.h" />
     <ClInclude Include="WX2Model.h" />
+    <ClInclude Include="core\assimp_helper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\mesh.cpp" />

@@ -5,21 +5,21 @@
  * @brief  ’¸“_Œ^’è‹`
  ********************************************************************/
 #pragma once
-#include <DirectXMath.h>
+#include <WX2Mathematics.h>
 
 namespace wx2
 {
 	struct Vertex3D
 	{
-		DirectX::XMFLOAT3 position;
+		Float3 position{};
 	};
 
 	struct ModelVertex
 	{
-		DirectX::XMFLOAT3 position;
-		DirectX::XMFLOAT2 texcoord;
-		DirectX::XMFLOAT3 normal;
-		DirectX::XMFLOAT3 tangent;
-		DirectX::XMFLOAT3 binormal;
+		Float3 position{};
+		Float2 texcoord{};
+		Float3 normal{};
+		Float3 tangent{};
+		Float3 binormal{};
 	};
 }

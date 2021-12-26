@@ -81,7 +81,6 @@ namespace wx2
 		//! @brief スレッドにタスクを与える
 		void Join() noexcept;
 
-
 		/**
 		 * @brief  タスクをタスクキューからポップする
 		 * @return タスク

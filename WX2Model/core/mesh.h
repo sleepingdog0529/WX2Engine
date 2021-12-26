@@ -26,6 +26,9 @@ namespace wx2
 			std::unordered_map<TextureType, std::shared_ptr<Texture>>& textures);
 		~Mesh() = default;
 
+		WX2_COPYABLE(Mesh);
+		WX2_MOVEABLE(Mesh);
+
 		void Draw() const noexcept;
 
 	private:

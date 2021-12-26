@@ -10,9 +10,20 @@ namespace wx2
 {
 	enum class TextureType
 	{
+		Unknown,
 		Diffuse,
 		Specular,
 		Ambient,
 		Normals,
+	};
+
+	enum class TextureStorageType
+	{
+		Unknown,
+		EmbeddedIndexCompressed,
+		EmbeddedIndexNonCompressed,
+		EmbeddedCompressed,
+		EmbeddedNonCompressed,
+		Disk
 	};
 }

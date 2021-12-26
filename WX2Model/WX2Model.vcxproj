@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\assimp_helper.h" />
     <ClInclude Include="core\model.h" />
     <ClInclude Include="core\model_loader.h" />
     <ClInclude Include="core\texture.h" />
