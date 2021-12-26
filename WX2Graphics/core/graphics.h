@@ -36,6 +36,9 @@ namespace wx2
 		void DrawBegin() noexcept;
 		void DrawEnd() const noexcept;
 
+		static void DrawImGuiBegin() noexcept;
+		static void DrawImGuiEnd() noexcept;
+
 		[[nodiscard]] Device& GetDevice() noexcept { return devices_; }
 		[[nodiscard]] BlendState& GetBlendState() noexcept { return blendState_; }
 		[[nodiscard]] ConstantBuffer<WVPMatrix>& GetConstantBufferWVP() noexcept { return constantBufferWVP_; }

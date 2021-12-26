@@ -134,9 +134,11 @@ namespace wx2
 
 		void DrawImGui() noexcept override
 		{
-			//ImGui::Begin("Transform");
-			//ImGui::DragFloat3("Position", &pos_[0], 0.1f);
-			//ImGui::End();
+			ImGui::Begin("Transform");
+			auto pos = transform_.GetPositon();
+			ImGui::DragFloat3("Position", &pos[0], 0.1f);
+			transform_.SetPositon(pos);
+			ImGui::End();
 		}
 
 		Transform transform_;

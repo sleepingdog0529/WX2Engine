@@ -1,4 +1,5 @@
 ﻿#include "graphics.h"
+#include "imgui.h"
 
 namespace wx2
 {
@@ -118,6 +119,13 @@ namespace wx2
 			constantBufferWVP_.Initialize(&devices_);
 			
 			InitializeGraphics();
+
+			//IMGUI_CHECKVERSION();
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO();
+			ImGui_ImplWin32_Init(hwnd);
+			ImGui_ImplDX11_Init(dev, devCon);
+			ImGui::StyleColorsDark();
 		}
 		catch (const COMException& exception)
 		{
@@ -153,6 +161,19 @@ namespace wx2
 	void Graphics::DrawEnd() const noexcept
 	{
 		swapChain_->Present(0, 0);
+	}
+
+	void Graphics::DrawImGuiBegin() noexcept
+	{
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+	}
+
+	void Graphics::DrawImGuiEnd() noexcept
+	{
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	}
 
 	void Graphics::InitializeGraphics()

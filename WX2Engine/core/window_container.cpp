@@ -57,9 +57,14 @@ namespace wx2
 		return true;
 	}
 
+	extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 	LRESULT WindowContainer::WindowProcedure(const HWND hwnd, const UINT msg, const WPARAM wp, const LPARAM lp) noexcept
 	{
 		eventDispatcher_.Dispatch(static_cast<WindowEvent>(msg), hwnd, wp, lp);
+
+		if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wp, lp))
+			return true;
 
 		return DefWindowProc(hwnd, msg, wp, lp);
 	}

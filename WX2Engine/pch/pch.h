@@ -50,4 +50,6 @@
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/memory.hpp>
 
+#include <ImGui/imgui.h>
+
 #pragma warning(pop)

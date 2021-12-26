@@ -15,6 +15,7 @@
     <ClInclude Include="core\sampler_state.h" />
     <ClInclude Include="core\camera.h" />
     <ClInclude Include="core\shader_type.h" />
+    <ClInclude Include="core\imgui.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\graphics.cpp" />

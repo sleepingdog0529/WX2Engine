@@ -132,6 +132,11 @@ namespace wx2
 					Draw(deltaTime);
 					graphics_.DrawEnd();
 
+					// ImGui‚Ì•`‰æˆ—‚ğŒÄ‚Ño‚·
+					Graphics::DrawImGuiBegin();
+					DrawImGui();
+					Graphics::DrawImGuiEnd();
+
 					// “ü—Í‚ÌXV
 					input_.Update();
 					physics_.Step(deltaTime);

@@ -138,7 +138,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Graphics\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2Common.lib;WX2GraphicsD.lib;assimp-vc143-mt.lib;zlibstatic.lib;</AdditionalDependencies>
+      <AdditionalDependencies>WX2Common.lib;WX2Graphics.lib;assimp-vc143-mt.lib;zlibstatic.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

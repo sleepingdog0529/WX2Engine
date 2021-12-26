@@ -17,6 +17,7 @@
     <ClInclude Include="core\constant_buffer_type.h" />
     <ClInclude Include="core\graphics.h" />
     <ClInclude Include="core\device.h" />
+    <ClInclude Include="core\imgui.h" />
     <ClInclude Include="core\index_buffer.h" />
     <ClInclude Include="core\pixel_shader.h" />
     <ClInclude Include="core\sampler_state.h" />
@@ -113,7 +114,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2CommonD.lib;WX2MathematicsD.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;</AdditionalDependencies>
+      <AdditionalDependencies>WX2CommonD.lib;WX2MathematicsD.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;imgui.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,7 +148,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Common\;$(SolutionDir)bin\$(Platform)-$(Configuration)\WX2Mathematics\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WX2Common.lib;WX2Mathematics.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;</AdditionalDependencies>
+      <AdditionalDependencies>WX2Common.lib;WX2Mathematics.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;DirectXTK.lib;imgui.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
