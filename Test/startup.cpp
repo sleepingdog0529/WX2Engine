@@ -68,10 +68,13 @@ namespace wx2
 			const auto& gamepad = input_.GetGamepad();
 
 			// カーソルの動きにあわせて回転
-			const float cursorX = mouse.GetAxisVelocity(Mouse::CursorX);
-			const float cursorY = mouse.GetAxisVelocity(Mouse::CursorY);
-			camera_.AddRotation(Quaternion::RotationY(cursorX * deltaTime * 0.3f));
-			camera_.AddRotation(Quaternion::AxisAngle(camera_.Right(), cursorY * deltaTime * 0.3f));
+			if (mouse.IsDown(Mouse::Right))
+			{
+				const float cursorX = mouse.GetAxisVelocity(Mouse::CursorX);
+				const float cursorY = mouse.GetAxisVelocity(Mouse::CursorY);
+				camera_.AddRotation(Quaternion::RotationY(cursorX * deltaTime * 0.3f));
+				camera_.AddRotation(Quaternion::AxisAngle(camera_.Right(), cursorY * deltaTime * 0.3f));
+			}
 
 			// キーの入力から移動方向を設定
 			Vector3 camMove;
@@ -134,9 +137,11 @@ namespace wx2
 
 		void DrawImGui() noexcept override
 		{
+			ImGui::SetNextWindowSize(ImVec2(500, 600), ImGuiCond_Once);
+
 			ImGui::Begin("Transform");
 			auto pos = transform_.GetPositon();
-			ImGui::DragFloat3("Position", &pos[0], 0.1f);
+			ImGui::DragFloat3("Position", &pos[0], 1.0f);
 			transform_.SetPositon(pos);
 			ImGui::End();
 		}

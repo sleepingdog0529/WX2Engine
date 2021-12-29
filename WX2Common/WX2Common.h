@@ -6,12 +6,6 @@
  ********************************************************************/
 #pragma once
 
-#pragma warning(push, 0)
-#include "imgui/imgui.h"
-#include "imgui/backends/imgui_impl_win32.h"
-#include "imgui/backends/imgui_impl_dx11.h"
-#pragma warning(pop)
-
 #include "core/window_property.h"
 #include "core/layer_stack.h"
 #include "debug/assert.h"

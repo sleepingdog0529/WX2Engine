@@ -59,7 +59,7 @@ namespace wx2
 			scd.OutputWindow = hwnd;
 			scd.BufferDesc.Width = displayWidth;
 			scd.BufferDesc.Height = displayHeight;
-			scd.Windowed = !windowProperty_->fullscreen;
+			scd.Windowed = TRUE;
 			scd.BufferDesc.RefreshRate.Numerator = 60;
 			scd.BufferDesc.RefreshRate.Denominator = 1;
 			scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -120,12 +120,15 @@ namespace wx2
 			
 			InitializeGraphics();
 
-			//IMGUI_CHECKVERSION();
+			IMGUI_CHECKVERSION();
 			ImGui::CreateContext();
 			ImGuiIO& io = ImGui::GetIO();
 			ImGui_ImplWin32_Init(hwnd);
 			ImGui_ImplDX11_Init(dev, devCon);
 			ImGui::StyleColorsDark();
+			io.IniFilename = nullptr;
+			io.Fonts->AddFontFromFileTTF(
+				R"(C:\Windows\Fonts\meiryo.ttc)", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
 		}
 		catch (const COMException& exception)
 		{

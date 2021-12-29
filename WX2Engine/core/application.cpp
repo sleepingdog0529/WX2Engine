@@ -129,13 +129,15 @@ namespace wx2
 
 					// アプリケーションの描画処理を呼び出す
 					graphics_.DrawBegin();
+
 					Draw(deltaTime);
-					graphics_.DrawEnd();
 
 					// ImGuiの描画処理を呼び出す
 					Graphics::DrawImGuiBegin();
 					DrawImGui();
 					Graphics::DrawImGuiEnd();
+
+					graphics_.DrawEnd();
 
 					// 入力の更新
 					input_.Update();
