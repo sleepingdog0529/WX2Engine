@@ -5,6 +5,8 @@
  * @brief  •¶š—ñŒ^‚Ìƒwƒ‹ƒp[
 *********************************************************************/
 #pragma once
+#include <string>
+#include <cstdlib>
 
 namespace wx2
 {
